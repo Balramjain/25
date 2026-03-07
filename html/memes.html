@@ -1,32 +1,112 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Cat Zone 🐱</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Minku</title>
+  <style>
+    @font-face {
+      font-family: "StarShield";
+      src: url("../fonts/StarShieldV2-9M52K.ttf") format("truetype");
+      font-display: swap;
+    }
 
-  <link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700&family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../css/style.css">
+    :root {
+      --flip: 0;
+      --bg-r: 255;
+      --bg-g: 255;
+      --bg-b: 255;
+      --fg-r: 0;
+      --fg-g: 0;
+      --fg-b: 0;
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body {
+      margin: 0;
+      width: 100%;
+      min-height: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      min-height: 220vh;
+      background: rgb(var(--bg-r), var(--bg-g), var(--bg-b));
+      color: rgb(var(--fg-r), var(--fg-g), var(--fg-b));
+      transition: background-color 140ms linear, color 140ms linear;
+    }
+
+    .fixed-stage {
+      position: fixed;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      pointer-events: none;
+    }
+
+    .wordmark {
+      margin: 0;
+      font-family: "StarShield", sans-serif;
+      font-size: clamp(4rem, 20vw, 14rem);
+      letter-spacing: 0.06em;
+      line-height: 0.92;
+      color: rgb(var(--fg-r), var(--fg-g), var(--fg-b));
+      transform: translateY(calc(var(--flip) * -0.6rem));
+      opacity: calc(0.92 + (var(--flip) * 0.08));
+      transition: transform 180ms ease-out, opacity 180ms ease-out;
+      text-align: center;
+      user-select: none;
+    }
+
+    .scroll-space {
+      height: 220vh;
+    }
+  </style>
 </head>
 <body>
+  <div class="fixed-stage" aria-hidden="true">
+    <h1 class="wordmark">Minku</h1>
+  </div>
 
-  <div class="clouds">☁️ ☁️ ☁️</div>
+  <div class="scroll-space"></div>
 
-  <main class="card">
+  <script>
+    const root = document.documentElement;
+    let ticking = false;
 
-    <h1>Welcome to the Cat Zone 🐾</h1>
+    function lerp(start, end, t) {
+      return Math.round(start + (end - start) * t);
+    }
 
-    <p class="subtitle">
-      Choose your destiny, hooman 😼
-    </p>
+    function updateFlip() {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const raw = maxScroll > 0 ? window.scrollY / maxScroll : 0;
+      const progress = Math.min(Math.max(raw, 0), 1);
 
-    <div class="buttons">
-      <button onclick="location.href='cat-wall.html'">😹 Cat Meme Wall</button>
-      <button onclick="location.href='game.html'">🎮 Play Cat Game</button>
-      <button onclick="location.href='videos.html'">🎥 Cat Videos</button>
-      <button onclick="location.href='index.html'">🔙 Go Back</button>
-    </div>
+      // Smooth easing for the color-flip transition.
+      const eased = progress * progress * (3 - 2 * progress);
 
-  </main>
+      root.style.setProperty("--flip", eased.toFixed(3));
+      root.style.setProperty("--bg-r", String(lerp(255, 0, eased)));
+      root.style.setProperty("--bg-g", String(lerp(255, 0, eased)));
+      root.style.setProperty("--bg-b", String(lerp(255, 0, eased)));
+      root.style.setProperty("--fg-r", String(lerp(0, 255, eased)));
+      root.style.setProperty("--fg-g", String(lerp(0, 255, eased)));
+      root.style.setProperty("--fg-b", String(lerp(0, 255, eased)));
+    }
 
+    window.addEventListener("scroll", () => {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(() => {
+        updateFlip();
+        ticking = false;
+      });
+    }, { passive: true });
+
+    window.addEventListener("resize", updateFlip);
+    updateFlip();
+  </script>
 </body>
 </html>
