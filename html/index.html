@@ -85,7 +85,21 @@
     const hasVisited = localStorage.getItem("hasVisited");
     const musicMuted = localStorage.getItem("musicMuted");
     const cameFromPage = localStorage.getItem("cameFromPage") === "true";
-    localStorage.removeItem("cameFromPage"); // reset immediately after reading
+    localStorage.removeItem("cameFromPage"); // one-time flag
+
+    function forceTopNow() {
+      window.scrollTo(0, 0);
+      document.documentElement.scrollTop = 0;
+      document.body.scrollTop = 0;
+    }
+
+    function forceTopOnFreshOpen() {
+      if (!cameFromPage) {
+        forceTopNow();
+        requestAnimationFrame(forceTopNow);
+        setTimeout(forceTopNow, 40);
+      }
+    }
 
     if (hasVisited) {
       // Skip splash
@@ -102,13 +116,27 @@
       // Auto scroll to buttons only when coming back from a button click
       if (cameFromPage) {
         setTimeout(() => {
-          document.getElementById("actions").scrollIntoView({ behavior: "smooth" });
+          document.getElementById("actions").scrollIntoView({ behavior: "smooth", block: "start" });
         }, 500);
       } else {
-        window.scrollTo(0, 0);
-        requestAnimationFrame(() => window.scrollTo(0, 0));
+        forceTopOnFreshOpen();
       }
     }
+
+    // Handle browser back/forward cache and restore behavior.
+    window.addEventListener("pageshow", () => {
+      if (cameFromPage) {
+        setTimeout(() => {
+          document.getElementById("actions").scrollIntoView({ behavior: "smooth", block: "start" });
+        }, 100);
+      } else {
+        forceTopOnFreshOpen();
+      }
+    });
+
+    window.addEventListener("load", () => {
+      if (!cameFromPage) forceTopOnFreshOpen();
+    });
 
     function startSite() {
       localStorage.setItem("hasVisited", "true");
@@ -426,5 +454,4 @@
 
 </body>
 </html>
-
 

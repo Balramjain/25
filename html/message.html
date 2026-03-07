@@ -23,6 +23,10 @@
       --shade-3: #187f87;
       --shade-4: #155665;
       --shade-5: #102e3c;
+      --msg-light: #3b78b2;
+      --msg-mid: #1f5f98;
+      --msg-dark1: #0f3460;
+      --msg-dark2: #000000;
     }
 
     * { box-sizing: border-box; }
@@ -32,7 +36,7 @@
       min-height: 100vh;
       font-family: "Heart", cursive;
       color: var(--ink);
-      background: linear-gradient(140deg, var(--lav1), var(--lav2), var(--lav3), var(--blue1), var(--blue2));
+      background: linear-gradient(to bottom, var(--lav1), var(--lav2), var(--lav3), var(--blue1), var(--blue2));
       background-size: 220% 220%;
       animation: bg-flow 16s ease-in-out infinite;
       overflow-x: hidden;
@@ -85,6 +89,7 @@
       border: 1px solid rgba(196, 207, 206, 0.92);
       box-shadow:
         0 24px 64px rgba(16, 46, 60, 0.24),
+        0 0 26px rgba(26, 122, 82, 0.16),
         inset 0 1px 0 rgba(255, 255, 255, 0.7);
       backdrop-filter: blur(8px);
       padding: clamp(18px, 4vw, 36px);
@@ -99,41 +104,22 @@
       padding-bottom: 0.16em;
       text-align: center;
       letter-spacing: 0.01em;
-      background: linear-gradient(
-        118deg,
-        var(--shade-1),
-        var(--shade-2),
-        var(--shade-3),
-        var(--shade-4),
-        var(--shade-5)
-      );
-      background-size: 380% 380%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 2px 12px rgba(255, 255, 255, 0.42);
-      animation: title-pop 0.8s ease, text-flow 10s linear infinite;
+      background: none;
+      color: #3b78b2;
+      -webkit-text-fill-color: #3b78b2;
+      text-shadow: none;
+      animation: title-pop 0.8s ease;
     }
 
     .message p {
       margin: 0;
       font-size: clamp(1.12rem, 3vw, 1.5rem);
-      line-height: 1.45;
-      background: linear-gradient(
-        120deg,
-        var(--shade-1),
-        var(--shade-2),
-        var(--shade-3),
-        var(--shade-4),
-        var(--shade-5)
-      );
-      background-size: 360% 360%;
-      -webkit-background-clip: text;
-      background-clip: text;
-      color: transparent;
-      -webkit-text-fill-color: transparent;
-      animation: fade-up 0.45s ease both, text-flow 12s linear infinite;
+      line-height: 1.52;
+      color: var(--msg-mid);
+      -webkit-text-fill-color: currentColor;
+      padding-inline: 0.04em;
+      overflow: visible;
+      animation: fade-up 0.45s ease both;
     }
 
     .bottom-nav {
@@ -187,6 +173,12 @@
       50% { background-position: 100% 50%; filter: saturate(1.1); }
       100% { background-position: 0% 50%; filter: saturate(0.98); }
     }
+
+    @keyframes title-flow {
+      0% { background-position: 50% 0%; }
+      50% { background-position: 50% 100%; }
+      100% { background-position: 50% 0%; }
+    }
   </style>
 </head>
 <body>
@@ -238,7 +230,7 @@
     const safeTitle = escapeHtml(title || "Birthday Message");
     const safeParagraphs = (paragraphs || []).map((p, i) => {
       const delay = Math.min(i * 0.04, 0.5);
-      return "<p style=\"animation-delay:" + delay + "s\">" + escapeHtml(p).replace(/\n/g, "<br>") + "</p>";
+      return "<p data-para-index=\"" + i + "\" style=\"animation-delay:" + delay + "s\">" + escapeHtml(p).replace(/\n/g, "<br>") + "</p>";
     }).join("");
     messageEl.innerHTML = "<h1>" + safeTitle + "</h1>" + safeParagraphs;
   }
@@ -248,6 +240,58 @@
     const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
     const progress = maxScroll > 0 ? Math.min(window.scrollY / maxScroll, 1) : 0;
     document.body.style.setProperty("--scroll-progress", progress.toFixed(3));
+    updateMessageShades(progress);
+  }
+
+  function hexToRgb(hex) {
+    const clean = String(hex).replace("#", "");
+    const n = parseInt(clean, 16);
+    return {
+      r: (n >> 16) & 255,
+      g: (n >> 8) & 255,
+      b: n & 255
+    };
+  }
+
+  function lerp(a, b, t) {
+    return Math.round(a + (b - a) * t);
+  }
+
+  function lerpColor(fromHex, toHex, t) {
+    const a = hexToRgb(fromHex);
+    const b = hexToRgb(toHex);
+    return "rgb(" + lerp(a.r, b.r, t) + ", " + lerp(a.g, b.g, t) + ", " + lerp(a.b, b.b, t) + ")";
+  }
+
+  function updateMessageShades(progress) {
+    const p = Math.min(Math.max(progress, 0), 1);
+    const lightBlue = "#3b78b2";
+    const midBlue = "#1f5f98";
+    const deepBlue = "#0f3460";
+    const black = "#000000";
+
+    // Global palette drift for related UI elements.
+    const lightShade = lerpColor(lightBlue, midBlue, p * 0.45);
+    const topShade = lerpColor(midBlue, deepBlue, p * 0.75);
+    const midShade = lerpColor(deepBlue, black, p * 0.8);
+    const bottomShade = lerpColor("#091a24", black, p);
+
+    document.documentElement.style.setProperty("--msg-light", lightShade);
+    document.documentElement.style.setProperty("--msg-mid", topShade);
+    document.documentElement.style.setProperty("--msg-dark1", midShade);
+    document.documentElement.style.setProperty("--msg-dark2", bottomShade);
+
+    // Paragraph-level color so wrapped lines stay the same shade.
+    const paraEls = messageEl.querySelectorAll("p[data-para-index]");
+    const total = Math.max(paraEls.length - 1, 1);
+    paraEls.forEach((el, idx) => {
+      const order = idx / total; // top paragraphs stay lighter
+      const t = Math.min(1, p * 0.72 + order * 0.4);
+      const color = t < 0.55
+        ? lerpColor(lightBlue, deepBlue, t / 0.55)
+        : lerpColor(deepBlue, black, (t - 0.55) / 0.45);
+      el.style.color = color;
+    });
   }
 
   function spawnHearts() {
