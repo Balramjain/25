@@ -54,6 +54,29 @@
       user-select: none;
       transition: color 400ms ease;
     }
+
+    .back-btn {
+      position: fixed;
+      left: 20px;
+      bottom: 20px;
+      z-index: 30;
+      border: none;
+      border-radius: 999px;
+      padding: 10px 18px;
+      font-family: "StarShield", sans-serif;
+      font-size: clamp(0.95rem, 2.5vw, 1.2rem);
+      letter-spacing: 0.04em;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.82);
+      color: #000;
+      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
+      transition: transform 220ms ease, box-shadow 220ms ease;
+    }
+
+    .back-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.25);
+    }
   </style>
 </head>
 <body>
@@ -61,6 +84,10 @@
   <div class="fixed-stage" aria-hidden="true">
     <h1 class="wordmark" id="wordmark">MINKU LOVES YOU</h1>
   </div>
+
+  <button class="back-btn" onclick="sessionStorage.setItem('cameFromPage','true'); location.href='index.html?v=20260308';">
+    Go Back
+  </button>
 
   <!-- one section per combo -->
   <div class="snap-section" data-combo="0"></div>
