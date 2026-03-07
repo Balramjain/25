@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>Birthday Surprise</title>
   <style>
     @font-face {
@@ -306,7 +309,7 @@
   <div class="arena" id="arena"></div>
 
   <div class="hud">
-    <a class="back" href="index.html" aria-label="Back" onclick="localStorage.setItem('cameFromPage','true')">&#8592;</a>
+    <a class="back" href="index.html?v=20260308" aria-label="Back" onclick="sessionStorage.setItem('cameFromPage','true')">&#8592;</a>
     <div class="counter" id="counter">Near misses: 0</div>
 
     <div class="top">

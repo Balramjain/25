@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>Purrcade</title>
   <style>
     @font-face { font-family: "GamePaused"; src: url("../fonts/GamepauseddemoRegular-RpmY6.otf") format("opentype"); font-display: swap; }
@@ -69,7 +72,7 @@
       <span class="meta">Fun mini games for desktop and mobile</span>
     </button>
 
-    <button class="back" onclick="localStorage.setItem('cameFromPage','true'); location.href='index.html';">Go Back</button>
+    <button class="back" onclick="sessionStorage.setItem('cameFromPage','true'); location.href='index.html?v=20260308';">Go Back</button>
   </main>
 </body>
 </html>

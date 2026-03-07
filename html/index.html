@@ -3,6 +3,9 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <title>Happy Birthday Bangari 💖</title>
 
   <style>
@@ -84,8 +87,8 @@
 
     const hasVisited = localStorage.getItem("hasVisited");
     const musicMuted = localStorage.getItem("musicMuted");
-    const cameFromPage = localStorage.getItem("cameFromPage") === "true";
-    localStorage.removeItem("cameFromPage"); // one-time flag
+    const cameFromPage = sessionStorage.getItem("cameFromPage") === "true";
+    sessionStorage.removeItem("cameFromPage"); // one-time flag for current tab only
 
     function forceTopNow() {
       window.scrollTo(0, 0);
@@ -318,10 +321,10 @@
     <h2>Choose your purr-venture 😼</h2>
 
     <div class="button-grid">
-      <a href="memes.html" class="cat-button pink" onclick="localStorage.setItem('cameFromPage','true')">😹<span>Neon Meowtrix</span></a>
-      <a href="game.html" class="cat-button blue" onclick="localStorage.setItem('cameFromPage','true')">🎮<span>Game</span></a>
-      <a href="message.html" class="cat-button yellow" onclick="localStorage.setItem('cameFromPage','true')">🎵<span>Message</span></a>
-      <a href="surprise.html" class="cat-button purple" onclick="localStorage.setItem('cameFromPage','true')">💌<span>Surprise</span></a>
+      <a href="memes.html?v=20260308" class="cat-button pink" onclick="sessionStorage.setItem('cameFromPage','true')">😹<span>Neon Meowtrix</span></a>
+      <a href="game.html?v=20260308" class="cat-button blue" onclick="sessionStorage.setItem('cameFromPage','true')">🎮<span>Game</span></a>
+      <a href="message.html?v=20260308" class="cat-button yellow" onclick="sessionStorage.setItem('cameFromPage','true')">🎵<span>Message</span></a>
+      <a href="surprise.html?v=20260308" class="cat-button purple" onclick="sessionStorage.setItem('cameFromPage','true')">💌<span>Surprise</span></a>
     </div>
   </section>
 
