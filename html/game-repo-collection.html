@@ -1,0 +1,158 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Game Collection</title>
+  <style>
+    @font-face {
+      font-family: "GamePaused";
+      src: url("../fonts/GamepauseddemoRegular-RpmY6.otf") format("opentype");
+      font-display: swap;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "GamePaused", system-ui, sans-serif;
+      color: #1d2b47;
+      background: linear-gradient(140deg, #f8f4ff, #e7f3ff 52%, #e9fff3);
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 10px;
+      padding: 12px;
+    }
+
+    .top {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .back {
+      border: none;
+      border-radius: 999px;
+      padding: 10px 14px;
+      background: #2c4f81;
+      color: #fff;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+
+    .bar {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 8px;
+      background: rgba(255, 255, 255, 0.82);
+      border: 1px solid rgba(255, 255, 255, 0.96);
+      border-radius: 14px;
+      padding: 8px;
+    }
+
+    select, .open-btn {
+      border: none;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-family: inherit;
+      font-size: 0.9rem;
+    }
+
+    select {
+      background: #ffffff;
+      color: #243a60;
+    }
+
+    .open-btn {
+      background: linear-gradient(135deg, #ffcaea, #9fccff 56%, #96f0d7);
+      color: #172a4a;
+      cursor: pointer;
+    }
+
+    iframe {
+      width: 100%;
+      height: calc(100vh - 88px);
+      border: 0;
+      border-radius: 14px;
+      background: #fff;
+      box-shadow: 0 14px 36px rgba(23, 42, 74, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <div class="top">
+    <button class="back" onclick="location.href='game.html'">Back</button>
+    <div class="bar">
+      <select id="gameSelect"></select>
+      <button class="open-btn" id="openBtn">Open</button>
+    </div>
+  </div>
+
+  <iframe id="gameFrame" loading="eager"></iframe>
+
+  <script>
+    const games = [
+      ["01 Candy Crush", "01-Candy-Crush-Game/index.html"],
+      ["02 Pac-Man", "02-Pac-Man-Game/index.html"],
+      ["03 Chess", "03-Chess-Game/index.html"],
+      ["04 Doodle Jump", "04-Doodle-Jump-Game/index.html"],
+      ["05 Solitaire", "05-Solitaire-Game/index.html"],
+      ["06 Sudoku", "06-Sudoku-Game/index.html"],
+      ["07 Crossy Road", "07-Crossy-Road-Game/index.html"],
+      ["08 Rock Paper Scissors", "08-Rock-Paper-Scissors/index.html"],
+      ["09 Flappy Bird", "09-Flappy-Bird-Game/index.html"],
+      ["10 2048", "10-2048-Game/index.html"],
+      ["11 Wordle", "11-Wordle-Game/index.html"],
+      ["12 Hangman", "12-Hangman-Game/index.html"],
+      ["13 Tower Blocks", "13-Tower-Blocks/index.html"],
+      ["14 Archery", "14-Archery-Game/index.html"],
+      ["15 Tic Tac Toe", "15-Tic-Tac-Toe/index.html"],
+      ["16 Minesweeper", "16-Minesweeper-Game/index.html"],
+      ["17 Speed Typing", "17-Speed-Typing-Game/index.html"],
+      ["18 Breakout", "18-Breakout-Game/index.html"],
+      ["19 Ping Pong", "19-Ping-Pong-Game/index.html"],
+      ["20 Tetris", "20-Tetris-Game/index.html"],
+      ["21 Tilting Maze", "21-Tilting-Maze-Game/index.html"],
+      ["22 Memory Card", "22-Memory-Card-Game/index.html"],
+      ["23 Number Guessing", "23-Type-Number-Guessing-Game/index.html"],
+      ["24 Snake", "24-Snake-Game/index.html"],
+      ["25 Connect Four", "25-Connect-Four-Game/index.html"],
+      ["26 Insect Catch", "26-Insect-Catch-Game/index.html"],
+      ["27 Typing", "27-Typing-Game/index.html"],
+      ["28 Dice Roll", "28-Dice-Roll-Simulator/index.html"],
+      ["29 Shape Clicker", "29-Shape-Clicker-Game/index.html"],
+      ["30 Typing 2", "30-Typing-Game/index.html"],
+      ["31 Speak Number Guessing", "31-Speak-Number-Guessing-Game/index.html"],
+      ["32 Fruit Slicer", "32-Fruit-Slicer-Game/index.html"],
+      ["33 Quiz", "33-Quiz-Game/index.html"],
+      ["34 Emoji Catcher", "34-Emoji-Catcher-Game/index.html"],
+      ["35 Whack-a-Mole", "35-Whack-A-Mole-Game/index.html"],
+      ["36 Simon Says", "36-Simon-Says-Game/index.html"],
+      ["37 Sliding Puzzle", "37-Sliding-Puzzle-Game/index.html"]
+    ];
+
+    const select = document.getElementById("gameSelect");
+    const frame = document.getElementById("gameFrame");
+    const openBtn = document.getElementById("openBtn");
+
+    games.forEach(([label, relPath], i) => {
+      const opt = document.createElement("option");
+      opt.value = relPath;
+      opt.textContent = label;
+      if (i === 0) opt.selected = true;
+      select.appendChild(opt);
+    });
+
+    function openSelected() {
+      frame.src = "../external-src/html-css-javascript-games/" + select.value;
+    }
+
+    openBtn.addEventListener("click", openSelected);
+    select.addEventListener("change", openSelected);
+    openSelected();
+  </script>
+</body>
+</html>

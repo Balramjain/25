@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -185,22 +185,25 @@
       width: min(92vw, 460px);
       display: flex;
       justify-content: center;
+      align-items: center;
       gap: 14px;
       z-index: 6;
-      pointer-events: none;
+      pointer-events: auto;
     }
 
     .yes-btn,
     .no-btn {
-      pointer-events: auto;
       border: 0;
       border-radius: 999px;
-      padding: 14px 24px;
+      width: clamp(120px, 26vw, 160px);
+      height: clamp(46px, 8vw, 56px);
       font-family: inherit;
       font-size: clamp(1rem, 2.6vw, 1.24rem);
       color: #fff;
       cursor: pointer;
-      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .yes-btn {
@@ -209,9 +212,6 @@
     }
 
     .no-btn {
-      position: absolute;
-      left: 56%;
-      top: 58%;
       background: linear-gradient(135deg, #8f4a52, #6e383f);
       box-shadow: 0 14px 24px rgba(95, 47, 53, 0.38);
     }
@@ -303,9 +303,7 @@
   <div class="aura"></div>
   <div class="sparkles" id="sparkles"></div>
 
-  <div class="arena" id="arena">
-    <button id="noBtn" class="no-btn" type="button">No</button>
-  </div>
+  <div class="arena" id="arena"></div>
 
   <div class="hud">
     <a class="back" href="index.html" aria-label="Back" onclick="localStorage.setItem('cameFromPage','true')">&#8592;</a>
@@ -323,6 +321,7 @@
 
     <div class="btn-row">
       <button id="yesBtn" class="yes-btn" type="button">Yes</button>
+      <button id="noBtn" class="no-btn" type="button">No</button>
     </div>
   </div>
 
@@ -358,12 +357,18 @@
     ];
 
     let misses = 0;
+    let noEscaped = false;
 
     function randomInRange(min, max) {
       return Math.random() * (max - min) + min;
     }
 
     function moveNoButton() {
+      if (!noEscaped) {
+        noEscaped = true;
+        noBtn.style.position = "absolute";
+        arena.appendChild(noBtn);
+      }
       const arenaRect = arena.getBoundingClientRect();
       const btnRect = noBtn.getBoundingClientRect();
       const topBlock = document.querySelector(".top").getBoundingClientRect();
@@ -463,10 +468,13 @@
       }
     }
 
-    window.addEventListener("resize", moveNoButton);
+    window.addEventListener("resize", () => {
+      if (noEscaped) moveNoButton();
+    });
     spawnSparkles();
-    moveNoButton();
   </script>
 </body>
 </html>
+
+
 
