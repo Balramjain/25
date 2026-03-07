@@ -59,9 +59,25 @@
     transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   ">🔊</button>
 
+  <!-- QUICK NAV BUTTON -->
+  <button id="quickNavBtn" class="quick-nav-btn to-bottom" aria-label="Scroll to bottom" style="
+    position: fixed;
+    right: 80px;
+    bottom: 20px;
+    width: 50px;
+    height: 50px;
+    z-index: 999;
+    border: none;
+    border-radius: 50%;
+    background: #ffd6f0;
+    color: #57374d;
+    cursor: pointer;
+  ">⤵</button>
+
   <script>
     const music = document.getElementById("bgMusic");
     const btn = document.getElementById("musicBtn");
+    const quickNavBtn = document.getElementById("quickNavBtn");
     if ("scrollRestoration" in history) {
       history.scrollRestoration = "manual";
     }
@@ -118,6 +134,35 @@
       }
       setTimeout(() => btn.style.transform = "scale(1) rotate(0deg)", 300);
     }
+
+    function updateQuickNavBtn() {
+      const atTop = window.scrollY < 100;
+
+      if (atTop) {
+        quickNavBtn.classList.add("to-bottom");
+        quickNavBtn.classList.remove("to-top");
+        quickNavBtn.innerText = "⤵";
+        quickNavBtn.setAttribute("aria-label", "Scroll to bottom");
+      } else {
+        quickNavBtn.classList.add("to-top");
+        quickNavBtn.classList.remove("to-bottom");
+        quickNavBtn.innerText = "⤴";
+        quickNavBtn.setAttribute("aria-label", "Scroll to top");
+      }
+    }
+
+    quickNavBtn.addEventListener("click", () => {
+      if (quickNavBtn.classList.contains("to-bottom")) {
+        document.getElementById("actions").scrollIntoView({ behavior: "smooth" });
+      } else {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
+
+    window.addEventListener("scroll", updateQuickNavBtn, { passive: true });
+    window.addEventListener("resize", updateQuickNavBtn);
+    updateQuickNavBtn();
+    window.addEventListener("load", updateQuickNavBtn);
   </script>
 
   <!-- ✨ BACKGROUND ANIMATIONS -->
@@ -182,29 +227,40 @@
     </div>
   </section>
 
-  <!-- 🎨 BACKGROUND COLOR BLEND -->
+  <!-- 🎨 BACKGROUND COLOR BLEND (requestAnimationFrame-throttled for smoother scroll) -->
   <script>
     const startColor = [248, 240, 226];
     const endColor   = [214, 240, 255];
 
     document.body.style.backgroundColor = `rgb(${startColor.join(",")})`;
 
-    window.addEventListener("scroll", () => {
+    const updateBackgroundBlend = () => {
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const progress = Math.min(window.scrollY / maxScroll, 1);
+      const progress = maxScroll > 0 ? Math.min(window.scrollY / maxScroll, 1) : 0;
 
       const r = Math.round(startColor[0] + (endColor[0] - startColor[0]) * progress);
       const g = Math.round(startColor[1] + (endColor[1] - startColor[1]) * progress);
       const b = Math.round(startColor[2] + (endColor[2] - startColor[2]) * progress);
 
       document.body.style.backgroundColor = `rgb(${r},${g},${b})`;
-    });
+    };
+
+    let bgTicking = false;
+    window.addEventListener("scroll", () => {
+      if (bgTicking) return;
+      bgTicking = true;
+      requestAnimationFrame(() => {
+        updateBackgroundBlend();
+        bgTicking = false;
+      });
+    }, { passive: true });
   </script>
 
   <!-- ⭐ STAR + BUBBLE SCRIPTS -->
   <script>
     const starContainer = document.getElementById("emoji-stars");
     const starEmojis = ["⭐", "✨", "🌟"];
+    const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
 
     function spawnStar() {
       const star = document.createElement("div");
@@ -217,7 +273,7 @@
 
       const dx = (Math.random() - 0.5) * 600;
       const dy = (Math.random() - 0.5) * 600;
-      const duration = Math.random() * 4 + 4;
+      const duration = isMobileViewport ? (Math.random() * 3 + 4.5) : (Math.random() * 4 + 4);
 
       star.style.left = `${startX}px`;
       star.style.top = `${startY}px`;
@@ -230,7 +286,7 @@
       setTimeout(() => star.remove(), duration * 1000);
     }
 
-    setInterval(spawnStar, 2000);
+    setInterval(spawnStar, isMobileViewport ? 3000 : 2000);
 
     const bubbleContainer = document.getElementById("emoji-bubbles");
     let lastBubbleTime = 0;
@@ -241,7 +297,7 @@
         spawnBubble();
         lastBubbleTime = now;
       }
-    });
+    }, { passive: true });
 
     function spawnBubble() {
       if (Math.random() < 0.5) return;
@@ -258,43 +314,45 @@
     }
   </script>
 
+  <!-- 🎬 SCROLL REVEAL (kept inside body for valid structure) -->
+  <script>
+    const quoteBlocks = document.querySelectorAll(".quote-block");
+    const revealEls = document.querySelectorAll(".quote-block, .actions h2, .button-grid");
+    quoteBlocks.forEach((el, i) => {
+      el.style.setProperty("--stagger", `${i * 70}ms`);
+    });
+
+    const revealThreshold = window.matchMedia("(max-width: 768px)").matches ? 0.35 : 0.45;
+    const passThreshold = window.matchMedia("(max-width: 768px)").matches ? 0.15 : 0.2;
+
+    // Reveal on enter
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("revealed");
+          entry.target.classList.remove("passed");
+        }
+      });
+    }, { threshold: revealThreshold });
+
+    // Shrink on exit top (scrolled past)
+    const passObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) {
+          const rect = entry.target.getBoundingClientRect();
+          if (rect.top < 0) {
+            entry.target.classList.add("passed");
+            entry.target.classList.remove("revealed");
+          }
+        }
+      });
+    }, { threshold: passThreshold });
+
+    revealEls.forEach(el => {
+      revealObserver.observe(el);
+      passObserver.observe(el);
+    });
+  </script>
+
 </body>
 </html>
-
-<!-- 🎬 SCROLL WORLD REVEAL -->
-<script>
-  const quoteBlocks = document.querySelectorAll(".quote-block");
-  const revealEls = document.querySelectorAll(".quote-block, .actions h2, .button-grid");
-  quoteBlocks.forEach((el, i) => {
-    el.style.setProperty("--stagger", `${i * 70}ms`);
-  });
-
-  // Reveal on enter
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add("revealed");
-        entry.target.classList.remove("passed");
-      }
-    });
-  }, { threshold: 0.45 });
-
-  // Shrink on exit top (scrolled past)
-  const passObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (!entry.isIntersecting) {
-        const rect = entry.target.getBoundingClientRect();
-        if (rect.top < 0) {
-          // element has been scrolled past
-          entry.target.classList.add("passed");
-          entry.target.classList.remove("revealed");
-        }
-      }
-    });
-  }, { threshold: 0.2 });
-
-  revealEls.forEach(el => {
-    revealObserver.observe(el);
-    passObserver.observe(el);
-  });
-</script>
