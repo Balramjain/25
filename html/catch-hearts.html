@@ -8,251 +8,395 @@
   <meta http-equiv="Expires" content="0" />
   <title>Catch My Heartbeats</title>
   <style>
-    @font-face {
-      font-family: "CutiePatootie";
-      src: url("../fonts/CutiePatootie-Rgjv.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: "Wildcrazy";
-      src: url("../fonts/Wildcrazy-WKYO.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: "Cookiemonster";
-      src: url("../fonts/Cookiemonster-gv11.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: "LoveMint";
-      src: url("../fonts/LoveMint-9497.ttf") format("truetype");
-      font-display: swap;
-    }
+    @font-face { font-family: "LoveMint"; src: url("../fonts/LoveMint-9497.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "CutiePatootie"; src: url("../fonts/CutiePatootie-Rgjv.ttf") format("truetype"); font-display: swap; }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #fff1f1;
-      --bg-2: #f0f8ff;
-      --card: #ffffffcc;
-      --ink: #2a2a3b;
-      --accent: #ff9eb7;
+      --bg:       #fff1f1;
+      --bg-2:     #f0f8ff;
+      --ink:      #2a2a3b;
+      --accent:   #ff9eb7;
       --accent-2: #bfe1ff;
     }
 
+    html, body, body * {
+      font-family: "LoveMint", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
+    }
+
+    html { height: 100%; }
+
     body {
-      font-family: "LoveMint", sans-serif;
       color: var(--ink);
       background: linear-gradient(140deg, var(--bg), var(--bg-2));
-      min-height: 100vh;
-      padding: 24px 16px 80px;
-      overflow-x: hidden;
+      height: 100vh;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 16px 16px 70px;
     }
 
-    body > @font-face {
-      font-family: "LoveMint";
-      src: url("../fonts/LoveMint-9497.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    * {
-      position: relative;
-      z-index: 2;
-    }
-
-    .bg-sparkles {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 1;
-    }
-
+    .bg-sparkles { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
     .bg-sparkles span {
       position: absolute;
-      width: var(--size);
-      height: var(--size);
+      width: var(--size); height: var(--size);
       border-radius: 999px;
       background: var(--accent-2);
-      opacity: 0.45;
-      filter: blur(0.2px);
-      animation: float 10s ease-in-out infinite;
+      opacity: 0.45; filter: blur(0.2px);
+      animation: floatS 10s ease-in-out infinite;
     }
-
-    @keyframes float {
-      0% { transform: translateY(0) translateX(0) scale(1); }
-      50% { transform: translateY(-16px) translateX(10px) scale(1.06); }
+    @keyframes floatS {
+      0%   { transform: translateY(0) translateX(0) scale(1); }
+      50%  { transform: translateY(-16px) translateX(10px) scale(1.06); }
       100% { transform: translateY(0) translateX(0) scale(1); }
     }
 
     header {
       text-align: center;
-      margin: 12px auto 22px;
-      max-width: 900px;
+      flex-shrink: 0;
+      margin-bottom: 10px;
+      position: relative; z-index: 2;
+    }
+    header h1 { font-size: clamp(1.8rem, 5vw, 3.2rem); }
+    header p  { margin-top: 4px; font-size: clamp(1rem, 2.5vw, 1.3rem); opacity: 0.8; }
+
+    .score-bar {
+      text-align: center;
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      flex-shrink: 0;
+      margin-bottom: 8px;
+      position: relative; z-index: 2;
     }
 
-    header h1 {
-      font-family: "CutiePatootie", cursive;
-      font-size: clamp(2.2rem, 6vw, 3.4rem);
-    }
-
-    header p {
-      margin-top: 8px;
-      font-size: 1.1rem;
-      opacity: 0.8;
-    }
-.back-btn {
-      position: fixed;
-      left: 20px;
-      bottom: 20px;
-      z-index: 30;
-      border: none;
-      border-radius: 999px;
-      padding: 10px 18px;
-      font-family: "CutiePatootie", cursive;
-      font-size: 1.1rem;
-      cursor: pointer;
-      background: rgba(255, 255, 255, 0.86);
-      color: #000;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
-      transition: transform 220ms ease, box-shadow 220ms ease;
-    }
-
-    .back-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.25);
-    }
-    .panel {
-      width: min(980px, 92vw);
-      margin: 0 auto;
-      padding: 28px;
-      border-radius: 26px;
-      background-image: url("https://images.unsplash.com/photo-1761888855526-674732099103?auto=format&fit=crop&fm=jpg&q=80&w=2000");
-      background-size: cover;
-      background-position: center;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
-      min-height: 65vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .heart-zone {
       position: relative;
+      flex: 1;
+      min-height: 0;
+      border-radius: 22px;
       overflow: hidden;
+      background: linear-gradient(160deg,
+        rgba(255,245,251,0.85),
+        rgba(245,251,255,0.85)
+      );
+      z-index: 2;
     }
 
-    .panel::before {
-      content: "";
+    /* ── HEART BASE ── */
+    .heart {
+      position: absolute;
+      font-size: clamp(1.6rem, 4vw, 2.4rem);
+      cursor: pointer;
+      user-select: none;
+      z-index: 3;
+      line-height: 1;
+      will-change: transform;
+    }
+
+    /* FALL — straight down */
+    .heart.type-fall {
+      animation: heartFall var(--dur) linear forwards;
+    }
+    @keyframes heartFall {
+      from { transform: translateY(-60px) scale(1);    opacity: 1; }
+      to   { transform: translateY(100vh) scale(1.15); opacity: 0.2; }
+    }
+
+    /* DRIFT — floats sideways */
+    .heart.type-drift {
+      animation: heartDrift var(--dur) ease-in-out forwards;
+    }
+    @keyframes heartDrift {
+      0%   { transform: translate(0, -40px) rotate(0deg);          opacity: 1; }
+      40%  { transform: translate(var(--dx), 35%) rotate(20deg);   opacity: 1; }
+      100% { transform: translate(calc(var(--dx)*2), 105%) rotate(40deg); opacity: 0; }
+    }
+
+    /* ZIGZAG — bounces side to side */
+    .heart.type-zigzag {
+      animation: heartZigzag var(--dur) ease-in-out forwards;
+    }
+    @keyframes heartZigzag {
+      0%   { transform: translateY(-40px) translateX(0);            opacity: 1; }
+      20%  { transform: translateY(20%)   translateX(40px); }
+      40%  { transform: translateY(40%)   translateX(-40px); }
+      60%  { transform: translateY(60%)   translateX(40px); }
+      80%  { transform: translateY(80%)   translateX(-30px); }
+      100% { transform: translateY(105%)  translateX(0);            opacity: 0.1; }
+    }
+
+    /* GHOST — unpoppable, fades in and out */
+    .heart.type-ghost {
+      animation: heartGhost var(--dur) ease-in-out forwards;
+      cursor: not-allowed;
+      filter: grayscale(0.5) opacity(0.5);
+    }
+    @keyframes heartGhost {
+      0%   { transform: translateY(-40px) scale(0.8); opacity: 0.3; }
+      30%  { opacity: 0.7; }
+      70%  { opacity: 0.3; }
+      100% { transform: translateY(105%)  scale(1.1); opacity: 0; }
+    }
+
+    /* POP on click */
+    .heart.popped {
+      animation: heartPop 0.3s ease-out forwards !important;
+      pointer-events: none;
+    }
+    @keyframes heartPop {
+      0%   { transform: scale(1);   opacity: 1; }
+      50%  { transform: scale(2.2); opacity: 0.8; }
+      100% { transform: scale(0);   opacity: 0; }
+    }
+
+    /* DECOY click — shakes and runs */
+    .heart.shaking {
+      animation: heartShake 0.4s ease-out forwards !important;
+      pointer-events: none;
+    }
+    @keyframes heartShake {
+      0%   { transform: translateX(0) scale(1); }
+      20%  { transform: translateX(-12px) scale(1.1); }
+      40%  { transform: translateX(12px) scale(1.1); }
+      60%  { transform: translateX(-8px); }
+      80%  { transform: translateX(8px); }
+      100% { transform: translateX(0) scale(0.8); opacity: 0.5; }
+    }
+
+    /* ── HINT LABEL ── */
+    .heart-hint {
+      position: absolute;
+      top: -18px; left: 50%; transform: translateX(-50%);
+      font-size: 0.65rem;
+      white-space: nowrap;
+      color: #aaa;
+      pointer-events: none;
+    }
+
+    /* ── TIME BAR ── */
+    .time-bar-wrap {
+      flex-shrink: 0;
+      height: 8px;
+      background: rgba(0,0,0,0.08);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 8px;
+      position: relative; z-index: 2;
+    }
+    .time-bar {
+      height: 100%;
+      width: 100%;
+      background: linear-gradient(90deg, #ff9eb7, #ffcad4);
+      border-radius: 999px;
+      transition: width 0.2s linear;
+    }
+
+    /* ── GAME OVER ── */
+    .game-over {
       position: absolute;
       inset: 0;
-      background: linear-gradient(150deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
-    }
-
-    .panel > @font-face {
-      font-family: "LoveMint";
-      src: url("../fonts/LoveMint-9497.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .mini-panel {
-      padding: 16px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.88);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-    }
-
-    @media (max-width: 700px) {
-      .panel {
-        min-height: 70vh;
-        padding: 22px;
-      }
-    }
-.row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
+      display: none;
+      flex-direction: column;
       align-items: center;
+      justify-content: center;
+      background: rgba(255,255,255,0.9);
+      border-radius: 22px;
+      z-index: 10;
+      gap: 10px;
     }
+    .game-over.show { display: flex; }
+    .game-over h2 { font-size: clamp(1.8rem, 5vw, 2.8rem); color: var(--ink); }
+    .game-over p  { font-size: clamp(1.1rem, 3vw, 1.5rem); color: var(--ink); opacity: 0.8; }
 
-    .primary-btn {
-      border: none;
-      border-radius: 999px;
-      padding: 10px 18px;
-      font-family: "Cookiemonster", sans-serif;
-      font-size: 1.05rem;
+    /* ── BUTTONS ── */
+    .start-btn {
+      position: fixed;
+      bottom: 20px; left: 50%;
+      transform: translateX(-50%);
+      z-index: 30;
+      border: none; border-radius: 999px;
+      padding: clamp(12px,2vh,16px) clamp(32px,6vw,56px);
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
       cursor: pointer;
-      background: var(--accent);
-      color: #2b2b3a;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      background: linear-gradient(135deg, #ff9eb7, #ffcad4);
+      color: #2a2a3b;
+      box-shadow: 0 10px 28px rgba(255,100,150,0.3);
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
     }
+    .start-btn:hover { transform: translateX(-50%) translateY(-3px) scale(1.05); }
+    .start-btn:active { transform: translateX(-50%) scale(0.97); }
+    .start-btn:disabled { opacity: 0.5; cursor: not-allowed; transform: translateX(-50%); }
 
-    .primary-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 26px rgba(0, 0, 0, 0.18);
-    }
-
-    .tiny-btn {
-      border: none;
-      border-radius: 10px;
-      padding: 6px 12px;
-      font-family: "Cookiemonster", sans-serif;
+    .back-btn {
+      position: fixed;
+      left: 20px; bottom: 20px; z-index: 30;
+      border: none; border-radius: 999px;
+      padding: 14px 28px;
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
       cursor: pointer;
-      background: var(--accent-2);
-      color: #2b2b3a;
+      background: rgba(255,255,255,0.92);
+      color: #2a2a3b;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.2);
+      transition: transform 220ms ease, box-shadow 220ms ease;
     }
-
-    .heart-zone{position:relative;height:260px;overflow:hidden;border-radius:16px;background:linear-gradient(160deg,#fff5fb,#f5fbff);} .heart{position:absolute;font-size:1.4rem;animation:heart-fall var(--dur) linear forwards;cursor:pointer;} @keyframes heart-fall{from{transform:translateY(-20px) scale(1);opacity:1;}to{transform:translateY(280px) scale(1.2);opacity:0;}} .score{font-family:"Cookiemonster",sans-serif;font-size:1.2rem;}
-  
-    body, body * {
-      font-family: "LoveMint", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
-    }
+    .back-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(0,0,0,0.25); }
   </style>
 </head>
 <body>
+
   <div class="bg-sparkles" aria-hidden="true">
-    <span style="--size: 10px; left: 8%; top: 12%;"></span>
-    <span style="--size: 16px; left: 18%; top: 24%;"></span>
-    <span style="--size: 12px; left: 32%; top: 10%;"></span>
-    <span style="--size: 14px; left: 44%; top: 22%;"></span>
-    <span style="--size: 9px; left: 56%; top: 14%;"></span>
-    <span style="--size: 13px; left: 66%; top: 30%;"></span>
-    <span style="--size: 11px; left: 78%; top: 16%;"></span>
-    <span style="--size: 15px; left: 88%; top: 28%;"></span>
-    <span style="--size: 9px; left: 12%; top: 70%;"></span>
-    <span style="--size: 12px; left: 36%; top: 78%;"></span>
-    <span style="--size: 14px; left: 64%; top: 74%;"></span>
-    <span style="--size: 10px; left: 84%; top: 68%;"></span>
+    <span style="--size:10px;left:8%;top:12%"></span>
+    <span style="--size:16px;left:18%;top:24%"></span>
+    <span style="--size:12px;left:32%;top:10%"></span>
+    <span style="--size:14px;left:44%;top:22%"></span>
+    <span style="--size:9px;left:56%;top:14%"></span>
+    <span style="--size:13px;left:66%;top:30%"></span>
+    <span style="--size:11px;left:78%;top:16%"></span>
+    <span style="--size:15px;left:88%;top:28%"></span>
+    <span style="--size:9px;left:12%;top:70%"></span>
+    <span style="--size:12px;left:36%;top:78%"></span>
+    <span style="--size:14px;left:64%;top:74%"></span>
+    <span style="--size:10px;left:84%;top:68%"></span>
   </div>
 
   <button class="back-btn" onclick="sessionStorage.setItem('cameFromPage','true'); location.href='index.html?v=20260315';">
     Go Back
   </button>
 
-  <header></div>
-    <h1>Catch My Heartbeats</h1>
-    <p>Tap the falling hearts and rack up the love.</p>
+  <header>
+    <h1>Catch My Heartbeats 💕</h1>
+    <p>Tap every falling heart before it disappears!</p>
   </header>
 
-  <section class="panel">
-    <div class="row"><div class="score">Score: <span id="heartScore">0</span></div><button class="tiny-btn" id="heartStart">Start</button></div><div class="heart-zone" id="heartZone"></div>
-  </section>
+  <div class="score-bar">Score: <span id="heartScore">0</span></div>
+
+  <div class="time-bar-wrap">
+    <div class="time-bar" id="timeBar"></div>
+  </div>
+
+  <div class="heart-zone" id="heartZone">
+    <div class="game-over" id="gameOver">
+      <h2>Time's up! 🎉</h2>
+      <p id="finalScore">You caught 0 hearts!</p>
+    </div>
+  </div>
+
+  <button class="start-btn" id="startBtn">Start 💖</button>
 
   <script>
-    let score=0; let interval=null; const zone=document.getElementById("heartZone"); const scoreEl=document.getElementById("heartScore"); function spawnHeart(){ const h=document.createElement("div"); h.className="heart"; h.textContent="<3"; h.style.left=`${Math.random()*90+4}%`; h.style.setProperty("--dur",`${Math.random()*2+2.5}s`); h.addEventListener("click",()=>{ score+=1; scoreEl.textContent=score; h.remove();}); zone.appendChild(h); setTimeout(()=>h.remove(),4000);} document.getElementById("heartStart").addEventListener("click",()=>{ if(interval) return; interval=setInterval(spawnHeart,650); setTimeout(()=>{ clearInterval(interval); interval=null; },15000);});
+    const zone       = document.getElementById("heartZone");
+    const scoreEl    = document.getElementById("heartScore");
+    const startBtn   = document.getElementById("startBtn");
+    const timeBar    = document.getElementById("timeBar");
+    const gameOver   = document.getElementById("gameOver");
+    const finalScore = document.getElementById("finalScore");
+
+    const GOOD_EMOJIS  = ["❤️","💕","💗","💖","💝","💓","🩷","💞"];
+    const GHOST_EMOJIS = ["🖤","💀","👻","🤍"];
+    const DURATION     = 30000;
+    const INTERVAL     = 550;
+
+    // heart type weights — fall:50% drift:20% zigzag:15% ghost:15%
+    function pickType() {
+      const r = Math.random();
+      if (r < 0.50) return "fall";
+      if (r < 0.70) return "drift";
+      if (r < 0.85) return "zigzag";
+      return "ghost";
+    }
+
+    let score      = 0;
+    let spawnTimer = null;
+    let running    = false;
+    let startTime  = null;
+
+    function spawnHeart() {
+      const type    = pickType();
+      const isGhost = type === "ghost";
+
+      const h = document.createElement("div");
+      h.className   = `heart type-${type}`;
+      h.textContent = isGhost
+        ? GHOST_EMOJIS[Math.floor(Math.random() * GHOST_EMOJIS.length)]
+        : GOOD_EMOJIS[Math.floor(Math.random() * GOOD_EMOJIS.length)];
+
+      // position
+      h.style.left = `${Math.random() * 86 + 2}%`;
+      h.style.top  = "0px";
+
+      // duration — longer so they reach bottom
+      const dur = (Math.random() * 2 + 3.5).toFixed(2);
+      h.style.setProperty("--dur", dur + "s");
+
+      // drift offset
+      const dx = (Math.random() > 0.5 ? 1 : -1) * (Math.random() * 80 + 40);
+      h.style.setProperty("--dx", dx + "px");
+
+      if (isGhost) {
+        // unpoppable — hint label
+        const hint = document.createElement("span");
+        hint.className   = "heart-hint";
+        hint.textContent = "can't catch!";
+        h.appendChild(hint);
+
+        h.addEventListener("click", () => {
+          // shake and deduct 1 point
+          h.classList.add("shaking");
+          score = Math.max(0, score - 1);
+          scoreEl.textContent = score;
+          setTimeout(() => h.remove(), 450);
+        });
+      } else {
+        h.addEventListener("click", () => {
+          if (h.classList.contains("popped")) return;
+          h.classList.add("popped");
+          score++;
+          scoreEl.textContent = score;
+          setTimeout(() => h.remove(), 320);
+        });
+      }
+
+      zone.appendChild(h);
+      setTimeout(() => { if (h.parentNode) h.remove(); }, parseFloat(dur) * 1000 + 200);
+    }
+
+    function updateTimeBar() {
+      if (!running) return;
+      const elapsed  = Date.now() - startTime;
+      const progress = Math.max(0, 1 - elapsed / DURATION);
+      timeBar.style.width = (progress * 100) + "%";
+      requestAnimationFrame(updateTimeBar);
+    }
+
+    function startGame() {
+      if (running) return;
+      running    = true;
+      score      = 0;
+      startTime  = Date.now();
+      scoreEl.textContent = "0";
+      timeBar.style.width = "100%";
+      gameOver.classList.remove("show");
+      startBtn.disabled    = true;
+      startBtn.textContent = "Going 💓";
+
+      zone.querySelectorAll(".heart").forEach(h => h.remove());
+
+      spawnTimer = setInterval(spawnHeart, INTERVAL);
+      requestAnimationFrame(updateTimeBar);
+
+      setTimeout(() => {
+        clearInterval(spawnTimer);
+        running = false;
+        timeBar.style.width = "0%";
+        finalScore.textContent = `You caught ${score} heart${score !== 1 ? "s" : ""}! 💖`;
+        gameOver.classList.add("show");
+        startBtn.disabled    = false;
+        startBtn.textContent = "Play Again 💖";
+      }, DURATION);
+    }
+
+    startBtn.addEventListener("click", startGame);
   </script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
