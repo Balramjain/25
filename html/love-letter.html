@@ -9,70 +9,42 @@
   <title>A Note Just for You</title>
   <style>
     @font-face { font-family: "LoveBubbles"; src: url("../fonts/LoveBubbles-MV21J.ttf") format("truetype"); font-display: swap; }
-    @font-face {
-      font-family: "CutiePatootie";
-      src: url("../fonts/CutiePatootie-Rgjv.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: "Wildcrazy";
-      src: url("../fonts/Wildcrazy-WKYO.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: "Cookiemonster";
-      src: url("../fonts/Cookiemonster-gv11.ttf") format("truetype");
-      font-display: swap;
-    }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #ffeef5;
-      --bg-2: #e7f3ff;
-      --card: #ffffffcc;
-      --ink: #2b2b3a;
-      --accent: #ffb9d9;
+      --bg:       #ffeef5;
+      --bg-2:     #e7f3ff;
+      --ink:      #2b2b3a;
+      --accent:   #ffb9d9;
       --accent-2: #bfe1ff;
     }
 
+    /* ALL text uses LoveBubbles — no exceptions */
+    html, body, body * {
+      font-family: "LoveBubbles", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
+    }
+
     body {
-      font-family: "LoveBubbles", sans-serif;
       color: var(--ink);
       background: linear-gradient(140deg, var(--bg), var(--bg-2));
       min-height: 100vh;
-      padding: 24px 16px 80px;
+      padding: 24px 16px 100px;
       overflow-x: hidden;
     }
 
-    * {
-      position: relative;
-      z-index: 2;
-    }
-
-    .bg-sparkles {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 1;
-    }
-
+    .bg-sparkles { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
     .bg-sparkles span {
       position: absolute;
-      width: var(--size);
-      height: var(--size);
+      width: var(--size); height: var(--size);
       border-radius: 999px;
       background: var(--accent-2);
-      opacity: 0.45;
-      filter: blur(0.2px);
-      animation: float 10s ease-in-out infinite;
+      opacity: 0.45; filter: blur(0.2px);
+      animation: floatSparkle 10s ease-in-out infinite;
     }
-
-    @keyframes float {
-      0% { transform: translateY(0) translateX(0) scale(1); }
-      50% { transform: translateY(-16px) translateX(10px) scale(1.06); }
+    @keyframes floatSparkle {
+      0%   { transform: translateY(0) translateX(0) scale(1); }
+      50%  { transform: translateY(-16px) translateX(10px) scale(1.06); }
       100% { transform: translateY(0) translateX(0) scale(1); }
     }
 
@@ -80,165 +52,165 @@
       text-align: center;
       margin: 12px auto 22px;
       max-width: 900px;
+      position: relative; z-index: 2;
     }
+    header h1 { font-size: clamp(2.2rem, 6vw, 3.6rem); }
+    header p  { margin-top: 8px; font-size: clamp(1.1rem, 3vw, 1.4rem); opacity: 0.8; }
 
-    header h1 {
-      font-family: "CutiePatootie", cursive;
-      font-size: clamp(2.2rem, 6vw, 3.4rem);
-    }
-
-    header p {
-      margin-top: 8px;
-      font-size: 1.1rem;
-      opacity: 0.8;
-    }
-.back-btn {
-      position: fixed;
-      left: 20px;
-      bottom: 20px;
-      z-index: 30;
-      border: none;
-      border-radius: 999px;
-      padding: 10px 18px;
-      font-family: "CutiePatootie", cursive;
-      font-size: 1.1rem;
-      cursor: pointer;
-      background: rgba(255, 255, 255, 0.86);
-      color: #000;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
-      transition: transform 220ms ease, box-shadow 220ms ease;
-    }
-
-    .back-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.25);
-    }
     .panel {
-      width: min(980px, 92vw);
+      width: min(860px, 92vw);
       margin: 0 auto;
-      padding: 28px;
+      padding: clamp(24px, 4vw, 44px);
       border-radius: 26px;
       background-image: url("https://images.unsplash.com/photo-1761888855526-674732099103?auto=format&fit=crop&fm=jpg&q=80&w=2000");
       background-size: cover;
       background-position: center;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
-      min-height: 65vh;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.12);
+      min-height: 60vh;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       position: relative;
       overflow: hidden;
+      z-index: 2;
     }
-
     .panel::before {
       content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(150deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
+      position: absolute; inset: 0;
+      background: linear-gradient(150deg, rgba(255,255,255,0.93), rgba(255,255,255,0.80));
+      z-index: 0;
+    }
+    .panel > * { position: relative; z-index: 1; }
+
+    .letter-wrap {
+      width: 100%;
+      max-width: 700px;
     }
 
-    * {
-      position: relative;
-      z-index: 1;
+    /* NO blinking cursor, NO border */
+    .typewriter {
+      font-size: clamp(1.35rem, 3.5vw, 1.8rem);
+      line-height: 1.8;
+      color: var(--ink);
+      white-space: pre-wrap;
+      word-break: break-word;
+      min-height: 2em;
     }
 
-    .mini-panel {
-      padding: 16px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.88);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-    }
-
-    @media (max-width: 700px) {
-      .panel {
-        min-height: 70vh;
-        padding: 22px;
-      }
-    }
-.row {
+    .reveal-wrap {
+      width: 100%;
       display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      align-items: center;
+      justify-content: center;
+      margin-top: 36px;
     }
 
-    .primary-btn {
+    .reveal-btn {
       border: none;
       border-radius: 999px;
+      padding: clamp(12px, 2vw, 16px) clamp(28px, 6vw, 48px);
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      cursor: pointer;
+      background: linear-gradient(135deg, #ffb9d9, #ffd6f0);
+      color: #2b2b3a;
+      box-shadow: 0 10px 24px rgba(255,100,160,0.25);
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
+    }
+    .reveal-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 16px 32px rgba(255,100,160,0.3);
+    }
+    .reveal-btn:active { transform: scale(0.97); }
+
+    .back-btn {
+      position: fixed;
+      left: 20px; bottom: 20px; z-index: 30;
+      border: none; border-radius: 999px;
       padding: 10px 18px;
-      font-family: "Cookiemonster", sans-serif;
-      font-size: 1.05rem;
-      cursor: pointer;
-      background: var(--accent);
-      color: #2b2b3a;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      font-size: 1.1rem; cursor: pointer;
+      background: rgba(255,255,255,0.86);
+      color: #000;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.2);
+      transition: transform 220ms ease, box-shadow 220ms ease;
     }
-
-    .primary-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 26px rgba(0, 0, 0, 0.18);
-    }
-
-    .tiny-btn {
-      border: none;
-      border-radius: 10px;
-      padding: 6px 12px;
-      font-family: "Cookiemonster", sans-serif;
-      cursor: pointer;
-      background: var(--accent-2);
-      color: #2b2b3a;
-    }
-
-    .typewriter { font-family: "Cookiemonster", sans-serif; font-size: 1.2rem; min-height: 70px; border-right: 2px solid rgba(0,0,0,0.4); padding-right: 6px; white-space: pre-wrap; }
-
-    body, body * {
-      font-family: "LoveBubbles", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
-    }
+    .back-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(0,0,0,0.25); }
   </style>
 </head>
 <body>
+
   <div class="bg-sparkles" aria-hidden="true">
-    <span style="--size: 10px; left: 8%; top: 12%;"></span>
-    <span style="--size: 16px; left: 18%; top: 24%;"></span>
-    <span style="--size: 12px; left: 32%; top: 10%;"></span>
-    <span style="--size: 14px; left: 44%; top: 22%;"></span>
-    <span style="--size: 9px; left: 56%; top: 14%;"></span>
-    <span style="--size: 13px; left: 66%; top: 30%;"></span>
-    <span style="--size: 11px; left: 78%; top: 16%;"></span>
-    <span style="--size: 15px; left: 88%; top: 28%;"></span>
-    <span style="--size: 9px; left: 12%; top: 70%;"></span>
-    <span style="--size: 12px; left: 36%; top: 78%;"></span>
-    <span style="--size: 14px; left: 64%; top: 74%;"></span>
-    <span style="--size: 10px; left: 84%; top: 68%;"></span>
+    <span style="--size:10px;left:8%;top:12%"></span>
+    <span style="--size:16px;left:18%;top:24%"></span>
+    <span style="--size:12px;left:32%;top:10%"></span>
+    <span style="--size:14px;left:44%;top:22%"></span>
+    <span style="--size:9px;left:56%;top:14%"></span>
+    <span style="--size:13px;left:66%;top:30%"></span>
+    <span style="--size:11px;left:78%;top:16%"></span>
+    <span style="--size:15px;left:88%;top:28%"></span>
+    <span style="--size:9px;left:12%;top:70%"></span>
+    <span style="--size:12px;left:36%;top:78%"></span>
+    <span style="--size:14px;left:64%;top:74%"></span>
+    <span style="--size:10px;left:84%;top:68%"></span>
   </div>
 
   <button class="back-btn" onclick="sessionStorage.setItem('cameFromPage','true'); location.href='index.html?v=20260315';">
     Go Back
   </button>
 
-  <header></div>
+  <header>
     <h1>A Note Just for You</h1>
     <p>Read this slowly, like a little heartbeat on paper.</p>
   </header>
 
   <section class="panel">
-    <div class="row"><div class="typewriter" id="loveText"></div><button class="primary-btn" id="loveReplay">Replay</button></div>
+    <div class="letter-wrap">
+      <div class="typewriter" id="loveText"></div>
+    </div>
+    <div class="reveal-wrap">
+      <button class="reveal-btn" id="revealBtn">Reveal 💌</button>
+    </div>
   </section>
 
   <script>
-    const loveText = "My love, every day with you feels like home."; const loveEl = document.getElementById("loveText"); function typeLetter(){ loveEl.textContent=""; let i=0; const t=setInterval(()=>{ loveEl.textContent+=loveText[i]||""; i+=1; if(i>=loveText.length) clearInterval(t); },35);} document.getElementById("loveReplay").addEventListener("click", typeLetter); typeLetter();
+    const letter = `Hey you 💕
+
+I know I don't always say the right things at the right time, and sometimes I'm too much or too little — but here is the one thing I am always sure about: I want you.
+
+Not just on the good days when everything is easy and we are laughing at nothing. I want you on the hard days too, when things don't make sense and the world feels too loud. I want to be the person you call, the person you don't have to explain yourself to, the person who just gets it.
+
+You do something to me that nobody else has ever done. You make me feel calm and excited at the same time — which doesn't even make sense, but that is exactly what you do. Your voice, your laugh, the way you look when you're thinking — I notice all of it and I love all of it.
+
+So here it is, simple and honest —
+
+Will you be mine? 🥺
+
+Not just today. Not just when it's easy. But properly, fully, all the way mine?
+
+Because I already know my answer. You are the one I choose. Every time, without thinking, without doubt — you.
+
+Yours always,
+Minku 💖`;
+
+    const el        = document.getElementById("loveText");
+    const revealBtn = document.getElementById("revealBtn");
+    let   timer     = null;
+    let   started   = false;
+
+    revealBtn.addEventListener("click", () => {
+      if (started) return;
+      started = true;
+      revealBtn.style.display = "none";
+
+      clearInterval(timer);
+      el.textContent = "";
+      let i = 0;
+      timer = setInterval(() => {
+        el.textContent += letter[i] || "";
+        i++;
+        if (i >= letter.length) clearInterval(timer);
+      }, 28);
+    });
   </script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
