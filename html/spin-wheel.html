@@ -8,251 +8,249 @@
   <meta http-equiv="Expires" content="0" />
   <title>Spin for a Date</title>
   <style>
-    @font-face {
-      font-family: "CutiePatootie";
-      src: url("../fonts/CutiePatootie-Rgjv.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: "Wildcrazy";
-      src: url("../fonts/Wildcrazy-WKYO.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: "Cookiemonster";
-      src: url("../fonts/Cookiemonster-gv11.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: "LoveVale";
-      src: url("../fonts/LoveVale-BWm1G.ttf") format("truetype");
-      font-display: swap;
-    }
+    @font-face { font-family: "LoveVale"; src: url("../fonts/LoveVale-BWm1G.ttf") format("truetype"); font-display: swap; }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg: #fff8ea;
-      --bg-2: #eef6ff;
-      --card: #ffffffcc;
-      --ink: #2a2a3b;
-      --accent: #ffd39c;
+      --bg:       #fff8ea;
+      --bg-2:     #eef6ff;
+      --ink:      #2a2a3b;
       --accent-2: #bcd7ff;
     }
 
+    html, body, body * {
+      font-family: "LoveVale", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
+    }
+
+    html { height: 100%; }
+
     body {
-      font-family: "LoveVale", sans-serif;
       color: var(--ink);
       background: linear-gradient(140deg, var(--bg), var(--bg-2));
-      min-height: 100vh;
-      padding: 24px 16px 80px;
-      overflow-x: hidden;
+      height: 100vh;
+      padding: 16px 16px 70px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
     }
 
-    body > @font-face {
-      font-family: "LoveVale";
-      src: url("../fonts/LoveVale-BWm1G.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    * {
-      position: relative;
-      z-index: 2;
-    }
-
-    .bg-sparkles {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 1;
-    }
-
+    .bg-sparkles { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
     .bg-sparkles span {
       position: absolute;
-      width: var(--size);
-      height: var(--size);
+      width: var(--size); height: var(--size);
       border-radius: 999px;
       background: var(--accent-2);
-      opacity: 0.45;
-      filter: blur(0.2px);
-      animation: float 10s ease-in-out infinite;
+      opacity: 0.45; filter: blur(0.2px);
+      animation: floatS 10s ease-in-out infinite;
     }
-
-    @keyframes float {
-      0% { transform: translateY(0) translateX(0) scale(1); }
-      50% { transform: translateY(-16px) translateX(10px) scale(1.06); }
+    @keyframes floatS {
+      0%   { transform: translateY(0) translateX(0) scale(1); }
+      50%  { transform: translateY(-16px) translateX(10px) scale(1.06); }
       100% { transform: translateY(0) translateX(0) scale(1); }
     }
 
     header {
       text-align: center;
-      margin: 12px auto 22px;
+      margin: 0 auto 10px;
       max-width: 900px;
+      position: relative; z-index: 2;
+      flex-shrink: 0;
     }
+    header h1 { font-size: clamp(1.6rem, 4.5vw, 3rem); }
+    header p  { margin-top: 4px; font-size: clamp(1rem, 2.5vw, 1.3rem); opacity: 0.8; }
 
-    header h1 {
-      font-family: "CutiePatootie", cursive;
-      font-size: clamp(2.2rem, 6vw, 3.4rem);
-    }
-
-    header p {
-      margin-top: 8px;
-      font-size: 1.1rem;
-      opacity: 0.8;
-    }
-.back-btn {
-      position: fixed;
-      left: 20px;
-      bottom: 20px;
-      z-index: 30;
-      border: none;
-      border-radius: 999px;
-      padding: 10px 18px;
-      font-family: "CutiePatootie", cursive;
-      font-size: 1.1rem;
-      cursor: pointer;
-      background: rgba(255, 255, 255, 0.86);
-      color: #000;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
-      transition: transform 220ms ease, box-shadow 220ms ease;
-    }
-
-    .back-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.25);
-    }
+    /* ── PANEL ── */
     .panel {
       width: min(980px, 92vw);
       margin: 0 auto;
-      padding: 28px;
+      padding: 16px;
       border-radius: 26px;
       background-image: url("https://images.unsplash.com/photo-1761798983856-6f67414ea18c?auto=format&fit=crop&fm=jpg&q=80&w=2000");
       background-size: cover;
       background-position: center;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
-      min-height: 65vh;
+      box-shadow: 0 18px 40px rgba(0,0,0,0.12);
+      flex: 1;
+      min-height: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       position: relative;
       overflow: hidden;
+      z-index: 2;
     }
-
     .panel::before {
       content: "";
-      position: absolute;
-      inset: 0;
+      position: absolute; inset: 0;
       background: linear-gradient(150deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
+      z-index: 0;
     }
+    .panel > * { position: relative; z-index: 1; }
 
-    .panel > @font-face {
-      font-family: "LoveVale";
-      src: url("../fonts/LoveVale-BWm1G.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .mini-panel {
-      padding: 16px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.88);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-    }
-
-    @media (max-width: 700px) {
-      .panel {
-        min-height: 70vh;
-        padding: 22px;
-      }
-    }
-.row {
+    /* ── WHEEL WRAP ── */
+    .wheel-wrap {
       display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
+      flex-direction: column;
       align-items: center;
+      gap: clamp(6px, 1.5vh, 14px);
+      width: 100%;
     }
 
-    .primary-btn {
+    .wheel-pointer {
+      width: 0; height: 0;
+      border-left: 12px solid transparent;
+      border-right: 12px solid transparent;
+      border-bottom: 22px solid #2b2b3a;
+      margin-bottom: -4px;
+      z-index: 3;
+    }
+
+    .wheel {
+      width: clamp(160px, 28vh, 260px);
+      height: clamp(160px, 28vh, 260px);
+      border-radius: 50%;
+      background: conic-gradient(
+        #ffd6d6 0deg 45deg,
+        #d6f5e3 45deg 90deg,
+        #e8d6ff 90deg 135deg,
+        #ffecd6 135deg 180deg,
+        #ffd6d6 180deg 225deg,
+        #d6f5e3 225deg 270deg,
+        #e8d6ff 270deg 315deg,
+        #ffecd6 315deg 360deg
+      );
+      border: 6px solid #fff;
+      box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+      transition: transform 2.2s cubic-bezier(0.15,0.85,0.2,1);
+    }
+
+    #wheelResult {
+      font-size: clamp(1.1rem, 3vh, 1.7rem);
+      text-align: center;
+      min-height: 1.8em;
+      color: var(--ink);
+      transition: opacity 0.4s;
+    }
+
+    .spin-btn {
       border: none;
       border-radius: 999px;
-      padding: 10px 18px;
-      font-family: "Cookiemonster", sans-serif;
-      font-size: 1.05rem;
+      padding: clamp(8px,1.5vh,14px) clamp(22px,4vw,48px);
+      font-size: clamp(1rem, 2.5vh, 1.5rem);
       cursor: pointer;
-      background: var(--accent);
-      color: #2b2b3a;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      background: linear-gradient(135deg, #7ec8f5, #4baee8);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(75,174,232,0.3);
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
     }
+    .spin-btn:hover { transform: translateY(-3px) scale(1.05); box-shadow: 0 16px 32px rgba(75,174,232,0.4); }
+    .spin-btn:active { transform: scale(0.97); }
+    .spin-btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; }
 
-    .primary-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 26px rgba(0, 0, 0, 0.18);
-    }
-
-    .tiny-btn {
-      border: none;
-      border-radius: 10px;
-      padding: 6px 12px;
-      font-family: "Cookiemonster", sans-serif;
+    .back-btn {
+      position: fixed;
+      left: 20px; bottom: 20px; z-index: 30;
+      border: none; border-radius: 999px;
+      padding: 14px 28px;
+      font-size: clamp(1.1rem, 2.5vw, 1.4rem);
       cursor: pointer;
-      background: var(--accent-2);
-      color: #2b2b3a;
+      background: rgba(255,255,255,0.92);
+      color: #2a2a3b;
+      box-shadow: 0 8px 22px rgba(0,0,0,0.2);
+      transition: transform 220ms ease, box-shadow 220ms ease;
     }
-
-    .wheel-wrap{display:grid;place-items:center;gap:10px;} .wheel{width:240px;height:240px;border-radius:50%;background:conic-gradient(#ffd6d6 0deg 45deg,#d6f5e3 45deg 90deg,#e8d6ff 90deg 135deg,#ffecd6 135deg 180deg,#ffd6d6 180deg 225deg,#d6f5e3 225deg 270deg,#e8d6ff 270deg 315deg,#ffecd6 315deg 360deg);border:6px solid #fff;box-shadow:0 12px 24px rgba(0,0,0,0.18);transition:transform 2.2s cubic-bezier(0.15,0.85,0.2,1);} .wheel-pointer{width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:18px solid #2b2b3a;}
-  
-    body, body * {
-      font-family: "LoveVale", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
-    }
+    .back-btn:hover { transform: translateY(-2px); box-shadow: 0 12px 26px rgba(0,0,0,0.25); }
   </style>
 </head>
 <body>
+
   <div class="bg-sparkles" aria-hidden="true">
-    <span style="--size: 10px; left: 8%; top: 12%;"></span>
-    <span style="--size: 16px; left: 18%; top: 24%;"></span>
-    <span style="--size: 12px; left: 32%; top: 10%;"></span>
-    <span style="--size: 14px; left: 44%; top: 22%;"></span>
-    <span style="--size: 9px; left: 56%; top: 14%;"></span>
-    <span style="--size: 13px; left: 66%; top: 30%;"></span>
-    <span style="--size: 11px; left: 78%; top: 16%;"></span>
-    <span style="--size: 15px; left: 88%; top: 28%;"></span>
-    <span style="--size: 9px; left: 12%; top: 70%;"></span>
-    <span style="--size: 12px; left: 36%; top: 78%;"></span>
-    <span style="--size: 14px; left: 64%; top: 74%;"></span>
-    <span style="--size: 10px; left: 84%; top: 68%;"></span>
+    <span style="--size:10px;left:8%;top:12%"></span>
+    <span style="--size:16px;left:18%;top:24%"></span>
+    <span style="--size:12px;left:32%;top:10%"></span>
+    <span style="--size:14px;left:44%;top:22%"></span>
+    <span style="--size:9px;left:56%;top:14%"></span>
+    <span style="--size:13px;left:66%;top:30%"></span>
+    <span style="--size:11px;left:78%;top:16%"></span>
+    <span style="--size:15px;left:88%;top:28%"></span>
+    <span style="--size:9px;left:12%;top:70%"></span>
+    <span style="--size:12px;left:36%;top:78%"></span>
+    <span style="--size:14px;left:64%;top:74%"></span>
+    <span style="--size:10px;left:84%;top:68%"></span>
   </div>
 
   <button class="back-btn" onclick="sessionStorage.setItem('cameFromPage','true'); location.href='index.html?v=20260315';">
     Go Back
   </button>
 
-  <header></div>
+  <header>
     <h1>Spin for a Date</h1>
     <p>Let fate pick our next sweet plan.</p>
   </header>
 
   <section class="panel">
-    <div class="wheel-wrap"><div class="wheel-pointer"></div><div class="wheel" id="wheel"></div><button class="primary-btn" id="spinBtn">Spin</button><div id="wheelResult"></div></div>
+    <div class="wheel-wrap">
+      <div class="wheel-pointer"></div>
+      <div class="wheel" id="wheel"></div>
+      <div id="wheelResult"></div>
+      <button class="spin-btn" id="spinBtn">Spin</button>
+    </div>
   </section>
 
   <script>
-    const items=["Movie night","Dessert date","Picnic","Love note","Hug attack","Dance","Stargaze","Breakfast"]; const wheel=document.getElementById("wheel"); const result=document.getElementById("wheelResult"); let rotation=0; document.getElementById("spinBtn").addEventListener("click",()=>{ const spin=Math.floor(Math.random()*360)+720; rotation+=spin; wheel.style.transform=`rotate(${rotation}deg)`; const normalized=(360-(rotation%360))%360; const idx=Math.floor(normalized/(360/items.length)); setTimeout(()=>{ result.textContent=`Result: ${items[idx]}`;},2200);});
+    const items = [
+      "Movie night 🎬",
+      "Dessert date 🍰",
+      "Picnic outside 🧺",
+      "Love note 💌",
+      "Hug attack 🤗",
+      "Dance together 💃",
+      "Stargaze 🌟",
+      "Breakfast date 🥞",
+    ];
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    }
+
+    let queue    = shuffle(items);
+    let queueIdx = 0;
+
+    const wheel   = document.getElementById("wheel");
+    const result  = document.getElementById("wheelResult");
+    const spinBtn = document.getElementById("spinBtn");
+    let rotation  = 0;
+    let spinning  = false;
+
+    spinBtn.addEventListener("click", () => {
+      if (spinning) return;
+      spinning = true;
+      spinBtn.disabled = true;
+      result.style.opacity = "0";
+
+      if (queueIdx >= queue.length) {
+        queue    = shuffle(items);
+        queueIdx = 0;
+      }
+      const picked = queue[queueIdx++];
+
+      const extraSpin = Math.floor(Math.random() * 360);
+      rotation += 1440 + extraSpin;
+      wheel.style.transform = `rotate(${rotation}deg)`;
+
+      setTimeout(() => {
+        result.textContent   = picked;
+        result.style.opacity = "1";
+        spinning             = false;
+        spinBtn.disabled     = false;
+      }, 2300);
+    });
   </script>
+
 </body>
 </html>
-
-
-
-
-
-
-
-
