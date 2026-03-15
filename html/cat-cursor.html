@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -26,6 +26,12 @@
       font-display: swap;
     }
 
+    @font-face {
+      font-family: "BalonkuRegular";
+      src: url("../fonts/BalonkuRegular-la1w.otf") format("opentype");
+      font-display: swap;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
@@ -38,7 +44,7 @@
     }
 
     body {
-      font-family: "Wildcrazy", sans-serif;
+      font-family: "BalonkuRegular", sans-serif;
       color: var(--ink);
       background: linear-gradient(140deg, var(--bg), var(--bg-2));
       min-height: 100vh;
@@ -47,7 +53,13 @@
       cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'><circle cx='12' cy='12' r='6' fill='%23ffb4d6'/><circle cx='6' cy='7' r='3' fill='%23ffb4d6'/><circle cx='18' cy='7' r='3' fill='%23ffb4d6'/></svg>") 12 12, auto;
     }
 
-    body > * {
+    body > @font-face {
+      font-family: "BalonkuRegular";
+      src: url("../fonts/BalonkuRegular-la1w.otf") format("opentype");
+      font-display: swap;
+    }
+
+    * {
       position: relative;
       z-index: 2;
     }
@@ -137,7 +149,13 @@
       background: linear-gradient(150deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
     }
 
-    .panel > * {
+    .panel > @font-face {
+      font-family: "BalonkuRegular";
+      src: url("../fonts/BalonkuRegular-la1w.otf") format("opentype");
+      font-display: swap;
+    }
+
+    * {
       position: relative;
       z-index: 1;
     }
@@ -192,6 +210,10 @@
 
     .cursor-demo{position:relative;height:260px;border-radius:16px;background:#fef2f8;overflow:hidden;cursor:none;}
     .cat-cursor{position:absolute;width:28px;height:28px;border-radius:50%;background:#ffb4d6;pointer-events:none;box-shadow:0 6px 16px rgba(0,0,0,0.18);transform:translate(-50%,-50%);}
+  
+    body, body * {
+      font-family: "BalonkuRegular", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
+    }
   </style>
 </head>
 <body>
@@ -228,6 +250,11 @@
   </script>
 </body>
 </html>
+
+
+
+
+
 
 
 

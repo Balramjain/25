@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -26,6 +26,12 @@
       font-display: swap;
     }
 
+    @font-face {
+      font-family: "LoveBubbles";
+      src: url("../fonts/LoveBubbles-MV21J.ttf") format("truetype");
+      font-display: swap;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
@@ -37,7 +43,7 @@
     }
 
     body {
-      font-family: "Wildcrazy", sans-serif;
+      font-family: "LoveBubbles", sans-serif;
       color: var(--ink);
       background: linear-gradient(140deg, var(--bg), var(--bg-2));
       min-height: 100vh;
@@ -120,6 +126,10 @@
     .ball:active {
       transform: scale(0.95);
     }
+  
+    body, body * {
+      font-family: "LoveBubbles", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
+    }
   </style>
 </head>
 <body>
@@ -165,6 +175,11 @@
   </script>
 </body>
 </html>
+
+
+
+
+
 
 
 

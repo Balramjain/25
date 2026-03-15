@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -8,94 +8,56 @@
   <meta http-equiv="Expires" content="0" />
   <title>Petal Shower</title>
   <style>
-    @font-face {
-      font-family: "CutiePatootie";
-      src: url("../fonts/CutiePatootie-Rgjv.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: "Wildcrazy";
-      src: url("../fonts/Wildcrazy-WKYO.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: "Cookiemonster";
-      src: url("../fonts/Cookiemonster-gv11.ttf") format("truetype");
-      font-display: swap;
-    }
+    @font-face { font-family: "CutiePatootie"; src: url("../fonts/CutiePatootie-Rgjv.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "Wildcrazy"; src: url("../fonts/Wildcrazy-WKYO.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "Cookiemonster"; src: url("../fonts/Cookiemonster-gv11.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "BalonkuRegular"; src: url("../fonts/BalonkuRegular-la1w.otf") format("opentype"); font-display: swap; }
+    @font-face { font-family: "GamepauseddemoRegular"; src: url("../fonts/GamepauseddemoRegular-RpmY6.otf") format("opentype"); font-display: swap; }
+    @font-face { font-family: "LoveAndTrust"; src: url("../fonts/LoveAndTrust-lqdy.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "LoveAndTrustHearted"; src: url("../fonts/LoveAndTrustHearted-naLP.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "LoveArrow"; src: url("../fonts/LoveArrow-JpRgj.otf") format("opentype"); font-display: swap; }
+    @font-face { font-family: "LoveBubbles"; src: url("../fonts/LoveBubbles-MV21J.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "LoveDays"; src: url("../fonts/LoveDays-2v7Oe.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "LoveDisplayPersonalUse"; src: url("../fonts/LoveDisplayPersonalUse-6RL2x.otf") format("opentype"); font-display: swap; }
+    @font-face { font-family: "LoveLili"; src: url("../fonts/LoveLili-LVKvG.otf") format("opentype"); font-display: swap; }
+    @font-face { font-family: "LoveMaulidah"; src: url("../fonts/LoveMaulidah-KVAoA.otf") format("opentype"); font-display: swap; }
+    @font-face { font-family: "LoveMint"; src: url("../fonts/LoveMint-9497.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "LoveMintAlt"; src: url("../fonts/LoveMint-y6Gq.otf") format("opentype"); font-display: swap; }
+    @font-face { font-family: "LoveRain"; src: url("../fonts/LoveRain-vnm9M.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "LoveSky"; src: url("../fonts/LoveSky-6R75v.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "LoveStory"; src: url("../fonts/LoveStory-mLZgv.otf") format("opentype"); font-display: swap; }
+    @font-face { font-family: "LoveVale"; src: url("../fonts/LoveVale-BWm1G.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "StarShieldV2"; src: url("../fonts/StarShieldV2-9M52K.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "TheHeartOfEverythingDemo"; src: url("../fonts/TheHeartOfEverythingDemo-KRdD.ttf") format("truetype"); font-display: swap; }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg: #fff4f8;
-      --bg-2: #eef6ff;
-      --card: #ffffffcc;
-      --ink: #2a2a3b;
-      --accent: #ffc1dc;
-      --accent-2: #bddbff;
+    html, body { width: 100%; height: 100%; 
+      font-family: "LoveSky", sans-serif;
     }
 
     body {
-      font-family: "Wildcrazy", sans-serif;
-      color: var(--ink);
-      background: linear-gradient(140deg, var(--bg), var(--bg-2));
-      min-height: 100vh;
-      padding: 24px 16px 80px;
-      overflow-x: hidden;
+      font-family: "LoveSky", sans-serif;
+      background: radial-gradient(circle at 20% 20%, #fff5fb, #eef6ff 45%, #f6f2ff 70%, #fff7e6 100%);
+      overflow: hidden;
     }
 
-    body > * {
-      position: relative;
-      z-index: 2;
-    }
-
-    .bg-sparkles {
+    .center-text {
       position: fixed;
       inset: 0;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .bg-sparkles span {
-      position: absolute;
-      width: var(--size);
-      height: var(--size);
-      border-radius: 999px;
-      background: var(--accent-2);
-      opacity: 0.45;
-      filter: blur(0.2px);
-      animation: float 10s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0% { transform: translateY(0) translateX(0) scale(1); }
-      50% { transform: translateY(-16px) translateX(10px) scale(1.06); }
-      100% { transform: translateY(0) translateX(0) scale(1); }
-    }
-
-    header {
+      display: grid;
+      place-items: center;
       text-align: center;
-      margin: 12px auto 22px;
-      max-width: 900px;
+      z-index: 6;
+      pointer-events: none;
+      color: #2b1c26;
+      font-size: clamp(1.6rem, 4.2vw, 3.2rem);
     }
 
-    header h1 {
-      font-family: "CutiePatootie", cursive;
-      font-size: clamp(2.2rem, 6vw, 3.4rem);
-    }
-
-    header p {
-      margin-top: 8px;
-      font-size: 1.1rem;
-      opacity: 0.8;
-    }
-.back-btn {
+    .back-btn {
       position: fixed;
       left: 20px;
       bottom: 20px;
-      z-index: 30;
+      z-index: 10;
       border: none;
       border-radius: 999px;
       padding: 10px 18px;
@@ -112,120 +74,135 @@
       transform: translateY(-2px);
       box-shadow: 0 12px 26px rgba(0, 0, 0, 0.25);
     }
-    .panel {
-      width: min(980px, 92vw);
-      margin: 0 auto;
-      padding: 28px;
-      border-radius: 26px;
-      background-image: url("https://images.unsplash.com/photo-1762227144580-431ec0015003?auto=format&fit=crop&fm=jpg&q=80&w=2000");
-      background-size: cover;
-      background-position: center;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
-      min-height: 65vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
+
+    .petal-zone {
+      position: fixed;
+      inset: 0;
       overflow: hidden;
+      pointer-events: none;
     }
 
-    .panel::before {
+    .petal {
+      position: absolute;
+      width: var(--size, 18px);
+      height: calc(var(--size, 18px) * 0.7);
+      background: var(--color, #ffc6de);
+      border-radius: 60% 40% 60% 40%;
+      opacity: 0.9;
+      filter: blur(0.2px);
+      transform-origin: center;
+      animation: fall var(--dur, 6s) linear forwards,
+                 sway var(--sway, 4s) ease-in-out infinite;
+    }
+
+    .petal::before {
       content: "";
       position: absolute;
-      inset: 0;
-      background: linear-gradient(150deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
+      width: 60%;
+      height: 60%;
+      left: 20%;
+      top: 10%;
+      background: rgba(255, 255, 255, 0.4);
+      border-radius: 50%;
+      transform: rotate(-20deg);
     }
 
-    .panel > * {
-      position: relative;
-      z-index: 1;
+    @keyframes fall {
+      from { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 1; }
+      to { transform: translateY(110vh) rotate(var(--rot, 360deg)); opacity: 0; }
     }
 
-    .mini-panel {
-      padding: 16px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.88);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+    @keyframes sway {
+      0% { margin-left: 0; }
+      50% { margin-left: var(--drift, 40px); }
+      100% { margin-left: 0; }
     }
-
-    @media (max-width: 700px) {
-      .panel {
-        min-height: 70vh;
-        padding: 22px;
-      }
-    }
-.row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      align-items: center;
-    }
-
-    .primary-btn {
-      border: none;
-      border-radius: 999px;
-      padding: 10px 18px;
-      font-family: "Cookiemonster", sans-serif;
-      font-size: 1.05rem;
-      cursor: pointer;
-      background: var(--accent);
-      color: #2b2b3a;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .primary-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 26px rgba(0, 0, 0, 0.18);
-    }
-
-    .tiny-btn {
-      border: none;
-      border-radius: 10px;
-      padding: 6px 12px;
-      font-family: "Cookiemonster", sans-serif;
-      cursor: pointer;
-      background: var(--accent-2);
-      color: #2b2b3a;
-    }
-
-    .petal-zone{position:relative;height:260px;border-radius:16px;overflow:hidden;background:linear-gradient(160deg,#fdf0f6,#eff6ff);} .petal{position:absolute;width:16px;height:10px;border-radius:50%;background:#ffc6de;opacity:.9;animation:petal-fall var(--dur) linear forwards;} @keyframes petal-fall{from{transform:translateY(-20px) translateX(0) rotate(0deg);opacity:1;}to{transform:translateY(280px) translateX(40px) rotate(180deg);opacity:0;}}
   </style>
 </head>
 <body>
-  <div class="bg-sparkles" aria-hidden="true">
-    <span style="--size: 10px; left: 8%; top: 12%;"></span>
-    <span style="--size: 16px; left: 18%; top: 24%;"></span>
-    <span style="--size: 12px; left: 32%; top: 10%;"></span>
-    <span style="--size: 14px; left: 44%; top: 22%;"></span>
-    <span style="--size: 9px; left: 56%; top: 14%;"></span>
-    <span style="--size: 13px; left: 66%; top: 30%;"></span>
-    <span style="--size: 11px; left: 78%; top: 16%;"></span>
-    <span style="--size: 15px; left: 88%; top: 28%;"></span>
-    <span style="--size: 9px; left: 12%; top: 70%;"></span>
-    <span style="--size: 12px; left: 36%; top: 78%;"></span>
-    <span style="--size: 14px; left: 64%; top: 74%;"></span>
-    <span style="--size: 10px; left: 84%; top: 68%;"></span>
-  </div>
-
-  <button class="back-btn" onclick="sessionStorage.setItem('cameFromPage','true'); location.href='index.html?v=20260315';">
-    Go Back
-  </button>
-
-  <header></div>
-    <h1>Petal Shower</h1>
-    <p>Soft petals drifting down just for you.</p>
-  </header>
-
-  <section class="panel">
-    <div class="petal-zone" id="petalZone"></div>
-  </section>
+  <div class="petal-zone" id="petalZone"></div>
+  <div class="center-text"><span id="loveText">I love you forever and ever</span></div>
+  <button class="back-btn" onclick="sessionStorage.setItem('cameFromPage','true'); location.href='index.html?v=20260315';">Go Back</button>
 
   <script>
-    const zone=document.getElementById("petalZone"); setInterval(()=>{ const p=document.createElement("div"); p.className="petal"; p.style.left=`${Math.random()*90+5}%`; p.style.setProperty("--dur",`${Math.random()*3+3}s`); zone.appendChild(p); setTimeout(()=>p.remove(),5000); },600);
+    const zone = document.getElementById("petalZone");
+    const loveText = document.getElementById("loveText");
+
+    const colors = ["#ffd0e6", "#ffc6de", "#e6d6ff", "#cfe2ff", "#f4d6ff", "#ffe2f1", "#d7e8ff"];
+
+    const patterns = [
+      { sway: 4.2, drift: 30, min: 4, max: 7, size: [14, 22], rot: 240 },
+      { sway: 5.0, drift: 60, min: 5, max: 8, size: [12, 20], rot: 320 },
+      { sway: 3.6, drift: 20, min: 4, max: 7, size: [16, 26], rot: 200 },
+      { sway: 6.2, drift: 70, min: 5, max: 9, size: [10, 18], rot: 400 },
+      { sway: 4.8, drift: 40, min: 4, max: 8, size: [14, 24], rot: 280 },
+      { sway: 7.0, drift: 80, min: 6, max: 10, size: [12, 22], rot: 420 },
+      { sway: 5.6, drift: 55, min: 5, max: 9, size: [13, 23], rot: 360 },
+      { sway: 3.9, drift: 25, min: 4, max: 7, size: [15, 26], rot: 260 },
+      { sway: 6.5, drift: 75, min: 6, max: 10, size: [11, 20], rot: 450 },
+      { sway: 4.4, drift: 35, min: 4, max: 8, size: [16, 24], rot: 300 },
+    ];
+
+    function spawnPetal() {
+      const p = document.createElement("div");
+      p.className = "petal";
+      const pattern = patterns[Math.floor(Math.random() * patterns.length)];
+      const size = Math.random() * (pattern.size[1] - pattern.size[0]) + pattern.size[0];
+      const duration = Math.random() * (pattern.max - pattern.min) + pattern.min;
+      const drift = (Math.random() * pattern.drift) * (Math.random() > 0.5 ? 1 : -1);
+      const rot = (Math.random() * pattern.rot + 180) * (Math.random() > 0.5 ? 1 : -1);
+
+      p.style.left = `${Math.random() * 100}vw`;
+      p.style.setProperty("--size", `${size}px`);
+      p.style.setProperty("--dur", `${duration}s`);
+      p.style.setProperty("--sway", `${pattern.sway}s`);
+      p.style.setProperty("--drift", `${drift}px`);
+      p.style.setProperty("--rot", `${rot}deg`);
+      p.style.setProperty("--color", colors[Math.floor(Math.random() * colors.length)]);
+
+      zone.appendChild(p);
+      p.addEventListener("animationend", () => p.remove());
+    }
+
+    // dense petals
+    setInterval(spawnPetal, 90);
+
+    const fontStack = [
+      "CutiePatootie",
+      "Wildcrazy",
+      "Cookiemonster",
+      "BalonkuRegular",
+      "GamepauseddemoRegular",
+      "LoveAndTrust",
+      "LoveAndTrustHearted",
+      "LoveArrow",
+      "LoveBubbles",
+      "LoveDays",
+      "LoveDisplayPersonalUse",
+      "LoveLili",
+      "LoveMaulidah",
+      "LoveMint",
+      "LoveMintAlt",
+      "LoveRain",
+      "LoveSky",
+      "LoveStory",
+      "LoveVale",
+      "StarShieldV2",
+      "TheHeartOfEverythingDemo"
+    ];
+
+    let fontIndex = 0;
+    setInterval(() => {
+      fontIndex = (fontIndex + 1) % fontStack.length;
+      loveText.style.fontFamily = fontStack[fontIndex];
+    }, 200);
   </script>
 </body>
 </html>
+
+
+
 
 
 

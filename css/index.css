@@ -18,7 +18,7 @@ html {
 }
 
 body {
-  font-family: "Wildcrazy", sans-serif;
+  font-family: "Wildcrazy", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
   color: #2c3e50;
   overflow-x: hidden;
   background: rgb(248, 240, 226);
@@ -57,7 +57,7 @@ body > *:not(.bg-effects) {
 
 /* HERO */
 .hero h1 {
-  font-family: "CutiePatootie", cursive;
+  font-family: "CutiePatootie", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", cursive;
   font-size: clamp(3rem, 6vw, 5rem);
 }
 
@@ -166,7 +166,7 @@ body > *:not(.bg-effects) {
 }
 
 .quote-block .quote {
-  font-family: "Wildcrazy", sans-serif;
+  font-family: "Wildcrazy", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
   max-width: 28ch;
   font-size: clamp(1.25rem, 2.8vw, 2rem);
   line-height: 1.45;
@@ -235,7 +235,7 @@ body > *:not(.bg-effects) {
 
 /* ACTIONS */
 .actions h2 {
-  font-family: "CutiePatootie", cursive;
+  font-family: "CutiePatootie", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", cursive;
   font-size: 2.4rem;
   margin-bottom: 50px;
   opacity: 0;
@@ -277,7 +277,7 @@ body > *:not(.bg-effects) {
   align-items: center;
   text-decoration: none;
   color: #333;
-  font-family: "Cookiemonster", sans-serif;
+  font-family: "Cookiemonster", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
   font-weight: 600;
   font-size: 1.1rem;
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
@@ -324,7 +324,7 @@ body > *:not(.bg-effects) {
 }
 
 .feature-title {
-  font-family: "CutiePatootie", cursive;
+  font-family: "CutiePatootie", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", cursive;
   font-size: clamp(1.6rem, 3.2vw, 2.2rem);
   margin-bottom: 16px;
   opacity: 0;
@@ -359,7 +359,7 @@ body > *:not(.bg-effects) {
   border-radius: 18px;
   padding: 16px 14px;
   text-decoration: none;
-  font-family: "Cookiemonster", sans-serif;
+  font-family: "Cookiemonster", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
   font-size: 1.05rem;
   color: #2f2a42;
   background: linear-gradient(145deg, var(--btn-1), var(--btn-2));
@@ -379,7 +379,7 @@ body > *:not(.bg-effects) {
 }
 
 .feature-btn strong {
-  font-family: "CutiePatootie", cursive;
+  font-family: "CutiePatootie", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", cursive;
   font-size: 1.1rem;
   color: #3a2f46;
 }
@@ -666,3 +666,5 @@ body > *:not(.bg-effects) {
     transition-duration: 0.01ms !important;
   }
 }
+
+

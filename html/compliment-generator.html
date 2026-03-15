@@ -1,4 +1,4 @@
-ï»¿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -6,96 +6,55 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>Pocket Compliments</title>
+  <title>Compliment Generator</title>
   <style>
-    @font-face {
-      font-family: "CutiePatootie";
-      src: url("../fonts/CutiePatootie-Rgjv.ttf") format("truetype");
-      font-display: swap;
-    }
+    @font-face { font-family: "CutiePatootie"; src: url("../fonts/CutiePatootie-Rgjv.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "Wildcrazy"; src: url("../fonts/Wildcrazy-WKYO.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "Cookiemonster"; src: url("../fonts/Cookiemonster-gv11.ttf") format("truetype"); font-display: swap; }
 
     @font-face {
-      font-family: "Wildcrazy";
-      src: url("../fonts/Wildcrazy-WKYO.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: "Cookiemonster";
-      src: url("../fonts/Cookiemonster-gv11.ttf") format("truetype");
+      font-family: "LoveBubbles";
+      src: url("../fonts/LoveBubbles-MV21J.ttf") format("truetype");
       font-display: swap;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg: #fff0f8;
-      --bg-2: #f1f7ff;
-      --card: #ffffffcc;
-      --ink: #2a2a3b;
-      --accent: #ffb2cf;
-      --accent-2: #b7dcff;
+    html, body { width: 100%; height: 100%; 
+      font-family: "LoveBubbles", sans-serif;
     }
 
     body {
-      font-family: "Wildcrazy", sans-serif;
-      color: var(--ink);
-      background: linear-gradient(140deg, var(--bg), var(--bg-2));
-      min-height: 100vh;
-      padding: 24px 16px 80px;
-      overflow-x: hidden;
+      font-family: "LoveBubbles", sans-serif;
+      background: linear-gradient(120deg, #fff1f8, #e9f3ff, #f6ffe9, #fff7e6);
+      background-size: 400% 400%;
+      animation: bgShift 18s ease-in-out infinite;
+      overflow: hidden;
+      color: #111;
     }
 
-    body > * {
-      position: relative;
-      z-index: 2;
+    @keyframes bgShift {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
     }
 
-    .bg-sparkles {
+    .center-text {
       position: fixed;
       inset: 0;
-      pointer-events: none;
-      z-index: 1;
-    }
-
-    .bg-sparkles span {
-      position: absolute;
-      width: var(--size);
-      height: var(--size);
-      border-radius: 999px;
-      background: var(--accent-2);
-      opacity: 0.45;
-      filter: blur(0.2px);
-      animation: float 10s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0% { transform: translateY(0) translateX(0) scale(1); }
-      50% { transform: translateY(-16px) translateX(10px) scale(1.06); }
-      100% { transform: translateY(0) translateX(0) scale(1); }
-    }
-
-    header {
+      display: grid;
+      place-items: center;
       text-align: center;
-      margin: 12px auto 22px;
-      max-width: 900px;
+      padding: 20px;
+      font-family: "Cookiemonster", sans-serif;
+      font-size: clamp(1.8rem, 4.6vw, 3.4rem);
+      color: #111;
     }
 
-    header h1 {
-      font-family: "CutiePatootie", cursive;
-      font-size: clamp(2.2rem, 6vw, 3.4rem);
-    }
-
-    header p {
-      margin-top: 8px;
-      font-size: 1.1rem;
-      opacity: 0.8;
-    }
-.back-btn {
+    .back-btn {
       position: fixed;
       left: 20px;
       bottom: 20px;
-      z-index: 30;
+      z-index: 5;
       border: none;
       border-radius: 999px;
       padding: 10px 18px;
@@ -112,117 +71,159 @@
       transform: translateY(-2px);
       box-shadow: 0 12px 26px rgba(0, 0, 0, 0.25);
     }
-    .panel {
-      width: min(980px, 92vw);
-      margin: 0 auto;
-      padding: 28px;
-      border-radius: 26px;
-      background-image: url("https://images.unsplash.com/photo-1761888855214-0458bca5965b?auto=format&fit=crop&fm=jpg&q=80&w=2000");
-      background-size: cover;
-      background-position: center;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
-      min-height: 65vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
 
-    .panel::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(150deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
-    }
-
-    .panel > * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .mini-panel {
-      padding: 16px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.88);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-    }
-
-    @media (max-width: 700px) {
-      .panel {
-        min-height: 70vh;
-        padding: 22px;
-      }
-    }
-.row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      align-items: center;
-    }
-
-    .primary-btn {
+    .generate-btn {
+      position: fixed;
+      left: 50%;
+      bottom: 26px;
+      transform: translateX(-50%);
+      z-index: 5;
       border: none;
       border-radius: 999px;
-      padding: 10px 18px;
-      font-family: "Cookiemonster", sans-serif;
-      font-size: 1.05rem;
+      padding: 12px 28px;
+      font-family: "CutiePatootie", cursive;
+      font-size: 1.2rem;
       cursor: pointer;
-      background: var(--accent);
-      color: #2b2b3a;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      background: rgba(255, 255, 255, 0.9);
+      color: #000;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.2);
+      transition: transform 220ms ease, box-shadow 220ms ease;
     }
 
-    .primary-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 26px rgba(0, 0, 0, 0.18);
+    .generate-btn:hover {
+      transform: translateX(-50%) translateY(-2px);
+      box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25);
     }
 
-    .tiny-btn {
-      border: none;
-      border-radius: 10px;
-      padding: 6px 12px;
-      font-family: "Cookiemonster", sans-serif;
-      cursor: pointer;
-      background: var(--accent-2);
-      color: #2b2b3a;
-    }\n\n  </style>
+    body, body * {
+      font-family: "LoveBubbles", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
+    }
+  </style>
 </head>
 <body>
-  <div class="bg-sparkles" aria-hidden="true">
-    <span style="--size: 10px; left: 8%; top: 12%;"></span>
-    <span style="--size: 16px; left: 18%; top: 24%;"></span>
-    <span style="--size: 12px; left: 32%; top: 10%;"></span>
-    <span style="--size: 14px; left: 44%; top: 22%;"></span>
-    <span style="--size: 9px; left: 56%; top: 14%;"></span>
-    <span style="--size: 13px; left: 66%; top: 30%;"></span>
-    <span style="--size: 11px; left: 78%; top: 16%;"></span>
-    <span style="--size: 15px; left: 88%; top: 28%;"></span>
-    <span style="--size: 9px; left: 12%; top: 70%;"></span>
-    <span style="--size: 12px; left: 36%; top: 78%;"></span>
-    <span style="--size: 14px; left: 64%; top: 74%;"></span>
-    <span style="--size: 10px; left: 84%; top: 68%;"></span>
-  </div>
+  <div class="center-text" id="complimentText">Tap generate for a compliment.</div>
 
   <button class="back-btn" onclick="sessionStorage.setItem('cameFromPage','true'); location.href='index.html?v=20260315';">
     Go Back
   </button>
 
-  <header></div>
-    <h1>Pocket Compliments</h1>
-    <p>Tap for a fresh little sparkle.</p>
-  </header>
-
-  <section class="panel">
-    <div class="row"><div class="mini-panel" id="complimentText">Click to begin.</div><button class="primary-btn" id="complimentBtn">Generate</button></div>
-  </section>
+  <button class="generate-btn" id="complimentBtn">Generate</button>
 
   <script>
-    const compliments=["You light up every room.","Your smile is my favorite view.","You make ordinary days magical.","You are kind and beautiful.","You are my favorite adventure."]; document.getElementById("complimentBtn").addEventListener("click",()=>{ const pick=compliments[Math.floor(Math.random()*compliments.length)]; document.getElementById("complimentText").textContent=pick;});
+    const compliments = [
+      "You light up every room you walk into, no effort needed at all.",
+      "Your smile na, it's my most favorite view in this entire world.",
+      "You make ordinary days feel like something special is happening yaar.",
+      "You are so kind and so beautiful, both at the same time, not fair at all.",
+      "You are my favorite adventure, always and every single day.",
+      "The way you laugh — full happiness, no holding back — I love it so much.",
+      "You are so cute it actually hurts my heart in the best way.",
+      "Your voice is so soft and sweet, I could listen to you forever only.",
+      "You smell so good yaar, like comfort and home at the same time.",
+      "Your chubby cheeks are the cutest thing in this universe, I am not joking.",
+      "You are short and perfect and I would not change one single thing.",
+      "The way you dress — every outfit, every time — always stunning.",
+      "You are the kindest person I have ever met in my life, genuinely.",
+      "Your eyes have this warmth that makes everything feel okay.",
+      "You glow from inside out and no filter can ever capture that.",
+      "You are so emotionally intelligent, I learn from you all the time.",
+      "Your hug is the safest and warmest place I know.",
+      "You make me feel seen in a way nobody else ever has.",
+      "You are so strong but so soft at the same time, that balance is rare yaar.",
+      "Your kindness heals people and you don't even realize it.",
+      "You are the definition of cute, like the word exists because of you only.",
+      "You carry yourself with so much grace, I am always impressed.",
+      "Your fashion sense is top class, every look is chef's kiss.",
+      "You make every boring day into something worth remembering.",
+      "You are so genuine — no fake nice, just real and pure kindness.",
+      "Your smile when you're trying not to smile — that one kills me every time.",
+      "You are the most beautiful person I have ever seen, no competition at all.",
+      "Your voice on call late at night is my absolute favorite sound.",
+      "You remember small small things about people and that is so special.",
+      "You are so expressive, your face tells everything and it's adorable.",
+      "You make home feel like home, wherever you are.",
+      "Your laugh is so contagious, everyone around you ends up smiling.",
+      "You put love into everything you do and it shows always.",
+      "You are patient and understanding and I don't deserve you honestly.",
+      "Your eyes light up when you're excited and that is everything to me.",
+      "You smell like something familiar and safe, I can't explain it better than that.",
+      "You are so dedicated to things you care about, truly inspiring yaar.",
+      "Your short height means you fit perfectly when I hug you and I love that.",
+      "You make me feel like I belong somewhere and that somewhere is with you.",
+      "You are honest even when it's hard and I respect that so much.",
+      "Your voice is the first thing I want to hear and the last thing I want to forget.",
+      "You are so hardworking and it makes me so proud of you.",
+      "Your chubby cheeks when you smile — I would stare at that forever, no problem.",
+      "You never judge anyone, you just love people and that is beautiful.",
+      "You are warm like sunshine, being around you just feels good.",
+      "Your little giggle when something surprises you — obsessed with that sound.",
+      "You make everyone around you feel comfortable and that's a gift.",
+      "You are so thoughtful, you feel things deeply and it shows.",
+      "Your dressing sense has that something extra, you just carry it so well.",
+      "You are my favorite person to talk to, always, about everything.",
+      "Your smile in the morning is better than anything else in this world.",
+      "You are so full of love and you give it so freely, that's rare.",
+      "Your skin literally glows yaar, how are you even real.",
+      "You make me want to be a better person just by being who you are.",
+      "Your voice when you're sleepy is the cutest thing I have ever heard.",
+      "You are brave in ways you don't even notice and I see it clearly.",
+      "Your pout when you're being stubborn — cutest thing, I cannot.",
+      "You make even difficult things feel manageable when you're around.",
+      "You are so real and so raw and that is so refreshing honestly.",
+      "Your eyes when you're happy — nothing better than that sight.",
+      "You fight for people you love and that loyalty is everything.",
+      "You smell like a warm hug, that's the only way I can describe it.",
+      "You are so magnetic, people are drawn to you and it makes sense why.",
+      "Your voice has this gentleness that makes everything feel softer.",
+      "You take care of everyone around you and I hope someone takes care of you too.",
+      "Your cute confused face when you don't understand something — too adorable.",
+      "You are the kind of person who makes the world feel less scary.",
+      "Your short height is the most endearing thing, I love it so much.",
+      "You make me feel chosen every day and that is not a small thing.",
+      "You are so full of life, your energy is just infectious.",
+      "Your kindness is not performative, it comes from the heart and you can feel it.",
+      "You look beautiful even when you think you don't, especially then actually.",
+      "Your laughter is medicine, genuinely, it fixes things.",
+      "You are so creative in the way you love people, it's unique to you.",
+      "Your smell after a long day is still the best smell to me, weird but true.",
+      "You make ordinary conversations feel like the best part of my day.",
+      "You are soft and fierce at the same time, nobody does it like you.",
+      "Your chubby cheeks are the highlight of my entire existence, not exaggerating.",
+      "You are so present when you're with someone, people feel that.",
+      "Your voice saying my name is a sound I never want to forget.",
+      "You are so lovable yaar, like stupidly, unreasonably lovable.",
+      "Your smile is so bright it makes everything around you look better.",
+      "You carry so much quietly and you still show up with a smile, respect.",
+      "You are my favorite kind of person — real, warm, funny, kind.",
+      "Your fashion is so you, nobody else could pull it off the same way.",
+      "You make me feel like the luckiest person and I mean that every time.",
+      "Your eyes have stories in them and I want to read every single one.",
+      "You are the reason my days are better, simpler than that I cannot say it.",
+      "Your kindness towards animals and random people moves me every time.",
+      "You are so beautiful inside and outside, both fully, completely.",
+      "Your voice when you're excited about something — I could listen all day.",
+      "You deserve every good thing in this world and I mean that with my whole heart.",
+      "You are my calm, my comfort, my favorite everything.",
+      "Your chubby cheeks and your smile together — unfair combination honestly.",
+      "You smell like home, and home is my favorite place because of you.",
+      "You are the most special person I have ever had in my life, no doubt.",
+      "You make me feel like love is easy and natural and safe.",
+      "Your short height, your smile, your voice, your kindness — all of it, I love all of it.",
+      "You are everything yaar. Just everything."
+    ];
+
+    document.getElementById("complimentBtn").addEventListener("click", () => {
+      const pick = compliments[Math.floor(Math.random() * compliments.length)];
+      document.getElementById("complimentText").textContent = pick;
+    });
   </script>
 </body>
 </html>
+
+
+
+
+
 
 
 

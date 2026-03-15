@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -8,6 +8,7 @@
   <meta http-equiv="Expires" content="0" />
   <title>A Note Just for You</title>
   <style>
+    @font-face { font-family: "LoveBubbles"; src: url("../fonts/LoveBubbles-MV21J.ttf") format("truetype"); font-display: swap; }
     @font-face {
       font-family: "CutiePatootie";
       src: url("../fonts/CutiePatootie-Rgjv.ttf") format("truetype");
@@ -38,7 +39,7 @@
     }
 
     body {
-      font-family: "Wildcrazy", sans-serif;
+      font-family: "LoveBubbles", sans-serif;
       color: var(--ink);
       background: linear-gradient(140deg, var(--bg), var(--bg-2));
       min-height: 100vh;
@@ -46,7 +47,7 @@
       overflow-x: hidden;
     }
 
-    body > * {
+    * {
       position: relative;
       z-index: 2;
     }
@@ -136,7 +137,7 @@
       background: linear-gradient(150deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
     }
 
-    .panel > * {
+    * {
       position: relative;
       z-index: 1;
     }
@@ -190,6 +191,10 @@
     }
 
     .typewriter { font-family: "Cookiemonster", sans-serif; font-size: 1.2rem; min-height: 70px; border-right: 2px solid rgba(0,0,0,0.4); padding-right: 6px; white-space: pre-wrap; }
+
+    body, body * {
+      font-family: "LoveBubbles", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
+    }
   </style>
 </head>
 <body>
@@ -226,6 +231,14 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
 
 
 

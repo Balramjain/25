@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -26,6 +26,12 @@
       font-display: swap;
     }
 
+    @font-face {
+      font-family: "LoveVale";
+      src: url("../fonts/LoveVale-BWm1G.ttf") format("truetype");
+      font-display: swap;
+    }
+
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
@@ -38,7 +44,7 @@
     }
 
     body {
-      font-family: "Wildcrazy", sans-serif;
+      font-family: "LoveVale", sans-serif;
       color: var(--ink);
       background: linear-gradient(140deg, var(--bg), var(--bg-2));
       min-height: 100vh;
@@ -46,7 +52,13 @@
       overflow-x: hidden;
     }
 
-    body > * {
+    body > @font-face {
+      font-family: "LoveVale";
+      src: url("../fonts/LoveVale-BWm1G.ttf") format("truetype");
+      font-display: swap;
+    }
+
+    * {
       position: relative;
       z-index: 2;
     }
@@ -136,7 +148,13 @@
       background: linear-gradient(150deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
     }
 
-    .panel > * {
+    .panel > @font-face {
+      font-family: "LoveVale";
+      src: url("../fonts/LoveVale-BWm1G.ttf") format("truetype");
+      font-display: swap;
+    }
+
+    * {
       position: relative;
       z-index: 1;
     }
@@ -190,6 +208,10 @@
     }
 
     .wheel-wrap{display:grid;place-items:center;gap:10px;} .wheel{width:240px;height:240px;border-radius:50%;background:conic-gradient(#ffd6d6 0deg 45deg,#d6f5e3 45deg 90deg,#e8d6ff 90deg 135deg,#ffecd6 135deg 180deg,#ffd6d6 180deg 225deg,#d6f5e3 225deg 270deg,#e8d6ff 270deg 315deg,#ffecd6 315deg 360deg);border:6px solid #fff;box-shadow:0 12px 24px rgba(0,0,0,0.18);transition:transform 2.2s cubic-bezier(0.15,0.85,0.2,1);} .wheel-pointer{width:0;height:0;border-left:10px solid transparent;border-right:10px solid transparent;border-bottom:18px solid #2b2b3a;}
+  
+    body, body * {
+      font-family: "LoveVale", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
+    }
   </style>
 </head>
 <body>
@@ -226,6 +248,11 @@
   </script>
 </body>
 </html>
+
+
+
+
+
 
 
 

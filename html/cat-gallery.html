@@ -1,17 +1,18 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Cat Gallery</title>
   <style>
+    @font-face { font-family: "TheHeartOfEverythingDemo"; src: url("../fonts/TheHeartOfEverythingDemo-KRdD.ttf") format("truetype"); font-display: swap; }
     @font-face { font-family:"CutiePatootie"; src:url("../fonts/CutiePatootie-Rgjv.ttf") format("truetype"); }
     @font-face { font-family:"Wildcrazy";     src:url("../fonts/Wildcrazy-WKYO.ttf")     format("truetype"); }
     @font-face { font-family:"Cookiemonster"; src:url("../fonts/Cookiemonster-gv11.ttf") format("truetype"); }
 
     *{ box-sizing:border-box; margin:0; padding:0; }
     body{
-      font-family:"Wildcrazy",sans-serif;
+      font-family: "TheHeartOfEverythingDemo", sans-serif;
       background:linear-gradient(140deg,#fff5fb,#f1f6ff);
       color:#2b1c26;
       min-height:100vh;
@@ -61,6 +62,10 @@
       transition:transform 0.2s, box-shadow 0.2s;
     }
     .back-btn:hover{ transform:translateY(-2px); box-shadow:0 12px 26px rgba(0,0,0,0.22); }
+  
+    body, body * {
+      font-family: "TheHeartOfEverythingDemo", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
+    }
   </style>
 </head>
 <body>
@@ -81,6 +86,11 @@
   <button class="back-btn" onclick="sessionStorage.setItem('cameFromPage','true'); location.href='index.html?v=20260315';">Go Back</button>
 </body>
 </html>
+
+
+
+
+
 
 
 
