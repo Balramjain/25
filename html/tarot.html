@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Tarot Card Pull 🔮</title>
+  <style>
+    @font-face { font-family: "CutiePatootie"; src: url("../fonts/CutiePatootie-Rgjv.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "Wildcrazy";     src: url("../fonts/Wildcrazy-WKYO.ttf")     format("truetype"); font-display: swap; }
+    @font-face { font-family: "Cookiemonster"; src: url("../fonts/Cookiemonster-gv11.ttf") format("truetype"); font-display: swap; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:   #1a0a2e;
+      --bg-2: #0d1a2e;
+      --ink:  #f0e6ff;
+      --gold: #ffd700;
+      --purple: #b07fff;
+    }
+
+    html, body, body * {
+      font-family: "Wildcrazy", "Segoe UI Emoji", sans-serif !important;
+    }
+
+    body {
+      color: var(--ink);
+      background: linear-gradient(140deg, var(--bg), var(--bg-2));
+      min-height: 100vh;
+      padding: 24px 16px 100px;
+      overflow-x: hidden;
+    }
+
+    /* stars bg */
+    .stars-bg {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        radial-gradient(1px 1px at 20% 30%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 80% 10%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 50% 60%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 10% 70%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 90% 80%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 40% 90%, rgba(255,255,255,0.3) 0%, transparent 100%),
+        radial-gradient(1px 1px at 70% 40%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 30% 50%, rgba(255,255,255,0.4) 0%, transparent 100%);
+    }
+
+    .page {
+      position: relative; z-index: 2;
+      max-width: 860px; margin: 0 auto;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 20px;
+    }
+
+    header { text-align: center; }
+    header h1 {
+      font-family: "CutiePatootie", cursive !important;
+      font-size: clamp(2rem, 6vw, 3.4rem);
+      color: var(--gold);
+      text-shadow: 0 0 20px rgba(255,215,0,0.4);
+    }
+    header p { margin-top: 8px; font-size: clamp(1rem, 2.5vw, 1.2rem); opacity: 0.75; }
+
+    /* ── CARD DECK ── */
+    .deck-area {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 28px;
+    }
+
+    /* 3 face-down cards to pick from */
+    .card-row {
+      display: flex;
+      gap: clamp(12px, 3vw, 24px);
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .card-pick {
+      width: clamp(90px, 22vw, 130px);
+      aspect-ratio: 2/3;
+      border-radius: 14px;
+      cursor: pointer;
+      position: relative;
+      perspective: 800px;
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+    }
+    .card-pick:hover:not(.used) { transform: translateY(-12px) scale(1.04); }
+    .card-pick.used { cursor: default; opacity: 0.35; }
+
+    .card-inner {
+      width: 100%; height: 100%;
+      position: relative;
+      transform-style: preserve-3d;
+      transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 14px;
+    }
+    .card-pick.flipped .card-inner { transform: rotateY(180deg); }
+
+    .card-face, .card-back {
+      position: absolute; inset: 0;
+      border-radius: 14px;
+      backface-visibility: hidden;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .card-back {
+      background: linear-gradient(135deg, #2d0a5e, #1a0a3e);
+      border: 2px solid rgba(176,127,255,0.5);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4), inset 0 0 30px rgba(100,0,150,0.2);
+      font-size: 2.5rem;
+    }
+    .card-back::before {
+      content: "";
+      position: absolute; inset: 6px;
+      border: 1px solid rgba(176,127,255,0.3);
+      border-radius: 10px;
+    }
+
+    .card-face {
+      transform: rotateY(180deg);
+      background: linear-gradient(160deg, #1e0a38, #0a1a38);
+      border: 2px solid rgba(255,215,0,0.4);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.5), 0 0 20px rgba(255,215,0,0.1);
+      flex-direction: column;
+      gap: 6px;
+      padding: 10px;
+      text-align: center;
+    }
+    .card-face .card-emoji { font-size: clamp(1.8rem, 5vw, 2.6rem); }
+    .card-face .card-name  {
+      font-family: "CutiePatootie", cursive !important;
+      font-size: clamp(0.7rem, 2vw, 0.95rem);
+      color: var(--gold);
+      line-height: 1.2;
+    }
+
+    /* ── RESULT BOX ── */
+    .result-box {
+      width: min(600px, 92vw);
+      background: linear-gradient(155deg, rgba(45,10,94,0.9), rgba(10,26,62,0.9));
+      border: 1px solid rgba(176,127,255,0.4);
+      border-radius: 22px;
+      padding: clamp(20px,4vw,36px);
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4), 0 0 40px rgba(100,0,180,0.15);
+      opacity: 0;
+      transform: translateY(20px) scale(0.95);
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22,1,0.36,1);
+      pointer-events: none;
+    }
+    .result-box.show {
+      opacity: 1; transform: translateY(0) scale(1); pointer-events: all;
+    }
+    .result-box h2 {
+      font-family: "CutiePatootie", cursive !important;
+      font-size: clamp(1.4rem, 4vw, 2rem);
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .result-box .result-emoji { font-size: clamp(2.5rem, 7vw, 3.5rem); margin-bottom: 8px; }
+    .result-box p {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      line-height: 1.7;
+      opacity: 0.9;
+      color: var(--ink);
+    }
+    .result-box .result-love {
+      margin-top: 12px;
+      font-size: clamp(0.9rem, 2vw, 1.05rem);
+      color: var(--purple);
+      font-style: italic;
+    }
+
+    /* pull again */
+    .pull-again-btn {
+      border: none; border-radius: 999px;
+      padding: clamp(10px,2vw,14px) clamp(24px,5vw,40px);
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      cursor: pointer;
+      background: linear-gradient(135deg, #b07fff, #7040c0);
+      color: #fff;
+      box-shadow: 0 10px 24px rgba(100,40,200,0.35);
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s;
+      margin-top: 8px;
+      display: none;
+    }
+    .pull-again-btn.show { display: inline-block; }
+    .pull-again-btn:hover { transform: translateY(-3px) scale(1.05); }
+
+    /* hint */
+    .hint {
+      font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+      opacity: 0.6;
+      text-align: center;
+    }
+
+    .back-btn {
+      position: fixed; left: 20px; bottom: 20px; z-index: 30;
+      border: none; border-radius: 999px; padding: 14px 28px;
+      font-size: clamp(1.1rem,2.5vw,1.4rem); cursor: pointer;
+      background: rgba(255,255,255,0.1); color: var(--ink);
+      box-shadow: 0 8px 22px rgba(0,0,0,0.3);
+      transition: transform 220ms ease, box-shadow 220ms ease;
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.15);
+    }
+    .back-btn:hover { transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+
+  <div class="stars-bg"></div>
+
+  <button class="back-btn" onclick="sessionStorage.setItem('cameFromPage','true'); location.href='index.html?v=20260315';">
+    Go Back
+  </button>
+
+  <div class="page">
+    <header>
+      <h1>Tarot Card Pull 🔮</h1>
+      <p>The universe has a message for you today.</p>
+    </header>
+
+    <p class="hint" id="hint">Pick one card — trust your gut 🌙</p>
+
+    <div class="deck-area">
+      <div class="card-row" id="cardRow">
+        <div class="card-pick" onclick="pickCard(0)">
+          <div class="card-inner" id="card-0">
+            <div class="card-back">✦</div>
+            <div class="card-face" id="face-0"></div>
+          </div>
+        </div>
+        <div class="card-pick" onclick="pickCard(1)">
+          <div class="card-inner" id="card-1">
+            <div class="card-back">✦</div>
+            <div class="card-face" id="face-1"></div>
+          </div>
+        </div>
+        <div class="card-pick" onclick="pickCard(2)">
+          <div class="card-inner" id="card-2">
+            <div class="card-back">✦</div>
+            <div class="card-face" id="face-2"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="result-box" id="resultBox">
+        <div class="result-emoji" id="resultEmoji"></div>
+        <h2 id="resultName"></h2>
+        <p id="resultMsg"></p>
+        <p class="result-love" id="resultLove"></p>
+        <button class="pull-again-btn" id="pullAgainBtn" onclick="resetCards()">Pull Again 🔮</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const cards = [
+      { emoji:"☀️", name:"The Sun", msg:"Warmth and joy are all around you right now. Something wonderful is coming — maybe it's already here.", love:"You radiate happiness that makes everyone around you brighter. 💛" },
+      { emoji:"🌙", name:"The Moon", msg:"Trust your intuition today. The things you feel deeply are real — don't second guess your heart.", love:"Your emotions are your superpower. Feel them fully. 🌙" },
+      { emoji:"⭐", name:"The Star", msg:"Hope is not lost. In fact, it's shining brighter than ever. This is a time of healing and beautiful new beginnings.", love:"You are someone worth wishing upon a star for. ✨" },
+      { emoji:"💕", name:"The Lovers", msg:"Connection, harmony, and deep love are highlighted for you. A bond in your life is growing stronger by the day.", love:"You are loved more than you know. 💕" },
+      { emoji:"🌸", name:"The Empress", msg:"You are full of creative energy and natural beauty. Nurture yourself and the things you love — they will bloom.", love:"Everything you touch grows beautiful. 🌸" },
+      { emoji:"🔮", name:"The High Priestess", msg:"Something hidden is about to reveal itself. Pay attention to dreams and small signs — the universe is whispering.", love:"Your wisdom and mystery make you unforgettable. 🔮" },
+      { emoji:"⚡", name:"The Tower", msg:"A sudden change might shake things up — but it clears the way for something far better. Trust the process.", love:"Through every storm, you come out even more radiant. ⚡" },
+      { emoji:"🌈", name:"The World", msg:"You are exactly where you're supposed to be. A cycle is completing beautifully — celebrate how far you've come.", love:"You are whole, complete, and deeply wonderful. 🌈" },
+      { emoji:"🦋", name:"The Fool", msg:"A fresh start is calling your name. Say yes to something new — leap with joy and trust that you'll land softly.", love:"Your sense of wonder makes life magical for everyone near you. 🦋" },
+      { emoji:"🌺", name:"Strength", msg:"You have more courage than you realise. The gentle way you handle hard things is your greatest power.", love:"Your kindness is not weakness — it is extraordinary strength. 🌺" },
+      { emoji:"💫", name:"The Magician", msg:"You have everything you need to make your dreams happen. The magic is already inside you — use it.", love:"You make impossible things feel possible just by being you. 💫" },
+      { emoji:"🕊️", name:"Justice", msg:"Balance is coming. What is right will prevail. Trust that fair outcomes are on their way to you.", love:"You deserve every good and honest thing the world has to offer. 🕊️" },
+    ];
+
+    function shuffle(arr) {
+      const a = [...arr];
+      for (let i = a.length-1; i>0; i--) {
+        const j = Math.floor(Math.random()*(i+1));
+        [a[i],a[j]] = [a[j],a[i]];
+      }
+      return a;
+    }
+
+    let drawn = [];
+    let picked = false;
+
+    function deal() {
+      drawn = shuffle(cards).slice(0, 3);
+    }
+
+    function pickCard(idx) {
+      if (picked) return;
+      picked = true;
+
+      const card = drawn[idx];
+
+      // fill face
+      const face = document.getElementById(`face-${idx}`);
+      face.innerHTML = `<span class="card-emoji">${card.emoji}</span><span class="card-name">${card.name}</span>`;
+
+      // flip picked card
+      document.getElementById(`card-${idx}`).classList.add("flipped");
+
+      // grey out others
+      document.querySelectorAll(".card-pick").forEach((c, i) => {
+        if (i !== idx) c.classList.add("used");
+      });
+
+      // show result
+      setTimeout(() => {
+        document.getElementById("resultEmoji").textContent = card.emoji;
+        document.getElementById("resultName").textContent  = card.name;
+        document.getElementById("resultMsg").textContent   = card.msg;
+        document.getElementById("resultLove").textContent  = card.love;
+        document.getElementById("resultBox").classList.add("show");
+        document.getElementById("pullAgainBtn").classList.add("show");
+        document.getElementById("hint").textContent = "Your card has spoken ✨";
+      }, 800);
+    }
+
+    function resetCards() {
+      picked = false;
+      document.getElementById("resultBox").classList.remove("show");
+      document.getElementById("pullAgainBtn").classList.remove("show");
+      document.getElementById("hint").textContent = "Pick one card — trust your gut 🌙";
+
+      for (let i = 0; i < 3; i++) {
+        document.getElementById(`card-${i}`).classList.remove("flipped");
+        document.getElementById(`face-${i}`).innerHTML = "";
+      }
+      document.querySelectorAll(".card-pick").forEach(c => c.classList.remove("used"));
+
+      setTimeout(deal, 100);
+    }
+
+    deal();
+  </script>
+</body>
+</html>

@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Astrology Match ✨</title>
+  <style>
+    @font-face { font-family: "CutiePatootie"; src: url("../fonts/CutiePatootie-Rgjv.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "Wildcrazy";     src: url("../fonts/Wildcrazy-WKYO.ttf")     format("truetype"); font-display: swap; }
+    @font-face { font-family: "Cookiemonster"; src: url("../fonts/Cookiemonster-gv11.ttf") format("truetype"); font-display: swap; }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:     #0d0818;
+      --bg-2:   #0a1428;
+      --ink:    #f0e8ff;
+      --gold:   #ffd700;
+      --purple: #c080ff;
+      --pink:   #ff80c0;
+    }
+
+    html, body, body * {
+      font-family: "Wildcrazy", "Segoe UI Emoji", sans-serif !important;
+    }
+
+    body {
+      color: var(--ink);
+      background: linear-gradient(140deg, var(--bg), var(--bg-2));
+      min-height: 100vh;
+      padding: 24px 16px 100px;
+      overflow-x: hidden;
+    }
+
+    /* stars */
+    .stars-bg {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        radial-gradient(1px 1px at 15% 20%, rgba(255,255,255,0.7) 0%, transparent 100%),
+        radial-gradient(1px 1px at 75% 8%,  rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 45% 55%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 5%  75%, rgba(255,255,255,0.6) 0%, transparent 100%),
+        radial-gradient(1px 1px at 88% 85%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(1px 1px at 35% 92%, rgba(255,255,255,0.4) 0%, transparent 100%),
+        radial-gradient(1px 1px at 65% 38%, rgba(255,255,255,0.5) 0%, transparent 100%),
+        radial-gradient(2px 2px at 25% 48%, rgba(255,215,0,0.4) 0%, transparent 100%),
+        radial-gradient(2px 2px at 85% 60%, rgba(192,128,255,0.4) 0%, transparent 100%);
+    }
+
+    .page {
+      position: relative; z-index: 2;
+      max-width: 760px; margin: 0 auto;
+      display: flex; flex-direction: column;
+      align-items: center; gap: 22px;
+    }
+
+    header { text-align: center; }
+    header h1 {
+      font-family: "CutiePatootie", cursive !important;
+      font-size: clamp(2rem, 6vw, 3.4rem);
+      color: var(--gold);
+      text-shadow: 0 0 20px rgba(255,215,0,0.3);
+    }
+    header p { margin-top: 8px; font-size: clamp(1rem, 2.5vw, 1.2rem); opacity: 0.7; }
+
+    /* ── INPUT PANEL ── */
+    .input-panel {
+      width: min(680px, 92vw);
+      background: linear-gradient(155deg, rgba(30,10,60,0.9), rgba(10,20,50,0.9));
+      border: 1px solid rgba(192,128,255,0.3);
+      border-radius: 26px;
+      padding: clamp(22px,4vw,38px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .person-row {
+      display: flex;
+      gap: 14px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+
+    .person-field {
+      flex: 1;
+      min-width: 200px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .person-field label {
+      font-size: clamp(0.9rem, 2.5vw, 1.1rem);
+      opacity: 0.8;
+    }
+
+    .sign-select {
+      border: 1px solid rgba(192,128,255,0.4);
+      border-radius: 12px;
+      padding: 10px 14px;
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      background: rgba(40,15,80,0.8);
+      color: var(--ink);
+      cursor: pointer;
+      width: 100%;
+      appearance: none;
+      -webkit-appearance: none;
+    }
+    .sign-select:focus { outline: none; border-color: var(--purple); }
+
+    .match-btn {
+      border: none; border-radius: 999px;
+      padding: clamp(12px,2vw,16px) clamp(28px,6vw,48px);
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--purple), #8040c0);
+      color: #fff;
+      box-shadow: 0 10px 28px rgba(150,80,255,0.35);
+      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+      align-self: center;
+      margin-top: 4px;
+    }
+    .match-btn:hover { transform: translateY(-3px) scale(1.05); }
+
+    /* ── RESULT ── */
+    .result-panel {
+      width: min(680px, 92vw);
+      background: linear-gradient(155deg, rgba(30,10,60,0.92), rgba(10,20,50,0.9));
+      border: 1px solid rgba(255,215,0,0.3);
+      border-radius: 26px;
+      padding: clamp(22px,4vw,38px);
+      box-shadow: 0 20px 50px rgba(0,0,0,0.5), 0 0 40px rgba(150,80,255,0.1);
+      opacity: 0;
+      transform: translateY(20px) scale(0.96);
+      transition: opacity 0.6s ease, transform 0.6s cubic-bezier(0.22,1,0.36,1);
+      pointer-events: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .result-panel.show {
+      opacity: 1; transform: translateY(0) scale(1); pointer-events: all;
+    }
+
+    /* signs display */
+    .signs-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(10px, 3vw, 24px);
+      flex-wrap: wrap;
+    }
+    .sign-chip {
+      display: flex; flex-direction: column; align-items: center; gap: 4px;
+    }
+    .sign-chip .sign-emoji { font-size: clamp(2.5rem, 7vw, 3.5rem); }
+    .sign-chip .sign-label {
+      font-size: clamp(0.85rem, 2vw, 1rem);
+      opacity: 0.8;
+      color: var(--gold);
+    }
+    .plus-sign {
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      color: var(--pink);
+      opacity: 0.8;
+    }
+
+    /* compatibility bar */
+    .compat-section { text-align: center; }
+    .compat-label {
+      font-family: "CutiePatootie", cursive !important;
+      font-size: clamp(1.1rem, 3vw, 1.5rem);
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+    .compat-bar-wrap {
+      height: 14px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 999px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+    .compat-bar {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--purple), var(--pink), var(--gold));
+      width: 0%;
+      transition: width 1.2s cubic-bezier(0.22,1,0.36,1);
+    }
+    .compat-pct {
+      font-size: clamp(1.6rem, 4vw, 2.2rem);
+      color: var(--gold);
+      font-family: "CutiePatootie", cursive !important;
+    }
+
+    .result-title {
+      font-family: "CutiePatootie", cursive !important;
+      font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+      color: var(--pink);
+      text-align: center;
+    }
+    .result-msg {
+      font-size: clamp(1rem, 2.5vw, 1.2rem);
+      line-height: 1.75;
+      opacity: 0.9;
+      text-align: center;
+    }
+    .result-tip {
+      font-size: clamp(0.9rem, 2vw, 1.05rem);
+      color: var(--purple);
+      text-align: center;
+      font-style: italic;
+    }
+
+    .try-again-btn {
+      border: none; border-radius: 999px;
+      padding: clamp(10px,2vw,13px) clamp(22px,5vw,36px);
+      font-size: clamp(0.95rem, 2.5vw, 1.15rem);
+      cursor: pointer;
+      background: rgba(255,255,255,0.1);
+      color: var(--ink);
+      border: 1px solid rgba(255,255,255,0.2);
+      transition: transform 0.3s ease, background 0.3s;
+      align-self: center;
+    }
+    .try-again-btn:hover { transform: translateY(-2px); background: rgba(255,255,255,0.15); }
+
+    .back-btn {
+      position: fixed; left: 20px; bottom: 20px; z-index: 30;
+      border: none; border-radius: 999px; padding: 14px 28px;
+      font-size: clamp(1.1rem,2.5vw,1.4rem); cursor: pointer;
+      background: rgba(255,255,255,0.1); color: var(--ink);
+      box-shadow: 0 8px 22px rgba(0,0,0,0.3);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.15);
+      transition: transform 220ms ease;
+    }
+    .back-btn:hover { transform: translateY(-2px); }
+  </style>
+</head>
+<body>
+
+  <div class="stars-bg"></div>
+
+  <button class="back-btn" onclick="sessionStorage.setItem('cameFromPage','true'); location.href='index.html?v=20260315';">
+    Go Back
+  </button>
+
+  <div class="page">
+    <header>
+      <h1>Astrology Match ✨</h1>
+      <p>See what the stars say about your connection.</p>
+    </header>
+
+    <div class="input-panel">
+      <div class="person-row">
+        <div class="person-field">
+          <label>Your sign 🌙</label>
+          <select class="sign-select" id="sign1">
+            <option value="">Pick your sign...</option>
+          </select>
+        </div>
+        <div class="person-field">
+          <label>Their sign 💖</label>
+          <select class="sign-select" id="sign2">
+            <option value="">Pick their sign...</option>
+          </select>
+        </div>
+      </div>
+      <button class="match-btn" onclick="calcMatch()">Read the Stars ✨</button>
+    </div>
+
+    <div class="result-panel" id="resultPanel">
+      <div class="signs-display">
+        <div class="sign-chip">
+          <span class="sign-emoji" id="r1Emoji"></span>
+          <span class="sign-label" id="r1Name"></span>
+        </div>
+        <div class="plus-sign">💫</div>
+        <div class="sign-chip">
+          <span class="sign-emoji" id="r2Emoji"></span>
+          <span class="sign-label" id="r2Name"></span>
+        </div>
+      </div>
+
+      <div class="compat-section">
+        <div class="compat-label">Compatibility</div>
+        <div class="compat-bar-wrap"><div class="compat-bar" id="compatBar"></div></div>
+        <div class="compat-pct" id="compatPct">0%</div>
+      </div>
+
+      <div class="result-title" id="resultTitle"></div>
+      <div class="result-msg"   id="resultMsg"></div>
+      <div class="result-tip"   id="resultTip"></div>
+
+      <button class="try-again-btn" onclick="resetMatch()">Try another pair 🔄</button>
+    </div>
+  </div>
+
+  <script>
+    const signs = [
+      { name:"Aries",       emoji:"♈", el:"Fire",  dates:"Mar 21–Apr 19" },
+      { name:"Taurus",      emoji:"♉", el:"Earth", dates:"Apr 20–May 20" },
+      { name:"Gemini",      emoji:"♊", el:"Air",   dates:"May 21–Jun 20" },
+      { name:"Cancer",      emoji:"♋", el:"Water", dates:"Jun 21–Jul 22" },
+      { name:"Leo",         emoji:"♌", el:"Fire",  dates:"Jul 23–Aug 22" },
+      { name:"Virgo",       emoji:"♍", el:"Earth", dates:"Aug 23–Sep 22" },
+      { name:"Libra",       emoji:"♎", el:"Air",   dates:"Sep 23–Oct 22" },
+      { name:"Scorpio",     emoji:"♏", el:"Water", dates:"Oct 23–Nov 21" },
+      { name:"Sagittarius", emoji:"♐", el:"Fire",  dates:"Nov 22–Dec 21" },
+      { name:"Capricorn",   emoji:"♑", el:"Earth", dates:"Dec 22–Jan 19" },
+      { name:"Aquarius",    emoji:"♒", el:"Air",   dates:"Jan 20–Feb 18" },
+      { name:"Pisces",      emoji:"♓", el:"Water", dates:"Feb 19–Mar 20" },
+    ];
+
+    // compatibility matrix [0-100]
+    // based on traditional element & modality harmony, with love bias
+    const compat = {
+      "Aries-Aries":92,"Aries-Taurus":68,"Aries-Gemini":84,"Aries-Cancer":62,
+      "Aries-Leo":95,"Aries-Virgo":58,"Aries-Libra":76,"Aries-Scorpio":72,
+      "Aries-Sagittarius":96,"Aries-Capricorn":60,"Aries-Aquarius":80,"Aries-Pisces":66,
+      "Taurus-Taurus":88,"Taurus-Gemini":62,"Taurus-Cancer":90,"Taurus-Leo":70,
+      "Taurus-Virgo":94,"Taurus-Libra":74,"Taurus-Scorpio":86,"Taurus-Sagittarius":58,
+      "Taurus-Capricorn":92,"Taurus-Aquarius":56,"Taurus-Pisces":84,
+      "Gemini-Gemini":78,"Gemini-Cancer":60,"Gemini-Leo":84,"Gemini-Virgo":62,
+      "Gemini-Libra":92,"Gemini-Scorpio":64,"Gemini-Sagittarius":88,"Gemini-Capricorn":58,
+      "Gemini-Aquarius":90,"Gemini-Pisces":66,
+      "Cancer-Cancer":86,"Cancer-Leo":72,"Cancer-Virgo":84,"Cancer-Libra":66,
+      "Cancer-Scorpio":94,"Cancer-Sagittarius":60,"Cancer-Capricorn":76,"Cancer-Aquarius":58,
+      "Cancer-Pisces":92,
+      "Leo-Leo":80,"Leo-Virgo":64,"Leo-Libra":88,"Leo-Scorpio":70,
+      "Leo-Sagittarius":94,"Leo-Capricorn":62,"Leo-Aquarius":76,"Leo-Pisces":68,
+      "Virgo-Virgo":82,"Virgo-Libra":70,"Virgo-Scorpio":86,"Virgo-Sagittarius":62,
+      "Virgo-Capricorn":92,"Virgo-Aquarius":60,"Virgo-Pisces":74,
+      "Libra-Libra":80,"Libra-Scorpio":68,"Libra-Sagittarius":86,"Libra-Capricorn":64,
+      "Libra-Aquarius":92,"Libra-Pisces":72,
+      "Scorpio-Scorpio":84,"Scorpio-Sagittarius":64,"Scorpio-Capricorn":82,
+      "Scorpio-Aquarius":62,"Scorpio-Pisces":90,
+      "Sagittarius-Sagittarius":88,"Sagittarius-Capricorn":60,"Sagittarius-Aquarius":86,
+      "Sagittarius-Pisces":68,
+      "Capricorn-Capricorn":84,"Capricorn-Aquarius":64,"Capricorn-Pisces":80,
+      "Aquarius-Aquarius":82,"Aquarius-Pisces":70,
+      "Pisces-Pisces":90,
+    };
+
+    function getCompat(a, b) {
+      const key1 = `${a}-${b}`;
+      const key2 = `${b}-${a}`;
+      return compat[key1] || compat[key2] || 75;
+    }
+
+    function getRating(pct) {
+      if (pct >= 90) return { title:"Twin Flames 🔥💫", msg:"The stars didn't just align for you two — they threw a whole party. This connection is rare, electric, and deeply fated. You balance each other in the most beautiful way.", tip:"The universe waited a long time to bring you two together. 💫" };
+      if (pct >= 80) return { title:"Cosmic Match ✨💖", msg:"Your energies complement each other naturally. There's a warmth and understanding between you that most people spend their whole lives searching for.", tip:"What you two have is not ordinary. Cherish it always. 🌙" };
+      if (pct >= 70) return { title:"Star-Crossed Sweethearts 🌟", msg:"You two bring out something interesting in each other. Your differences are your strengths — together you create a balance that's genuinely beautiful.", tip:"Opposites don't just attract — they complete. 💕" };
+      if (pct >= 60) return { title:"A Beautiful Mystery 🌸", msg:"There's a complexity to your connection that makes it fascinating. With understanding and patience, something truly special can grow here.", tip:"The best love stories have a little tension in them. 🌺" };
+      return { title:"A Unique Bond 🌈", msg:"You two are different souls on different paths — but that doesn't mean there isn't something real between you. Love transcends the stars.", tip:"Astrology is a guide, not a rule. Follow your heart. 💖" };
+    }
+
+    // populate selects
+    const s1 = document.getElementById("sign1");
+    const s2 = document.getElementById("sign2");
+    signs.forEach(s => {
+      [s1, s2].forEach(sel => {
+        const opt = document.createElement("option");
+        opt.value = s.name;
+        opt.textContent = `${s.emoji} ${s.name} (${s.dates})`;
+        sel.appendChild(opt);
+      });
+    });
+
+    function calcMatch() {
+      const v1 = s1.value, v2 = s2.value;
+      if (!v1 || !v2) { alert("Pick both signs first! 🌙"); return; }
+
+      const sign1 = signs.find(s => s.name === v1);
+      const sign2 = signs.find(s => s.name === v2);
+      const pct   = getCompat(v1, v2);
+      const rating = getRating(pct);
+
+      document.getElementById("r1Emoji").textContent = sign1.emoji;
+      document.getElementById("r1Name").textContent  = sign1.name;
+      document.getElementById("r2Emoji").textContent = sign2.emoji;
+      document.getElementById("r2Name").textContent  = sign2.name;
+      document.getElementById("resultTitle").textContent = rating.title;
+      document.getElementById("resultMsg").textContent   = rating.msg;
+      document.getElementById("resultTip").textContent   = rating.tip;
+      document.getElementById("compatPct").textContent   = pct + "%";
+
+      const panel = document.getElementById("resultPanel");
+      panel.classList.add("show");
+
+      // animate bar after show
+      setTimeout(() => {
+        document.getElementById("compatBar").style.width = pct + "%";
+      }, 200);
+
+      panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    function resetMatch() {
+      s1.value = ""; s2.value = "";
+      document.getElementById("resultPanel").classList.remove("show");
+      document.getElementById("compatBar").style.width = "0%";
+    }
+  </script>
+</body>
+</html>

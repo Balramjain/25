@@ -427,6 +427,12 @@ body > *:not(.bg-effects) {
   --btn-2: #e9ffe8;
 }
 
+.feature-group.theme-mystic {
+  --group-bg: linear-gradient(150deg, rgba(232, 220, 255, 0.95), rgba(255, 240, 250, 0.92));
+  --btn-1: #eddeff;
+  --btn-2: #ffe8f7;
+}
+
 
 /* QUICK SCROLL NAV (matches music button color theme) */
 .quick-nav-btn {
