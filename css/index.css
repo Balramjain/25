@@ -445,12 +445,52 @@ body > *:not(.bg-effects) {
   padding: 70px 30px 40px 30px;
   border-radius: 28px;
 
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 28px;
+  background-color: #eaf4ff;
 
-  background-color: #eaf4ff; /* soft fallback color */
+  position: relative;
+  min-height: 240px;
+}
+
+/* Title centered at top */
+.feature-group.theme-bubu .feature-title {
+  position: absolute;
+  top: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+}
+
+/* button container */
+.feature-group.theme-bubu .feature-grid {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+/* transparent buttons */
+.feature-group.theme-bubu .feature-btn {
+  background: transparent;
+  border: none;
+  padding: 12px 20px;
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* left button slightly inside */
+#btn-bubu-random-vibe {
+  position: absolute;
+  left: 12%;
+  top: 55%;
+  transform: translateY(-50%);
+}
+
+/* right button slightly inside */
+#btn-bubu-mood-match {
+  position: absolute;
+  right: 12%;
+  top: 55%;
+  transform: translateY(-50%);
 }
 
 
