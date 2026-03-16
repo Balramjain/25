@@ -433,6 +433,27 @@ body > *:not(.bg-effects) {
   --btn-2: #ffe8f7;
 }
 
+.feature-group.theme-bubu {
+  --btn-1: #fff1f6;
+  --btn-2: #f3f7ff;
+
+  background-image: url("../stickers/DB/DB_BOX.jpg");
+  background-size: contain;
+  background-position: center top;
+  background-repeat: no-repeat;
+
+  padding: 70px 30px 40px 30px;
+  border-radius: 28px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 28px;
+
+  background-color: #eaf4ff; /* soft fallback color */
+}
+
+
 
 /* QUICK SCROLL NAV (matches music button color theme) */
 .quick-nav-btn {
@@ -672,5 +693,4 @@ body > *:not(.bg-effects) {
     transition-duration: 0.01ms !important;
   }
 }
-
 
