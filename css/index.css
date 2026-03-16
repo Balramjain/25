@@ -27,6 +27,13 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+/* Mobile tap reliability */
+a,
+button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
 /* Keep app content above background effects */
 body > *:not(.bg-effects) {
   position: relative;
@@ -659,7 +666,7 @@ body > *:not(.bg-effects) {
 /* Mobile performance tuning for smoother quote scroll */
 @media (max-width: 768px) {
   html {
-    scroll-snap-type: y mandatory;
+    scroll-snap-type: y proximity;
     scroll-behavior: smooth;
   }
 
@@ -732,4 +739,3 @@ body > *:not(.bg-effects) {
     transition-duration: 0.01ms !important;
   }
 }
-
