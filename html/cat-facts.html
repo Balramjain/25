@@ -166,10 +166,65 @@
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
     }
 
+    .time-panel {
+      width: min(100%, 760px);
+      margin-bottom: 18px;
+      padding: 18px;
+      border-radius: 18px;
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
+      text-align: center;
+    }
+
+    .time-panel h2 {
+      font-family: "CutiePatootie", cursive;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      margin-bottom: 12px;
+    }
+
+    .time-counter {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(100px, 1fr));
+      gap: 12px;
+    }
+
+    .time-box {
+      padding: 14px 10px;
+      border-radius: 14px;
+      background: linear-gradient(150deg, rgba(255, 238, 247, 0.92), rgba(235, 248, 255, 0.92));
+      box-shadow:
+        0 10px 18px rgba(0, 0, 0, 0.08),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+
+    .time-value {
+      display: block;
+      font-size: clamp(1.8rem, 5vw, 2.8rem);
+      line-height: 1;
+    }
+
+    .time-label {
+      display: block;
+      margin-top: 6px;
+      font-size: 0.95rem;
+      opacity: 0.72;
+      text-transform: lowercase;
+    }
+
+    .time-note {
+      margin-top: 12px;
+      font-size: 0.92rem;
+      opacity: 0.75;
+    }
+
     @media (max-width: 700px) {
       .panel {
         min-height: 70vh;
         padding: 22px;
+      }
+
+      .time-counter {
+        grid-template-columns: 1fr;
       }
     }
 .row {
@@ -237,7 +292,28 @@
   </header>
 
   <section class="panel">
-    <div class="row"><div class="mini-panel" id="catFact">Click to get a fact.</div><button class="primary-btn" id="catFactBtn">New Fact</button></div>
+    <div>
+      <div class="time-panel">
+        <h2>Time Since We Met 💖</h2>
+        <div class="time-counter" id="timeCounter">
+          <div class="time-box">
+            <span class="time-value" id="timeYears">--</span>
+            <span class="time-label">years</span>
+          </div>
+          <div class="time-box">
+            <span class="time-value" id="timeMonths">--</span>
+            <span class="time-label">months</span>
+          </div>
+          <div class="time-box">
+            <span class="time-value" id="timeDays">--</span>
+            <span class="time-label">days</span>
+          </div>
+        </div>
+        <p class="time-note" id="timeNote">Set your real date in the script once and this card will update itself every day.</p>
+      </div>
+
+      <div class="row"><div class="mini-panel" id="catFact">Click to get a fact.</div><button class="primary-btn" id="catFactBtn">New Fact</button></div>
+    </div>
   </section>
 
   <script>
@@ -298,6 +374,55 @@
       const pick = facts[Math.floor(Math.random() * facts.length)];
       document.getElementById("catFact").textContent = pick;
     });
+
+    const metDateIso = "";
+
+    function updateTimeSinceWeMet() {
+      const yearsEl = document.getElementById("timeYears");
+      const monthsEl = document.getElementById("timeMonths");
+      const daysEl = document.getElementById("timeDays");
+      const noteEl = document.getElementById("timeNote");
+
+      if (!metDateIso) {
+        noteEl.textContent = "Add your real met date in cat-facts.html → const metDateIso = \"YYYY-MM-DD\".";
+        return;
+      }
+
+      const [year, month, day] = metDateIso.split("-").map(Number);
+      const start = new Date(year, month - 1, day);
+      const now = new Date();
+
+      if (Number.isNaN(start.getTime()) || start > now) {
+        yearsEl.textContent = "--";
+        monthsEl.textContent = "--";
+        daysEl.textContent = "--";
+        noteEl.textContent = "The met date looks invalid. Use the format YYYY-MM-DD.";
+        return;
+      }
+
+      let years = now.getFullYear() - start.getFullYear();
+      let months = now.getMonth() - start.getMonth();
+      let days = now.getDate() - start.getDate();
+
+      if (days < 0) {
+        const previousMonthLastDay = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+        days += previousMonthLastDay;
+        months -= 1;
+      }
+
+      if (months < 0) {
+        months += 12;
+        years -= 1;
+      }
+
+      yearsEl.textContent = String(years);
+      monthsEl.textContent = String(months);
+      daysEl.textContent = String(days);
+      noteEl.textContent = `Since ${start.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })} ✨`;
+    }
+
+    updateTimeSinceWeMet();
+    setInterval(updateTimeSinceWeMet, 60 * 1000);
   </script>
 </body>
 </html>

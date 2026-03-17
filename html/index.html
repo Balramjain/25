@@ -195,46 +195,61 @@
 
     let navDirection = "down";
 
-    function getSectionTargets() {
-      const actions = document.getElementById("actions");
-      const more = document.getElementById("more-actions");
-      return {
-        actionsTop: actions ? actions.offsetTop : 0,
-        moreTop: more ? more.offsetTop : document.body.scrollHeight,
-      };
+    function getSnapSections() {
+      return [
+        document.getElementById("top-section"),
+        document.getElementById("actions"),
+        document.getElementById("more-actions"),
+        document.getElementById("time-since"),
+      ].filter(Boolean);
+    }
+
+    function getCurrentSectionIndex(sections) {
+      if (!sections.length) return -1;
+
+      const probeY = window.scrollY + Math.min(window.innerHeight * 0.28, 220);
+
+      for (let i = sections.length - 1; i >= 0; i -= 1) {
+        if (probeY >= sections[i].offsetTop) {
+          return i;
+        }
+      }
+
+      return 0;
+    }
+
+    function getQuickNavState() {
+      const sections = getSnapSections();
+      const currentIndex = getCurrentSectionIndex(sections);
+
+      if (!sections.length || currentIndex === -1) {
+        return { direction: navDirection, type: "section", section: sections[0] || null };
+      }
+
+      if (currentIndex === 0) navDirection = "down";
+      if (currentIndex === sections.length - 1) navDirection = "up";
+
+      if (navDirection === "down") {
+        return { direction: "down", type: "section", section: sections[Math.min(currentIndex + 1, sections.length - 1)] };
+      }
+
+      return { direction: "up", type: "section", section: sections[Math.max(currentIndex - 1, 0)] };
     }
 
     function updateQuickNavBtn() {
-      const { actionsTop, moreTop } = getSectionTargets();
-      const y = window.scrollY;
-      const atTop = y < actionsTop - 80;
-      const atBottom = y > moreTop - 80;
+      const state = getQuickNavState();
 
-      if (atTop) navDirection = "down";
-      if (atBottom) navDirection = "up";
-
-      let next = "actions";
-      if (navDirection === "down") {
-        next = atTop ? "actions" : "more";
-      } else {
-        next = atBottom ? "actions" : "top";
-      }
-
-      quickNavBtn.dataset.next = next;
-      const goingDown = next === "actions" ? y < actionsTop : next === "more";
-      quickNavBtn.innerText = goingDown ? "⤵" : "⤴";
-      quickNavBtn.setAttribute("aria-label", goingDown ? "Scroll down" : "Scroll up");
+      quickNavBtn.dataset.targetType = state.type;
+      quickNavBtn.dataset.targetId = state.section ? state.section.id || "" : "";
+      quickNavBtn.innerText = state.direction === "down" ? "⤵" : "⤴";
+      quickNavBtn.setAttribute("aria-label", state.direction === "down" ? "Scroll down" : "Scroll up");
     }
 
     quickNavBtn.addEventListener("click", () => {
-      const { actionsTop, moreTop } = getSectionTargets();
-      const next = quickNavBtn.dataset.next;
-      if (next === "actions") {
-        document.getElementById("actions").scrollIntoView({ behavior: "smooth", block: "start" });
-      } else if (next === "more") {
-        document.getElementById("more-actions").scrollIntoView({ behavior: "smooth", block: "start" });
-      } else {
-        window.scrollTo({ top: 0, behavior: "smooth" });
+      const state = getQuickNavState();
+
+      if (state.type === "section" && state.section) {
+        state.section.scrollIntoView({ behavior: "smooth", block: "start" });
       }
     });
 
@@ -251,7 +266,7 @@
   </div>
 
   <!-- 🌸 HERO -->
-  <section class="section hero">
+  <section class="section hero" id="top-section" data-nav-stop="true">
     <h1>Happy 25th Birthday Bangari 💖</h1>
     <p>
       This little world slowly changes colors,<br>
@@ -365,7 +380,7 @@
   </section>
 
   <!-- 🧊 ACTION BUTTONS -->
-  <section class="section actions" id="actions">
+  <section class="section actions" id="actions" data-nav-stop="true">
     <h2>Choose your purr-venture 😼</h2>
 
     <div class="button-grid">
@@ -377,7 +392,7 @@
   </section>
 
   <!-- 🌈 MORE FEATURES -->
-  <section class="section actions more-actions" id="more-actions">
+  <section class="section actions more-actions" id="more-actions" data-nav-stop="true">
     <h2>MORE MAGIC ✨</h2>
 
     <div class="feature-groups">
@@ -512,6 +527,25 @@
     </div>
   </section>
 
+  <section class="section time-since" id="time-since" data-nav-stop="true">
+    <h2>Time Since We First Started Talking 💖</h2>
+    <div class="time-counter">
+      <div class="time-box">
+        <span class="time-value" id="homeTimeYears">--</span>
+        <span class="time-label">years</span>
+      </div>
+      <div class="time-box">
+        <span class="time-value" id="homeTimeMonths">--</span>
+        <span class="time-label">months</span>
+      </div>
+      <div class="time-box">
+        <span class="time-value" id="homeTimeDays">--</span>
+        <span class="time-label">days</span>
+      </div>
+    </div>
+    <p class="time-note" id="homeTimeNote">Add your real met date once and this will stay updated every day.</p>
+  </section>
+
   <!-- 🎨 BACKGROUND COLOR BLEND (requestAnimationFrame-throttled for smoother scroll) -->
   <script>
     const startColor = [248, 240, 226];
@@ -539,6 +573,56 @@
         bgTicking = false;
       });
     }, { passive: true });
+  </script>
+
+  <script>
+    const metDateIso = "";
+
+    function updateRelationshipTimer() {
+      const yearsEl = document.getElementById("homeTimeYears");
+      const monthsEl = document.getElementById("homeTimeMonths");
+      const daysEl = document.getElementById("homeTimeDays");
+      const noteEl = document.getElementById("homeTimeNote");
+
+      if (!yearsEl || !monthsEl || !daysEl || !noteEl) return;
+
+      const metDateIso = "2019-02-12";
+
+      const [year, month, day] = metDateIso.split("-").map(Number);
+      const start = new Date(year, month - 1, day);
+      const now = new Date();
+
+      if (Number.isNaN(start.getTime()) || start > now) {
+        yearsEl.textContent = "--";
+        monthsEl.textContent = "--";
+        daysEl.textContent = "--";
+        noteEl.textContent = "The met date looks invalid. Use the format YYYY-MM-DD.";
+        return;
+      }
+
+      let years = now.getFullYear() - start.getFullYear();
+      let months = now.getMonth() - start.getMonth();
+      let days = now.getDate() - start.getDate();
+
+      if (days < 0) {
+        const previousMonthLastDay = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
+        days += previousMonthLastDay;
+        months -= 1;
+      }
+
+      if (months < 0) {
+        months += 12;
+        years -= 1;
+      }
+
+      yearsEl.textContent = String(years);
+      monthsEl.textContent = String(months);
+      daysEl.textContent = String(days);
+      noteEl.textContent = `Since ${start.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })} ✨`;
+    }
+
+    updateRelationshipTimer();
+    setInterval(updateRelationshipTimer, 60 * 1000);
   </script>
 
   <!-- ⭐ STAR + BUBBLE SCRIPTS -->
