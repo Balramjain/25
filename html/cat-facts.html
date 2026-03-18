@@ -14,60 +14,35 @@
       font-display: swap;
     }
 
-    @font-face {
-      font-family: "Wildcrazy";
-      src: url("../fonts/Wildcrazy-WKYO.ttf") format("truetype");
-      font-display: swap;
-    }
 
-    @font-face {
-      font-family: "Cookiemonster";
-      src: url("../fonts/Cookiemonster-gv11.ttf") format("truetype");
-      font-display: swap;
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
-
-    @font-face {
-      font-family: "GamepauseddemoRegular";
-      src: url("../fonts/GamepauseddemoRegular-RpmY6.otf") format("opentype");
-      font-display: swap;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --bg: #fef5ff;
       --bg-2: #eefbff;
-      --card: #ffffffcc;
       --ink: #2a2a3b;
       --accent: #e6b7ff;
       --accent-2: #b7e5ff;
     }
 
     body {
-      font-family: "GamepauseddemoRegular", sans-serif;
-      color: var(--ink);
-      background: linear-gradient(140deg, var(--bg), var(--bg-2));
-      min-height: 100vh;
+      min-height: 100svh;
       padding: 24px 16px 80px;
       overflow-x: hidden;
-    }
-
-    body > @font-face {
-      font-family: "GamepauseddemoRegular";
-      src: url("../fonts/GamepauseddemoRegular-RpmY6.otf") format("opentype");
-      font-display: swap;
-    }
-
-    * {
-      position: relative;
-      z-index: 2;
+      font-family: "CutiePatootie", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+      color: var(--ink);
+      background: linear-gradient(140deg, var(--bg), var(--bg-2));
     }
 
     .bg-sparkles {
       position: fixed;
       inset: 0;
+      z-index: 0;
       pointer-events: none;
-      z-index: 1;
     }
 
     .bg-sparkles span {
@@ -87,10 +62,17 @@
       100% { transform: translateY(0) translateX(0) scale(1); }
     }
 
+    header,
+    .panel,
+    .back-btn {
+      position: relative;
+      z-index: 1;
+    }
+
     header {
-      text-align: center;
-      margin: 12px auto 22px;
       max-width: 900px;
+      margin: 12px auto 22px;
+      text-align: center;
     }
 
     header h1 {
@@ -103,7 +85,8 @@
       font-size: 1.1rem;
       opacity: 0.8;
     }
-.back-btn {
+
+    .back-btn {
       position: fixed;
       left: 20px;
       bottom: 20px;
@@ -124,121 +107,56 @@
       transform: translateY(-2px);
       box-shadow: 0 12px 26px rgba(0, 0, 0, 0.25);
     }
+
     .panel {
       width: min(980px, 92vw);
+      min-height: min(65svh, 560px);
       margin: 0 auto;
       padding: 28px;
       border-radius: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
       background-image: url("https://images.unsplash.com/photo-1761888855214-0458bca5965b?auto=format&fit=crop&fm=jpg&q=80&w=2000");
       background-size: cover;
       background-position: center;
       box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
-      min-height: 65vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
     }
 
     .panel::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: linear-gradient(150deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
+      background: linear-gradient(150deg, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0.78));
     }
 
-    .panel > @font-face {
-      font-family: "GamepauseddemoRegular";
-      src: url("../fonts/GamepauseddemoRegular-RpmY6.otf") format("opentype");
-      font-display: swap;
-    }
-
-    * {
+    .row {
       position: relative;
       z-index: 1;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
     }
 
     .mini-panel {
-      padding: 16px;
+      max-width: 560px;
+      padding: 16px 20px;
       border-radius: 16px;
       background: rgba(255, 255, 255, 0.88);
       box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-    }
-
-    .time-panel {
-      width: min(100%, 760px);
-      margin-bottom: 18px;
-      padding: 18px;
-      border-radius: 18px;
-      background: rgba(255, 255, 255, 0.9);
-      box-shadow: 0 12px 24px rgba(0, 0, 0, 0.12);
       text-align: center;
-    }
-
-    .time-panel h2 {
-      font-family: "CutiePatootie", cursive;
-      font-size: clamp(1.8rem, 4vw, 2.6rem);
-      margin-bottom: 12px;
-    }
-
-    .time-counter {
-      display: grid;
-      grid-template-columns: repeat(3, minmax(100px, 1fr));
-      gap: 12px;
-    }
-
-    .time-box {
-      padding: 14px 10px;
-      border-radius: 14px;
-      background: linear-gradient(150deg, rgba(255, 238, 247, 0.92), rgba(235, 248, 255, 0.92));
-      box-shadow:
-        0 10px 18px rgba(0, 0, 0, 0.08),
-        inset 0 1px 0 rgba(255, 255, 255, 0.9);
-    }
-
-    .time-value {
-      display: block;
-      font-size: clamp(1.8rem, 5vw, 2.8rem);
-      line-height: 1;
-    }
-
-    .time-label {
-      display: block;
-      margin-top: 6px;
-      font-size: 0.95rem;
-      opacity: 0.72;
-      text-transform: lowercase;
-    }
-
-    .time-note {
-      margin-top: 12px;
-      font-size: 0.92rem;
-      opacity: 0.75;
-    }
-
-    @media (max-width: 700px) {
-      .panel {
-        min-height: 70vh;
-        padding: 22px;
-      }
-
-      .time-counter {
-        grid-template-columns: 1fr;
-      }
-    }
-.row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      align-items: center;
+      font-size: clamp(1rem, 2.6vw, 1.2rem);
+      line-height: 1.6;
     }
 
     .primary-btn {
       border: none;
       border-radius: 999px;
       padding: 10px 18px;
-      font-family: "Cookiemonster", sans-serif;
+      font-family: "CutiePatootie", sans-serif;
       font-size: 1.05rem;
       cursor: pointer;
       background: var(--accent);
@@ -252,17 +170,24 @@
       box-shadow: 0 14px 26px rgba(0, 0, 0, 0.18);
     }
 
-    .tiny-btn {
-      border: none;
-      border-radius: 10px;
-      padding: 6px 12px;
-      font-family: "Cookiemonster", sans-serif;
-      cursor: pointer;
-      background: var(--accent-2);
-      color: #2b2b3a;
-    }\n\n  
-    body, body * {
-      font-family: "GamepauseddemoRegular", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
+    @media (max-width: 700px) {
+      body {
+        padding-bottom: 96px;
+      }
+
+      .panel {
+        min-height: auto;
+        padding: 22px;
+      }
+
+      .row {
+        flex-direction: column;
+      }
+
+      .back-btn {
+        left: 16px;
+        bottom: 16px;
+      }
     }
   </style>
 </head>
@@ -286,33 +211,15 @@
     Go Back
   </button>
 
-  <header></div>
+  <header>
     <h1>Cat Facts, But It Is You</h1>
     <p>Click for a new soft fact every time.</p>
   </header>
 
   <section class="panel">
-    <div>
-      <div class="time-panel">
-        <h2>Time Since We Met 💖</h2>
-        <div class="time-counter" id="timeCounter">
-          <div class="time-box">
-            <span class="time-value" id="timeYears">--</span>
-            <span class="time-label">years</span>
-          </div>
-          <div class="time-box">
-            <span class="time-value" id="timeMonths">--</span>
-            <span class="time-label">months</span>
-          </div>
-          <div class="time-box">
-            <span class="time-value" id="timeDays">--</span>
-            <span class="time-label">days</span>
-          </div>
-        </div>
-        <p class="time-note" id="timeNote">Set your real date in the script once and this card will update itself every day.</p>
-      </div>
-
-      <div class="row"><div class="mini-panel" id="catFact">Click to get a fact.</div><button class="primary-btn" id="catFactBtn">New Fact</button></div>
+    <div class="row">
+      <div class="mini-panel" id="catFact">Click to get a fact.</div>
+      <button class="primary-btn" id="catFactBtn">New Fact</button>
     </div>
   </section>
 
@@ -374,63 +281,6 @@
       const pick = facts[Math.floor(Math.random() * facts.length)];
       document.getElementById("catFact").textContent = pick;
     });
-
-    const metDateIso = "";
-
-    function updateTimeSinceWeMet() {
-      const yearsEl = document.getElementById("timeYears");
-      const monthsEl = document.getElementById("timeMonths");
-      const daysEl = document.getElementById("timeDays");
-      const noteEl = document.getElementById("timeNote");
-
-      if (!metDateIso) {
-        noteEl.textContent = "Add your real met date in cat-facts.html → const metDateIso = \"YYYY-MM-DD\".";
-        return;
-      }
-
-      const [year, month, day] = metDateIso.split("-").map(Number);
-      const start = new Date(year, month - 1, day);
-      const now = new Date();
-
-      if (Number.isNaN(start.getTime()) || start > now) {
-        yearsEl.textContent = "--";
-        monthsEl.textContent = "--";
-        daysEl.textContent = "--";
-        noteEl.textContent = "The met date looks invalid. Use the format YYYY-MM-DD.";
-        return;
-      }
-
-      let years = now.getFullYear() - start.getFullYear();
-      let months = now.getMonth() - start.getMonth();
-      let days = now.getDate() - start.getDate();
-
-      if (days < 0) {
-        const previousMonthLastDay = new Date(now.getFullYear(), now.getMonth(), 0).getDate();
-        days += previousMonthLastDay;
-        months -= 1;
-      }
-
-      if (months < 0) {
-        months += 12;
-        years -= 1;
-      }
-
-      yearsEl.textContent = String(years);
-      monthsEl.textContent = String(months);
-      daysEl.textContent = String(days);
-      noteEl.textContent = `Since ${start.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" })} ✨`;
-    }
-
-    updateTimeSinceWeMet();
-    setInterval(updateTimeSinceWeMet, 60 * 1000);
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
