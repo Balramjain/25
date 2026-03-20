@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Random Vibe</title>
+  <style>
+    @font-face {
+      font-family: "CutiePatootie";
+      src: url("../fonts/CutiePatootie-Rgjv.ttf") format("truetype");
+      font-display: swap;
+    }
+
+    @font-face {
+      font-family: "LoveBubbles";
+      src: url("../fonts/LoveBubbles-MV21J.ttf") format("truetype");
+      font-display: swap;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body, body * {
+      font-family: "LoveBubbles", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+    }
+
+    body {
+      min-height: 100svh;
+      padding: 24px 16px 96px;
+      color: #34263f;
+      background:
+        radial-gradient(circle at top left, rgba(255, 184, 216, 0.32), transparent 28%),
+        radial-gradient(circle at top right, rgba(182, 223, 255, 0.28), transparent 30%),
+        linear-gradient(145deg, #fff4fb, #edf7ff);
+    }
+
+    .shell { width: min(980px, 100%); margin: 0 auto; }
+    header { text-align: center; margin-bottom: 20px; }
+    h1 {
+      font-family: "CutiePatootie", cursive;
+      font-size: clamp(2.4rem, 7vw, 4rem);
+      line-height: 1.02;
+    }
+    header p { margin-top: 8px; color: #7e6a89; font-size: 1rem; line-height: 1.6; }
+
+    .panel {
+      border-radius: 30px;
+      border: 1px solid rgba(52, 38, 63, 0.12);
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow:
+        0 24px 50px rgba(66, 50, 92, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.92);
+      padding: 24px;
+      backdrop-filter: blur(10px);
+      display: grid;
+      gap: 18px;
+      justify-items: center;
+      text-align: center;
+    }
+
+    .random-vibe-btn {
+      position: relative;
+      min-width: 240px;
+      min-height: 56px;
+      border: none;
+      border-radius: 999px;
+      padding: 0 30px;
+      cursor: pointer;
+      color: #fff;
+      font-size: 1.08rem;
+      background: linear-gradient(135deg, #ff85bb, #ff6fa0, #c97aff, #7ab8ff);
+      background-size: 300% 300%;
+      animation: rvGrad 4s ease infinite;
+      box-shadow:
+        0 8px 24px rgba(200, 100, 180, 0.4),
+        0 2px 8px rgba(150, 100, 255, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease;
+      overflow: hidden;
+    }
+
+    .random-vibe-btn:hover {
+      transform: translateY(-4px) scale(1.04);
+    }
+
+    @keyframes rvGrad {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    @keyframes rvWiggle {
+      0%, 100% { transform: rotate(0deg) scale(1.04); }
+      25% { transform: rotate(-6deg) scale(1.06); }
+      50% { transform: rotate(6deg) scale(1.06); }
+      75% { transform: rotate(-4deg) scale(1.05); }
+    }
+
+    .random-vibe-btn.wiggling {
+      animation: rvGrad 4s ease infinite, rvWiggle 0.5s ease;
+    }
+
+    .rv-sparkle {
+      position: absolute;
+      pointer-events: none;
+      font-size: 1rem;
+      animation: rvSparkPop 0.7s ease forwards;
+    }
+
+    @keyframes rvSparkPop {
+      0% { transform: translate(0, 0) scale(0); opacity: 1; }
+      60% { opacity: 1; }
+      100% { transform: translate(var(--sx), var(--sy)) scale(1.2); opacity: 0; }
+    }
+
+    .rv-label {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 7px 16px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, rgba(255,133,187,0.18), rgba(122,184,255,0.18));
+      border: 1px solid rgba(200, 130, 200, 0.25);
+      color: #b55a9a;
+      font-size: 0.9rem;
+    }
+
+    .embed-shell {
+      width: min(100%, 520px);
+      padding: 14px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid rgba(52, 38, 63, 0.12);
+      box-shadow:
+        0 20px 40px rgba(66, 50, 92, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.96);
+    }
+
+    .embed-shell iframe {
+      display: block;
+      width: 100%;
+      max-width: 498px;
+      margin: 0 auto;
+      border: 0;
+      border-radius: 22px;
+    }
+
+    .back-btn {
+      position: fixed;
+      left: 20px;
+      bottom: 20px;
+      z-index: 30;
+      border: none;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-family: "CutiePatootie", cursive;
+      font-size: 1.1rem;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.9);
+      color: #34263f;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
+    }
+  </style>
+</head>
+<body>
+  <button class="back-btn" onclick="sessionStorage.setItem('cameFromPage','true'); location.href='index.html?v=20260321';">Go Back</button>
+  <main class="shell">
+    <header>
+      <h1>Random Vibe</h1>
+      <p>Tap once and let the mood decide everything.</p>
+    </header>
+    <section class="panel">
+      <button class="random-vibe-btn" id="randomVibeBtn" type="button">Random Vibe</button>
+      <div class="rv-label" id="rvLabel">Dudu • happy</div>
+      <div class="embed-shell">
+        <iframe id="rvFrame" src="https://tenor.com/embed/25349847" width="498" height="498" frameBorder="0" allowFullScreen></iframe>
+      </div>
+    </section>
+  </main>
+  <script>
+    const gifMap = {
+      "Dudu|happy": ["25349847", "27399014", "14493167788598386806"],
+      "Dudu|miss you": ["10303526456936420469", "13135407215043576734", "3957698627247538856"],
+      "Dudu|angy baby": ["16924410416058327526", "6033885021974215750", "2943268709700462982"],
+      "Dudu|sleepy": ["16580454341644875476", "9922236035808639039", "3196972504714330353"],
+      "Dudu|clingy": ["4427770176429036027", "8287565098988162462", "12180456026304033411"],
+      "Dudu|romantic": ["4232353899743732903", "16374273114368005382", "13874597465072197683"],
+      "Dudu|silly": ["7688468466204916573", "15832212014675771248", "1627045753181950483"],
+      "Dudu|jealous little bean": ["8512601855967694319", "5122355197214189314", "971431175556070217"],
+      "Bubu|happy": ["6673820799117904175", "3405712688022812089", "16115986830929782472"],
+      "Bubu|miss you": ["10856965504864633321", "3162435647008889847", "8359461075368888806"],
+      "Bubu|angy baby": ["16924410416058327526", "2943268709700462982", "6033885021974215750"],
+      "Bubu|sleepy": ["16580454341644875476", "9922236035808639039", "13135407215043576734"],
+      "Bubu|clingy": ["13588564667124748548", "4427770176429036027", "8287565098988162462"],
+      "Bubu|romantic": ["16636034131266451102", "971431175556070217", "13874597465072197683"],
+      "Bubu|silly": ["12459369701134837403", "7688468466204916573", "1627045753181950483"],
+      "Bubu|jealous little bean": ["8359461075368888806", "5122355197214189314", "8512601855967694319"]
+    };
+
+    const allCharacters = ["Dudu", "Bubu"];
+    const allEmotions = ["happy", "miss you", "angy baby", "sleepy", "clingy", "romantic", "silly", "jealous little bean"];
+    const randomVibeBtn = document.getElementById("randomVibeBtn");
+
+    function pickRandom(arr) {
+      return arr[Math.floor(Math.random() * arr.length)];
+    }
+
+    function fireSparkles(btn) {
+      const sparks = ["*", "o", "+", "<3", "~", "x", "."];
+      for (let i = 0; i < 8; i += 1) {
+        const s = document.createElement("span");
+        s.className = "rv-sparkle";
+        s.textContent = pickRandom(sparks);
+        const angle = (i / 8) * 360;
+        const dist = 44 + Math.random() * 28;
+        s.style.setProperty("--sx", Math.cos(angle * Math.PI / 180) * dist + "px");
+        s.style.setProperty("--sy", Math.sin(angle * Math.PI / 180) * dist + "px");
+        s.style.left = "50%";
+        s.style.top = "50%";
+        btn.appendChild(s);
+        setTimeout(() => s.remove(), 800);
+      }
+    }
+
+    function showRandomVibe() {
+      randomVibeBtn.classList.add("wiggling");
+      setTimeout(() => randomVibeBtn.classList.remove("wiggling"), 600);
+      fireSparkles(randomVibeBtn);
+      const character = pickRandom(allCharacters);
+      const emotion = pickRandom(allEmotions);
+      const ids = gifMap[character + "|" + emotion] || ["25349847"];
+      const gifId = pickRandom(ids);
+      document.getElementById("rvLabel").textContent = character + " • " + emotion;
+      document.getElementById("rvFrame").src = "https://tenor.com/embed/" + gifId;
+    }
+
+    randomVibeBtn.addEventListener("click", showRandomVibe);
+  </script>
+</body>
+</html>

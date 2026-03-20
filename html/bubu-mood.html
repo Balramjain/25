@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Bubu Mood Match</title>
+  <style>
+    @font-face { font-family: "CutiePatootie"; src: url("../fonts/CutiePatootie-Rgjv.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "LoveBubbles"; src: url("../fonts/LoveBubbles-MV21J.ttf") format("truetype"); font-display: swap; }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body, body * { font-family: "LoveBubbles", "Segoe UI Emoji", sans-serif; }
+    body {
+      min-height: 100svh; padding: 24px 16px 96px; color: #34263f;
+      background: radial-gradient(circle at top right, rgba(182,223,255,0.32), transparent 28%), linear-gradient(145deg, #fff4fb, #edf7ff);
+    }
+    .shell { width: min(980px, 100%); margin: 0 auto; }
+    header { text-align: center; margin-bottom: 20px; }
+    h1 { font-family: "CutiePatootie", cursive; font-size: clamp(2.4rem, 7vw, 4rem); line-height: 1.02; }
+    header p { margin-top: 8px; color: #7e6a89; font-size: 1rem; line-height: 1.6; }
+    .panel { border-radius: 30px; border: 1px solid rgba(52,38,63,0.12); background: rgba(255,255,255,0.9); box-shadow: 0 24px 50px rgba(66,50,92,0.12); padding: 24px; display: grid; gap: 18px; justify-items: center; text-align: center; }
+    .emotion-select { width: min(420px, 100%); min-height: 52px; border-radius: 20px; border: 1px solid rgba(52,38,63,0.12); background: rgba(255,255,255,0.94); color: #34263f; padding: 0 16px; outline: none; font-size: 1rem; }
+    .action-btn { min-width: 200px; border: 1px solid rgba(255,255,255,0.8); border-radius: 28px; padding: 14px 22px; cursor: pointer; color: #34263f; background: linear-gradient(145deg, rgba(233,245,255,0.98), rgba(244,251,255,0.98), rgba(227,240,252,0.94)); box-shadow: 0 18px 36px rgba(98,122,147,0.14); }
+    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 10px 16px; border-radius: 999px; background: rgba(255,255,255,0.82); border: 1px solid rgba(52,38,63,0.12); color: #34263f; font-size: 0.96rem; }
+    .embed-shell { width: min(100%, 520px); padding: 14px; border-radius: 28px; background: rgba(255,255,255,0.8); border: 1px solid rgba(52,38,63,0.12); box-shadow: 0 20px 40px rgba(66,50,92,0.12); }
+    .embed-shell iframe { display: block; width: 100%; max-width: 498px; margin: 0 auto; border: 0; border-radius: 22px; }
+    .back-btn { position: fixed; left: 20px; bottom: 20px; z-index: 30; border: none; border-radius: 999px; padding: 12px 18px; font-family: "CutiePatootie", cursive; font-size: 1.1rem; cursor: pointer; background: rgba(255,255,255,0.9); color: #34263f; box-shadow: 0 10px 22px rgba(0,0,0,0.14); }
+  </style>
+</head>
+<body>
+  <button class="back-btn" onclick="sessionStorage.setItem('cameFromPage','true'); location.href='dudu-bubu.html';">Go Back</button>
+  <main class="shell">
+    <header><h1>Bubu Mood Match</h1><p>Choose Bubu's mood and get the gif scene.</p></header>
+    <section class="panel">
+      <div class="pill">Chosen: Bubu</div>
+      <select class="emotion-select" id="emotionSelect" aria-label="Choose an emotion">
+        <option value="">Select an emotion</option>
+        <option value="happy">Happy</option>
+        <option value="miss you">Miss you</option>
+        <option value="angy baby">Angy baby</option>
+        <option value="sleepy">Sleepy</option>
+        <option value="clingy">Clingy</option>
+        <option value="romantic">Romantic</option>
+        <option value="silly">Silly</option>
+        <option value="jealous little bean">Jealous little bean</option>
+      </select>
+      <button class="action-btn" id="showMoodBtn" type="button">Show My Gif</button>
+      <div class="pill" id="resultMeta">Bubu • happy</div>
+      <div class="embed-shell">
+        <iframe id="resultFrame" src="https://tenor.com/embed/6673820799117904175" width="498" height="498" frameBorder="0" allowFullScreen></iframe>
+      </div>
+    </section>
+  </main>
+  <script>
+    const gifMap = {
+      happy: ["6673820799117904175", "3405712688022812089", "16115986830929782472"],
+      "miss you": ["10856965504864633321", "3162435647008889847", "8359461075368888806"],
+      "angy baby": ["16924410416058327526", "2943268709700462982", "6033885021974215750"],
+      sleepy: ["16580454341644875476", "9922236035808639039", "13135407215043576734"],
+      clingy: ["13588564667124748548", "4427770176429036027", "8287565098988162462"],
+      romantic: ["16636034131266451102", "971431175556070217", "13874597465072197683"],
+      silly: ["12459369701134837403", "7688468466204916573", "1627045753181950483"],
+      "jealous little bean": ["8359461075368888806", "5122355197214189314", "8512601855967694319"]
+    };
+    function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+    document.getElementById("showMoodBtn").addEventListener("click", () => {
+      const emotion = document.getElementById("emotionSelect").value;
+      if (!emotion) return;
+      const gifId = pickRandom(gifMap[emotion] || ["6673820799117904175"]);
+      document.getElementById("resultMeta").textContent = "Bubu • " + emotion;
+      document.getElementById("resultFrame").src = "https://tenor.com/embed/" + gifId;
+    });
+  </script>
+</body>
+</html>

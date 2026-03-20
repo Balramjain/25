@@ -15,244 +15,322 @@
     }
 
     @font-face {
-      font-family: "Wildcrazy";
-      src: url("../fonts/Wildcrazy-WKYO.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: "Cookiemonster";
-      src: url("../fonts/Cookiemonster-gv11.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: "LoveDisplayPersonalUse";
-      src: url("../fonts/LoveDisplayPersonalUse-6RL2x.otf") format("opentype");
-      font-display: swap;
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --bg: #eef5ff;
-      --bg-2: #fff1f6;
-      --card: #ffffffcc;
-      --ink: #2a2a3b;
-      --accent: #b7d7ff;
-      --accent-2: #ffbcd6;
-    }
-
-    body {
-      font-family: "LoveDisplayPersonalUse", sans-serif;
-      color: var(--ink);
-      background: linear-gradient(140deg, var(--bg), var(--bg-2));
-      min-height: 100vh;
-      padding: 24px 16px 80px;
-      overflow-x: hidden;
-    }
-
-    body > @font-face {
       font-family: "LoveDisplayPersonalUse";
       src: url("../fonts/LoveDisplayPersonalUse-6RL2x.otf") format("opentype");
       font-display: swap;
     }
 
     * {
-      position: relative;
-      z-index: 2;
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
-    .bg-sparkles {
+    body,
+    body * {
+      font-family: "LoveDisplayPersonalUse", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+    }
+
+    :root {
+      --bg-1: #050505;
+      --bg-2: #0d0d0d;
+      --bg-3: #151515;
+      --ink: #ffffff;
+      --soft: rgba(255, 255, 255, 0.78);
+      --card: rgba(255, 255, 255, 0.06);
+      --line: rgba(255, 255, 255, 0.12);
+      --spotify-green: #1ed760;
+    }
+
+    body {
+      min-height: 100svh;
+      padding: 26px 16px 96px;
+      color: var(--ink);
+      overflow-x: hidden;
+      background:
+        radial-gradient(circle at top left, rgba(30, 215, 96, 0.16), transparent 28%),
+        radial-gradient(circle at top right, rgba(30, 215, 96, 0.1), transparent 30%),
+        radial-gradient(circle at bottom center, rgba(30, 215, 96, 0.08), transparent 32%),
+        linear-gradient(150deg, var(--bg-1), var(--bg-2), var(--bg-3));
+    }
+
+    .glow-field {
       position: fixed;
       inset: 0;
+      z-index: 0;
       pointer-events: none;
-      z-index: 1;
+      overflow: hidden;
     }
 
-    .bg-sparkles span {
+    .glow-field span {
       position: absolute;
       width: var(--size);
       height: var(--size);
       border-radius: 999px;
-      background: var(--accent-2);
-      opacity: 0.45;
-      filter: blur(0.2px);
-      animation: float 10s ease-in-out infinite;
+      background: radial-gradient(circle, rgba(255,255,255,0.78), rgba(255,255,255,0));
+      opacity: 0.3;
+      animation: floaty 12s ease-in-out infinite;
     }
 
-    @keyframes float {
-      0% { transform: translateY(0) translateX(0) scale(1); }
-      50% { transform: translateY(-16px) translateX(10px) scale(1.06); }
-      100% { transform: translateY(0) translateX(0) scale(1); }
+    @keyframes floaty {
+      0%, 100% { transform: translateY(0) translateX(0) scale(1); }
+      50% { transform: translateY(-18px) translateX(12px) scale(1.08); }
     }
 
-    header {
-      text-align: center;
-      margin: 12px auto 22px;
-      max-width: 900px;
+    .shell,
+    .back-btn {
+      position: relative;
+      z-index: 1;
     }
 
-    header h1 {
+    .shell {
+      width: min(1080px, 100%);
+      margin: 0 auto;
+    }
+
+    .hero {
+      min-height: calc(100svh - 140px);
+      display: grid;
+      grid-template-columns: minmax(0, 1.2fr) minmax(280px, 0.8fr);
+      gap: 20px;
+      align-items: stretch;
+    }
+
+    .panel {
+      border-radius: 34px;
+      border: 1px solid var(--line);
+      background: var(--card);
+      box-shadow:
+        0 28px 60px rgba(0, 0, 0, 0.26),
+        inset 0 1px 0 rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(14px);
+    }
+
+    .main-card {
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .main-card::before {
+      content: "";
+      position: absolute;
+      inset: auto -10% -20% auto;
+      width: 360px;
+      height: 360px;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgba(255, 143, 188, 0.24), rgba(255, 143, 188, 0));
+      filter: blur(8px);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      width: fit-content;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+      background: rgba(255, 255, 255, 0.08);
+      color: var(--soft);
+      font-size: 0.96rem;
+      letter-spacing: 0.04em;
+    }
+
+    h1 {
+      margin-top: 18px;
       font-family: "CutiePatootie", cursive;
-      font-size: clamp(2.2rem, 6vw, 3.4rem);
+      font-size: clamp(3rem, 8vw, 5.4rem);
+      line-height: 0.95;
+      letter-spacing: 0.02em;
     }
 
-    header p {
-      margin-top: 8px;
-      font-size: 1.1rem;
-      opacity: 0.8;
+    .lead {
+      margin-top: 18px;
+      max-width: 18ch;
+      color: var(--soft);
+      font-size: clamp(1.04rem, 2.6vw, 1.22rem);
+      line-height: 1.6;
     }
-.back-btn {
+
+    .cta-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .playlist-btn,
+    .copy-btn {
+      min-height: 54px;
+      border: none;
+      border-radius: 999px;
+      padding: 0 22px;
+      cursor: pointer;
+      text-decoration: none;
+      color: #201827;
+      font-size: 1rem;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .playlist-btn {
+      background: linear-gradient(135deg, var(--cta-1), var(--cta-2), var(--cta-3));
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: var(--spotify-green);
+      box-shadow: 0 18px 34px rgba(30, 215, 96, 0.28);
+    }
+
+    .copy-btn {
+      background: rgba(255, 255, 255, 0.16);
+      color: var(--ink);
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      box-shadow: 0 16px 30px rgba(0, 0, 0, 0.18);
+    }
+
+    .playlist-btn:hover,
+    .copy-btn:hover {
+      transform: translateY(-3px);
+    }
+
+    .mini-note {
+      margin-top: 14px;
+      color: rgba(255, 247, 251, 0.64);
+      font-size: 1.08rem;
+    }
+
+    .side-card {
+      padding: 22px;
+      display: grid;
+      gap: 16px;
+      align-content: start;
+    }
+
+    .side-title {
+      font-family: "CutiePatootie", cursive;
+      font-size: 2rem;
+    }
+
+    .side-copy {
+      color: var(--soft);
+      line-height: 1.6;
+      font-size: 1.14rem;
+    }
+
+    .track-lines {
+      display: grid;
+      gap: 10px;
+      margin-top: 4px;
+    }
+
+    .track-line {
+      padding: 12px 14px;
+      border-radius: 20px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.08);
+      color: rgba(255, 247, 251, 0.9);
+      font-size: 1.12rem;
+      line-height: 1.5;
+    }
+
+    .back-btn {
       position: fixed;
       left: 20px;
       bottom: 20px;
       z-index: 30;
       border: none;
       border-radius: 999px;
-      padding: 10px 18px;
+      padding: 12px 18px;
       font-family: "CutiePatootie", cursive;
       font-size: 1.1rem;
       cursor: pointer;
-      background: rgba(255, 255, 255, 0.86);
-      color: #000;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
-      transition: transform 220ms ease, box-shadow 220ms ease;
+      background: rgba(255, 255, 255, 0.9);
+      color: #241b2a;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.2);
     }
 
-    .back-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.25);
-    }
-    .panel {
-      width: min(980px, 92vw);
-      margin: 0 auto;
-      padding: 28px;
-      border-radius: 26px;
-      background-image: url("https://images.unsplash.com/photo-1761888855526-674732099103?auto=format&fit=crop&fm=jpg&q=80&w=2000");
-      background-size: cover;
-      background-position: center;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
-      min-height: 65vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
-    }
+    @media (max-width: 860px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
 
-    .panel::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(150deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
-    }
-
-    .panel > @font-face {
-      font-family: "LoveDisplayPersonalUse";
-      src: url("../fonts/LoveDisplayPersonalUse-6RL2x.otf") format("opentype");
-      font-display: swap;
-    }
-
-    * {
-      position: relative;
-      z-index: 1;
-    }
-
-    .mini-panel {
-      padding: 16px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.88);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-    }
-
-    @media (max-width: 700px) {
-      .panel {
-        min-height: 70vh;
+      .main-card,
+      .side-card {
         padding: 22px;
       }
-    }
-.row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      align-items: center;
-    }
 
-    .primary-btn {
-      border: none;
-      border-radius: 999px;
-      padding: 10px 18px;
-      font-family: "Cookiemonster", sans-serif;
-      font-size: 1.05rem;
-      cursor: pointer;
-      background: var(--accent);
-      color: #2b2b3a;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-
-    .primary-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 26px rgba(0, 0, 0, 0.18);
-    }
-
-    .tiny-btn {
-      border: none;
-      border-radius: 10px;
-      padding: 6px 12px;
-      font-family: "Cookiemonster", sans-serif;
-      cursor: pointer;
-      background: var(--accent-2);
-      color: #2b2b3a;
-    }
-
-    .playlist{display:grid;gap:8px;}
-  
-    body, body * {
-      font-family: "LoveDisplayPersonalUse", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
+      .lead {
+        max-width: 100%;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="bg-sparkles" aria-hidden="true">
-    <span style="--size: 10px; left: 8%; top: 12%;"></span>
-    <span style="--size: 16px; left: 18%; top: 24%;"></span>
-    <span style="--size: 12px; left: 32%; top: 10%;"></span>
-    <span style="--size: 14px; left: 44%; top: 22%;"></span>
-    <span style="--size: 9px; left: 56%; top: 14%;"></span>
-    <span style="--size: 13px; left: 66%; top: 30%;"></span>
-    <span style="--size: 11px; left: 78%; top: 16%;"></span>
-    <span style="--size: 15px; left: 88%; top: 28%;"></span>
-    <span style="--size: 9px; left: 12%; top: 70%;"></span>
-    <span style="--size: 12px; left: 36%; top: 78%;"></span>
-    <span style="--size: 14px; left: 64%; top: 74%;"></span>
-    <span style="--size: 10px; left: 84%; top: 68%;"></span>
+  <div class="glow-field" aria-hidden="true">
+    <span style="--size: 140px; left: 6%; top: 10%;"></span>
+    <span style="--size: 180px; left: 78%; top: 12%;"></span>
+    <span style="--size: 120px; left: 26%; top: 72%;"></span>
+    <span style="--size: 150px; left: 68%; top: 70%;"></span>
   </div>
 
-  <button class="back-btn" onclick="sessionStorage.setItem('cameFromPage','true'); location.href='index.html?v=20260315';">
+  <button class="back-btn" onclick="sessionStorage.setItem('cameFromPage','true'); location.href='index.html?v=20260321';">
     Go Back
   </button>
 
-  <header></div>
-    <h1>Our Soundtrack</h1>
-    <p>Songs that feel like us.</p>
-  </header>
+  <main class="shell">
+    <section class="hero">
+      <article class="panel main-card">
+        <div>
+          <div class="eyebrow">Made with too much feeling</div>
+          <h1>Our Soundtrack</h1>
+          <p class="lead">
+            I made this playlist for us, so this page should feel less like a link and more like a little doorway into our mood.
+          </p>
+          <div class="cta-row">
+            <a class="playlist-btn" id="openPlaylistBtn" href="https://open.spotify.com/playlist/7gxN1Asp4LoST0WcFsE6Ty?si=JC6Ut306SAuNyC8rzfuhdQ&pi=aKfuTf2tRSemS&pt=55773c7952acfbd51414c8c11373d592" target="_blank" rel="noopener noreferrer">
+              Open Our Spotify Playlist
+            </a>
+            <button class="copy-btn" id="copyPlaylistBtn" type="button">
+              Copy Playlist Link
+            </button>
+          </div>
+          <div class="mini-note" id="copyStatus">Tap the button and it opens straight to Spotify.</div>
+        </div>
+      </article>
 
-  <section class="panel">
-    <div class="playlist"><div>Song 1 - Our road trip song</div><div>Song 2 - First dance</div><div>Song 3 - Late night talks</div></div>
-  </section>
+      <aside class="panel side-card">
+        <div class="side-title">Little Mood Note</div>
+        <p class="side-copy">
+          This one is for late-night thoughts, soft drives, random missing-you moments, and all the tiny feelings in between.
+        </p>
+        <div class="track-lines">
+          <div class="track-line">For the "I miss you but I am smiling also" mood.</div>
+          <div class="track-line">For the "window seat, earphones in, heart full" mood.</div>
+          <div class="track-line">For the "this is our song now, no arguments" mood.</div>
+          <div class="track-line">For the "one more track, then okay sleep" lie.</div>
+        </div>
+      </aside>
+    </section>
+  </main>
 
   <script>
-    
+    const playlistUrl = "https://open.spotify.com/playlist/7gxN1Asp4LoST0WcFsE6Ty?si=JC6Ut306SAuNyC8rzfuhdQ&pi=aKfuTf2tRSemS&pt=55773c7952acfbd51414c8c11373d592";
+    const copyBtn = document.getElementById("copyPlaylistBtn");
+    const copyStatus = document.getElementById("copyStatus");
+
+    copyBtn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(playlistUrl);
+        copyStatus.textContent = "Playlist link copied. Send, save, or open it anywhere.";
+      } catch (error) {
+        copyStatus.textContent = "Copy did not work here, but the Spotify button still opens the playlist.";
+      }
+    });
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
