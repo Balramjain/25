@@ -3,175 +3,267 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Would You Rather 💭</title>
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Would You Rather</title>
   <style>
     @font-face { font-family: "CutiePatootie"; src: url("../fonts/CutiePatootie-Rgjv.ttf") format("truetype"); font-display: swap; }
-    @font-face { font-family: "Wildcrazy";     src: url("../fonts/Wildcrazy-WKYO.ttf")     format("truetype"); font-display: swap; }
-    @font-face { font-family: "Cookiemonster"; src: url("../fonts/Cookiemonster-gv11.ttf") format("truetype"); font-display: swap; }
+    @font-face { font-family: "Wildcrazy"; src: url("../fonts/Wildcrazy-WKYO.ttf") format("truetype"); font-display: swap; }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:     #fff5fb;
-      --bg-2:   #f0f8ff;
-      --ink:    #2a2a3b;
-      --a:      #ff6eb0;
-      --b:      #6eaaff;
-      --accent: #e2b7ff;
+      --bg: #2a1833;
+      --bg-2: #14253b;
+      --ink: #fff5fb;
+      --soft: #e4cfe5;
+      --accent-a: #ff77b7;
+      --accent-b: #62a9ff;
+      --accent-c: #ffe29d;
+      --card: rgba(33, 22, 45, 0.82);
+      --line: rgba(255, 255, 255, 0.12);
     }
 
-    html, body, body * {
-      font-family: "Wildcrazy", "Segoe UI Emoji", sans-serif !important;
+    html, body {
+      min-height: 100%;
+    }
+
+    body, body * {
+      font-family: "Wildcrazy", "Segoe UI", sans-serif;
+      font-weight: 700;
     }
 
     body {
-      color: var(--ink);
-      background: linear-gradient(140deg, var(--bg), var(--bg-2));
       min-height: 100vh;
-      height: 100vh;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      padding: 20px 16px 80px;
+      overflow-x: hidden;
+      padding: 22px 16px 90px;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(255, 119, 183, 0.22), transparent 28%),
+        radial-gradient(circle at top right, rgba(98, 169, 255, 0.18), transparent 30%),
+        linear-gradient(140deg, var(--bg), var(--bg-2));
     }
 
-    .bg-sparkles { position: fixed; inset: 0; pointer-events: none; z-index: 1; }
+    .bg-sparkles { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
     .bg-sparkles span {
-      position: absolute; width: var(--size); height: var(--size);
-      border-radius: 999px; background: var(--accent);
-      opacity: 0.3; filter: blur(0.5px);
+      position: absolute;
+      width: var(--size);
+      height: var(--size);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.9);
+      opacity: 0.18;
       animation: floatS 10s ease-in-out infinite;
     }
+
     @keyframes floatS {
       0%,100% { transform: translateY(0) scale(1); }
-      50%      { transform: translateY(-14px) scale(1.06); }
+      50% { transform: translateY(-16px) scale(1.08); }
+    }
+
+    .shell,
+    .back-btn {
+      position: relative;
+      z-index: 1;
+    }
+
+    .shell {
+      width: min(940px, 100%);
+      margin: 0 auto;
     }
 
     header {
-      text-align: center; flex-shrink: 0;
-      margin-bottom: 12px;
-      position: relative; z-index: 2;
+      text-align: center;
+      margin-bottom: 14px;
     }
-    header h1 {
-      font-family: "CutiePatootie", cursive !important;
-      font-size: clamp(1.8rem, 5vw, 3.2rem);
-    }
-    header p { margin-top: 4px; font-size: clamp(0.95rem, 2.5vw, 1.2rem); opacity: 0.75; }
 
-    /* counter */
+    h1 {
+      font-size: clamp(2rem, 6vw, 3.7rem);
+      line-height: 1.05;
+    }
+
+    header p {
+      margin-top: 8px;
+      color: var(--soft);
+      font-size: clamp(0.96rem, 2.4vw, 1.15rem);
+      line-height: 1.6;
+    }
+
     .counter {
-      text-align: center; flex-shrink: 0;
-      font-size: clamp(0.9rem, 2vw, 1.1rem);
-      opacity: 0.6;
-      margin-bottom: 8px;
-      position: relative; z-index: 2;
+      text-align: center;
+      color: var(--soft);
+      margin-bottom: 12px;
+      font-size: 1rem;
     }
 
-    /* ── QUESTION CARD ── */
-    .card-wrap {
-      flex: 1; min-height: 0;
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      gap: clamp(14px, 2.5vh, 22px);
-      position: relative; z-index: 2;
+    .card {
+      border-radius: 30px;
+      background: var(--card);
+      border: 1px solid var(--line);
+      box-shadow: 0 22px 50px rgba(0, 0, 0, 0.28);
+      padding: 24px;
+      backdrop-filter: blur(10px);
     }
 
     .question-label {
-      font-family: "CutiePatootie", cursive !important;
-      font-size: clamp(1rem, 2.5vw, 1.3rem);
-      opacity: 0.7;
-      letter-spacing: 0.05em;
+      text-align: center;
+      font-size: clamp(1.2rem, 3vw, 1.6rem);
+      color: var(--soft);
+      margin-bottom: 18px;
     }
 
     .options {
-      display: flex;
-      gap: clamp(10px, 2.5vw, 20px);
-      width: min(800px, 94vw);
-      flex-wrap: wrap;
-      justify-content: center;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      gap: 12px;
+      align-items: stretch;
+    }
+
+    .or-badge {
+      align-self: center;
+      justify-self: center;
+      font-size: 1.4rem;
+      color: var(--soft);
+      opacity: 0.7;
     }
 
     .option-btn {
-      flex: 1;
-      min-width: min(280px, 88vw);
-      border: none;
-      border-radius: 22px;
-      padding: clamp(18px,3vh,28px) clamp(16px,3vw,24px);
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      line-height: 1.5;
+      min-height: 190px;
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      border-radius: 30px;
+      padding: 26px 24px;
+      color: #2f2a42;
       cursor: pointer;
+      font-size: clamp(1rem, 2.4vw, 1.24rem);
+      line-height: 1.5;
       text-align: center;
-      color: #fff;
-      box-shadow: 0 12px 30px rgba(0,0,0,0.15);
-      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.3s ease;
-      position: relative;
-      overflow: hidden;
+      box-shadow:
+        0 18px 36px rgba(98, 122, 147, 0.14),
+        0 8px 18px rgba(175, 125, 170, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.92);
+      transition:
+        transform 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+        opacity 0.2s ease,
+        box-shadow 0.2s ease,
+        background-position 0.5s ease;
+      background-size: 180% 180%;
     }
-    .option-btn.opt-a { background: linear-gradient(135deg, #ff6eb0, #ff3d8a); }
-    .option-btn.opt-b { background: linear-gradient(135deg, #6eaaff, #3d7aff); }
-    .option-btn:hover { transform: translateY(-5px) scale(1.03); box-shadow: 0 18px 40px rgba(0,0,0,0.2); }
-    .option-btn:active { transform: scale(0.97); }
+
+    .option-btn.opt-a {
+      background: linear-gradient(150deg, rgba(255, 238, 244, 0.96), rgba(255, 248, 252, 0.96), rgba(248, 233, 244, 0.92));
+    }
+
+    .option-btn.opt-b {
+      background: linear-gradient(150deg, rgba(233, 245, 255, 0.96), rgba(244, 251, 255, 0.96), rgba(227, 240, 252, 0.92));
+    }
+
+    .option-btn:hover {
+      transform: translateY(-4px) scale(1.02);
+      background-position: 100% 100%;
+      box-shadow:
+        0 28px 58px rgba(98, 122, 147, 0.2),
+        0 10px 24px rgba(175, 125, 170, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.96);
+    }
+
     .option-btn.chosen {
-      transform: scale(1.06);
-      box-shadow: 0 0 0 4px rgba(255,255,255,0.6), 0 18px 40px rgba(0,0,0,0.2);
-    }
-    .option-btn.dimmed { opacity: 0.4; transform: scale(0.97); pointer-events: none; }
-
-    .or-badge {
-      font-family: "CutiePatootie", cursive !important;
-      font-size: clamp(1.1rem, 3vw, 1.5rem);
-      color: var(--ink);
-      opacity: 0.5;
-      flex-shrink: 0;
-      align-self: center;
+      transform: scale(1.04);
+      box-shadow:
+        0 0 0 4px rgba(255, 255, 255, 0.75),
+        0 28px 58px rgba(98, 122, 147, 0.24),
+        0 10px 24px rgba(175, 125, 170, 0.16);
     }
 
-    /* reaction */
+    .option-btn.dimmed {
+      opacity: 0.36;
+      pointer-events: none;
+    }
+
     .reaction {
-      font-size: clamp(1rem, 2.5vw, 1.25rem);
-      text-align: center;
+      min-height: 70px;
+      margin-top: 18px;
+      padding: 16px 18px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.14);
+      border: 1px solid var(--line);
       color: var(--ink);
+      font-size: clamp(1rem, 2.2vw, 1.14rem);
+      line-height: 1.55;
       opacity: 0;
       transform: translateY(8px);
-      transition: opacity 0.4s, transform 0.4s cubic-bezier(0.22,1,0.36,1);
-      min-height: 1.8em;
+      transition: opacity 0.3s ease, transform 0.3s ease;
     }
-    .reaction.show { opacity: 1; transform: translateY(0); }
 
-    /* next btn */
-    .next-btn {
-      border: none; border-radius: 999px;
-      padding: clamp(10px,2vh,14px) clamp(28px,6vw,48px);
-      font-size: clamp(1rem, 2.5vw, 1.3rem);
-      cursor: pointer;
-      background: linear-gradient(135deg, #e2b7ff, #c080ff);
-      color: #2a2a3b;
-      box-shadow: 0 10px 24px rgba(180,100,255,0.3);
-      transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
-      opacity: 0; pointer-events: none;
+    .reaction.show {
+      opacity: 1;
+      transform: translateY(0);
     }
-    .next-btn.show { opacity: 1; pointer-events: all; }
-    .next-btn:hover { transform: translateY(-3px) scale(1.05); }
+
+    .actions {
+      display: flex;
+      justify-content: center;
+      margin-top: 16px;
+    }
+
+    .next-btn {
+      border: none;
+      border-radius: 999px;
+      padding: 14px 34px;
+      cursor: pointer;
+      font-size: 1.06rem;
+      color: var(--ink);
+      background: linear-gradient(135deg, #ffe29d, #ffc97d);
+      box-shadow: 0 12px 24px rgba(255, 201, 125, 0.28);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.22s ease, opacity 0.22s ease;
+    }
+
+    .next-btn.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .next-btn:hover {
+      transform: translateY(-2px);
+    }
 
     .back-btn {
-      position: fixed; left: 20px; bottom: 20px; z-index: 30;
-      border: none; border-radius: 999px; padding: 14px 28px;
-      font-size: clamp(1.1rem,2.5vw,1.4rem); cursor: pointer;
-      background: rgba(255,255,255,0.88); color: var(--ink);
-      box-shadow: 0 8px 22px rgba(0,0,0,0.15);
-      transition: transform 220ms ease;
+      position: fixed;
+      left: 20px;
+      bottom: 20px;
+      z-index: 30;
+      border: none;
+      border-radius: 999px;
+      padding: 12px 18px;
+      font-size: 1.1rem;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.9);
+      color: #2d2740;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.14);
     }
-    .back-btn:hover { transform: translateY(-2px); }
 
-    /* card flip transition */
-    .card-wrap.flip-out { animation: flipOut 0.3s ease-in forwards; }
-    .card-wrap.flip-in  { animation: flipIn  0.3s ease-out forwards; }
-    @keyframes flipOut { to { opacity: 0; transform: scale(0.92) translateY(-12px); } }
-    @keyframes flipIn  { from { opacity: 0; transform: scale(0.92) translateY(12px); } to { opacity:1; transform: none; } }
+    @media (max-width: 760px) {
+      .options {
+        grid-template-columns: 1fr;
+      }
+
+      .or-badge {
+        padding: 2px 0;
+      }
+
+      .option-btn {
+        min-height: 136px;
+        text-align: center;
+      }
+
+      .card {
+        padding: 18px;
+      }
+    }
   </style>
 </head>
 <body>
-
   <div class="bg-sparkles" aria-hidden="true">
     <span style="--size:10px;left:8%;top:12%"></span>
     <span style="--size:16px;left:18%;top:24%"></span>
@@ -183,73 +275,162 @@
     <span style="--size:15px;left:88%;top:28%"></span>
   </div>
 
-  <button class="back-btn" onclick="sessionStorage.setItem('cameFromPage','true'); location.href='index.html?v=20260315';">
+  <button class="back-btn" onclick="sessionStorage.setItem('cameFromPage','true'); location.href='index.html?v=20260320';">
     Go Back
   </button>
 
-  <header>
-    <h1>Would You Rather 💭</h1>
-    <p>No wrong answers — just fun ones.</p>
-  </header>
+  <main class="shell">
+    <header>
+      <h1>Would You Rather</h1>
+      <p>One hundred full-fun choices, with Bangalore English mixed in nicely.</p>
+    </header>
 
-  <div class="counter" id="counter">Question 1 of 30</div>
+    <div class="counter" id="counter">Question 1 of 100</div>
 
-  <div class="card-wrap" id="cardWrap">
-    <div class="question-label">Would you rather...</div>
-    <div class="options">
-      <button class="option-btn opt-a" id="optA" onclick="choose('a')"></button>
-      <div class="or-badge">OR</div>
-      <button class="option-btn opt-b" id="optB" onclick="choose('b')"></button>
-    </div>
-    <div class="reaction" id="reaction"></div>
-    <button class="next-btn" id="nextBtn" onclick="nextQuestion()">Next one 💭</button>
-  </div>
+    <section class="card" id="cardWrap">
+      <div class="question-label">Would you rather...</div>
+      <div class="options">
+        <button class="option-btn opt-a" id="optA" type="button" onclick="choose('a')"></button>
+        <div class="or-badge">OR</div>
+        <button class="option-btn opt-b" id="optB" type="button" onclick="choose('b')"></button>
+      </div>
+      <div class="reaction" id="reaction"></div>
+      <div class="actions">
+        <button class="next-btn" id="nextBtn" type="button" onclick="nextQuestion()">Next one</button>
+      </div>
+    </section>
+  </main>
 
   <script>
-    const questions = [
-      { a:"Have a cat that talks back 🐱", b:"Have a dog that reads your mind 🐶", ra:"That cat would definitely roast you nonstop 😂", rb:"Imagine — it just KNOWS. Scary cute." },
-      { a:"Only eat dessert forever 🍰", b:"Never eat dessert again 🚫🍰", ra:"Life is literally just cake now. Incredible.", rb:"The self-control on you... respect." },
-      { a:"Live in a treehouse 🌳", b:"Live in a cottage by the sea 🌊", ra:"Cozy elevated life. Squirrel neighbours included.", rb:"Waking up to waves every single day. Chef's kiss." },
-      { a:"Always speak in rhymes 🎵", b:"Always sing what you want to say 🎶", ra:"Honestly? Iconic. Every conversation is a poem.", rb:"You'd basically be in a musical 24/7. Love it." },
-      { a:"Rewind one memory to relive it 🔁", b:"Fast forward to see one future moment ⏩", ra:"Reliving the best days — goosebumps always.", rb:"Just a little peek. The suspense would kill me." },
-      { a:"Know every language in the world 🌍", b:"Play every instrument perfectly 🎸", ra:"Talk to literally anyone anywhere. Superpower.", rb:"Show up anywhere and just... start performing." },
-      { a:"Have a personal chef 🍽️", b:"Have a personal stylist 👗", ra:"Every meal is restaurant quality. No contest.", rb:"Always look amazing. Zero effort. Dream." },
-      { a:"Spend a week in Tokyo 🗼", b:"Spend a week in Paris 🗺️", ra:"Anime. Street food. Vending machines everywhere.", rb:"The lights. The cafes. The absolute romance." },
-      { a:"Read minds for one day 🧠", b:"Be invisible for one day 👻", ra:"You'd know every secret. Dangerous but tempting.", rb:"Imagine the places you could sneak into..." },
-      { a:"Always smell amazing naturally 🌸", b:"Always have perfect hair naturally 💇", ra:"Everyone loves being around you. No effort needed.", rb:"Wake up with perfect hair every day. FREEDOM." },
-      { a:"Have a movie night every Friday 🎬", b:"Have a fancy dinner every Saturday 🍷", ra:"Blankets. Popcorn. Comfort forever.", rb:"Dressed up, candles, music. Every week." },
-      { a:"Be fluent in every coding language 💻", b:"Be fluent in every cooking style 🍜", ra:"Build anything you imagine. Limitless.", rb:"Every meal is a masterpiece. Everyone loves you." },
-      { a:"Never feel tired ever 😤", b:"Never feel cold ever 🧊", ra:"Imagine what you'd get done. Absolutely unstoppable.", rb:"No more jacket struggles. Summer queen forever." },
-      { a:"Have a wardrobe that refills itself 👚", b:"Have a fridge that refills itself 🥗", ra:"New outfits forever. Endless fashion era.", rb:"Never grocery shop again. Absolute chaos avoided." },
-      { a:"Always have the best wifi 📶", b:"Always find a parking spot 🚗", ra:"No buffering. No waiting. Digital bliss.", rb:"Pulls up anywhere. Always the spot. Legend." },
-      { a:"Have a pet penguin 🐧", b:"Have a pet red panda 🦊", ra:"Little tuxedo baby waddling around. I'm crying.", rb:"Fluffy. Cute. Ridiculous. Perfect." },
-      { a:"Get paid to travel forever ✈️", b:"Get paid to eat forever 🍣", ra:"Every country. Every sunrise. Dream life.", rb:"Every restaurant. Every cuisine. Also dream life." },
-      { a:"Live without social media 📵", b:"Live without music 🎵", ra:"Honestly kind of freeing? Maybe?", rb:"That's just not possible. No way." },
-      { a:"Have a photographic memory 📸", b:"Never forget a face ever 👤", ra:"Remember everything you read. Superpower.", rb:"You'd recognise everyone. A bit surreal honestly." },
-      { a:"Meet your favourite fictional character 📚", b:"Enter your favourite fictional world 🌀", ra:"One conversation with them. Life complete.", rb:"Live there for a week. Total immersion." },
-      { a:"Have flowers always fresh at home 🌷", b:"Have candles that never burn out 🕯️", ra:"Every room smells like a garden. Gorgeous.", rb:"Cozy warm light. Always. Never running out." },
-      { a:"Swim with dolphins 🐬", b:"Hold a baby panda 🐼", ra:"Pure magic in the ocean.", rb:"The softest thing you'll ever touch." },
-      { a:"Always have the perfect comeback 💬", b:"Always have the perfect outfit 👑", ra:"Quick wit on demand. Nobody can touch you.", rb:"Walk in anywhere and OWN the room." },
-      { a:"Write a bestselling novel 📖", b:"Direct a hit film 🎬", ra:"Your story in the world forever.", rb:"Your vision on screen. Incredible." },
-      { a:"Have your dream home in the mountains 🏔️", b:"Have your dream home in the city 🌆", ra:"Peace. Nature. Stars at night. Perfection.", rb:"Everything close. Always something happening." },
-      { a:"Be able to draw perfectly 🎨", b:"Be able to dance perfectly 💃", ra:"Create art that moves people. Beautiful gift.", rb:"Every song is yours. Every floor is your stage." },
-      { a:"Always know what time it is ⏰", b:"Never be late for anything 🏃", ra:"Internal clock. Quietly impressive.", rb:"Always composed. Always there. Respect." },
-      { a:"Get a surprise gift every morning 🎁", b:"Have no responsibilities for one week 🌴", ra:"Every day starts with joy. Adorable.", rb:"One whole week. Nothing. Just being. Heaven." },
-      { a:"Have a hidden room in your home 🚪", b:"Have a rooftop garden 🌿", ra:"Secret space just for you. Magical.", rb:"Open air. Flowers. Sky. Above everything." },
-      { a:"End every day knowing someone loves you 💖", b:"Start every day knowing good things are coming ☀️", ra:"That warmth at the end. Worth everything.", rb:"That hope at the start. Changes everything." },
+    const cityQuestions = [
+      ["Get one full empty Namma Metro coach for yourself", "Get one full empty road in Bangalore for your scooter ride", "Metro queen scene. Full private VIP feeling.", "Empty road in Bangalore ah? That is bigger fantasy only."],
+      ["Eat CTR benne dosa every Sunday morning", "Eat hot idli-vade at darshini every Sunday morning", "Butter level full emotion, no complaints.", "Simple scene but full peace, macha."],
+      ["Skip Silk Board traffic forever", "Never hear one auto driver say extra 50 again", "This is not choice, this is blessing only.", "Wallet and blood pressure both saved, super."],
+      ["Have Cubbon Park date every weekend", "Have Church Street roaming date every weekend", "Greenery, chai, and full soft vibes.", "Books, lights, snacks, and total main character feel."],
+      ["Get rain only when you are cozy at home", "Get rain only when you are on perfect drive", "Blanket mode on, full comfort scene.", "Bangalore drizzle plus drive means cinema only."],
+      ["Always find parking in Indiranagar", "Always get table immediately in Koramangala", "That itself is god-tier power.", "No waiting outside hungry-hungry, love that for you."],
+      ["Get one bungalow in Jayanagar", "Get one penthouse in Indiranagar", "Old-school charm, trees, and full classy setup.", "City lights, rooftop vibe, and full glam scene."],
+      ["Have filter coffee delivered fresh every morning", "Have fresh tender coconut ready every afternoon", "Sharp start to the day, full Bangalore soul.", "Cool-cool hydration and instant vacation feeling."],
+      ["Do one midnight airport road drive", "Do one sunrise Nandi Hills ride", "Night lights and soft songs, scene set.", "Little cold, little sleepiness, but full payoff boss."],
+      ["Spend one evening at Blossoms bookshop", "Spend one evening cafe hopping on Church Street", "Books smell and timepass heaven, no?", "One cafe after another, full chatter scene."],
+      ["Have weather stay 22 degrees forever", "Have weather always drizzly and sweater-friendly", "Perfect climate, no negotiation.", "That slight chill only makes everything cuter."],
+      ["Get free masala peanuts in every pub", "Get free brownie in every cafe", "Small-small snack but full joy.", "Sweet ending automatically fixed, nice."],
+      ["Always have smooth Metro card recharge", "Always have UPI work in every tiny shop", "No queue, no stress, just glide only.", "If UPI works everywhere, life sorted maga."],
+      ["Live next to Lalbagh", "Live next to Cubbon Park", "Morning walks become full aesthetic.", "City middle but still full breathing space, lovely."],
+      ["Get one favorite darshini that knows your order", "Get one favorite chai spot that saves your seat", "Belonging level max, no?", "Regular customer power, sakkath."],
+      ["Have one date at a rooftop in Bangalore breeze", "Have one date in a tiny cozy bookstore cafe", "Hair flying, lights glowing, proper scene.", "Quiet talk plus coffee plus closeness, too nice."],
+      ["Always get the best pani puri stall", "Always get the best momos stall", "Crispy, spicy, and dangerous joy.", "Hot-hot momos in weather like this? Too good."],
+      ["Get one day with zero honking", "Get one day with zero work calls", "Peace for ears finally, ayyo thanks.", "No laptop tension, full freedom only."],
+      ["Watch sunset from terrace in Bangalore breeze", "Watch city rain from window with chai", "Soft sky, soft heart, full romance.", "That is healing scene, full stop."],
+      ["Have every plan happen on time in Bangalore", "Have every friend show up on time in Bangalore", "Now we are truly in fantasy category.", "This miracle deserves national award."]
     ];
 
+    const foodQuestions = [
+      ["Eat masala dosa with extra chutney", "Eat podi idli with extra ghee", "Crunch and chutney combo, never fails.", "Soft idli plus ghee means comfort overloaded."],
+      ["Have biryani date night", "Have pizza and fries date night", "Heavy scene, happy heart.", "Cheesy chaos and zero regret, nice."],
+      ["Get one giant hot chocolate", "Get one giant cold coffee", "Warm hug in cup form only.", "Full cafe-core energy, very correct."],
+      ["Eat brownie with ice cream", "Eat gulab jamun straight from hot syrup", "Messy but worth every bite.", "Hot jamun ah? Finished. Game over."],
+      ["Have shawarma after a long drive", "Have roadside maggi after light rain", "Classic night scene, always reliable.", "That steam plus weather combo is illegal-level good."],
+      ["Get endless garlic bread", "Get endless peri peri fries", "One more piece becomes twenty pieces only.", "Spicy fingers, happy soul."],
+      ["Have mom-made rasam rice on bad day", "Have hot ramen on bad day", "Instant emotional reset.", "Spicy slurp therapy, valid choice."],
+      ["Eat cake for breakfast", "Eat pani puri for breakfast", "Bold start to day, respect.", "Absolute menace behavior, but fun."],
+      ["Always get crunchy fries", "Always get stretchy cheese pull", "Texture satisfaction top level.", "Cheese drama is also necessary in life."],
+      ["Have one perfect mango milkshake", "Have one perfect thick lassi", "Summer solved, done.", "Cool, heavy, and proper satisfying."],
+      ["Get free dessert on every dinner date", "Get free starter on every dinner date", "Sweet ending guaranteed, I like this.", "Starting strong is also important, no?"],
+      ["Eat obbattu fresh off the tawa", "Eat holige with lots of ghee", "Festival vibe instantly activated.", "That ghee shine only makes it royal."],
+      ["Have dosa crisp always", "Have dosa soft always", "Crunch addicts will understand this deeply.", "Soft dosa is underrated comfort, boss."],
+      ["Drink only filter coffee for one month", "Drink only bubble tea for one month", "Old-school addiction but classy.", "Sweet pearls and full fun mood."],
+      ["Get one secret midnight snack drawer", "Get one secret midnight dessert fridge", "Salty snacks solve many problems actually.", "Dessert fridge is dangerous luxury and I support it."],
+      ["Have buffet where calories do not count", "Have dessert where sugar does not count", "Plate after plate, no guilt, scene over.", "This is the kind of innovation we need."],
+      ["Eat only spicy food for a week", "Eat only sweet food for a week", "Tears in eyes but happiness in soul.", "Cute choice, but by day three you may cry."],
+      ["Get fresh bakery puffs every evening", "Get fresh tea cake every evening", "Puff and tea is proper Bangalore therapy.", "Soft cake and tea means calm-calm life."],
+      ["Have one huge sundae to yourself", "Share one tiny dessert and fight over bites", "No sharing, no stress, full peace.", "Small fight, big romance, very cute scene."],
+      ["Always get perfect spice level", "Always get perfect salt level", "Spice right means whole meal right.", "Underrated superpower, honestly."]
+    ];
+
+    const dateQuestions = [
+      ["Get one long late-night terrace talk", "Get one long sunrise cuddle session", "Deep talk under soft sky is elite scene.", "Morning softness like this is unfairly nice."],
+      ["Receive daily good morning voice notes", "Receive daily good night forehead kisses", "Starting day with that voice? Finished, happy only.", "Ending day like that is luxury, no?"],
+      ["Go on one bookstore date", "Go on one arcade date", "Quiet romance and accidental hand touch scene.", "Loud fun, teasing, and total chaos chemistry."],
+      ["Have one partner who sends random memes all day", "Have one partner who sends random songs all day", "Laughing throughout office hours, nice only.", "Playlist flirting is top-tier flirting."],
+      ["Slow dance in living room", "Cook together and make full mess", "Cinema scene straight-up.", "Kitchen disaster plus laughter means success."],
+      ["Get surprise flowers", "Get surprise food delivery", "Soft heart unlocked immediately.", "Love is also one hot meal arriving on time."],
+      ["Watch stars from one quiet place", "Watch city lights from one rooftop", "Pure soft romance, no extra words needed.", "Breeze, lights, and closeness, too good."],
+      ["Have one handwritten love letter", "Have one long voice message from the heart", "Paper keeps feelings alive, maga.", "Hearing the voice crack a little? Full impact."],
+      ["Get one forehead kiss every day", "Get one hand squeeze every day", "Tiny action, huge effect.", "Simple, subtle, and full comfort."],
+      ["Do one rainy walk together", "Do one blanket movie marathon together", "Slightly filmy, fully worth it.", "No outside world, only cozy-cozy."],
+      ["Have one date at a quiet cafe", "Have one date on a noisy fairground", "Conversation-heavy and sweet.", "Full chaos, full joy, full memories."],
+      ["Be teased all day by your person", "Be pampered all day by your person", "Annoying but also low-key addictive.", "Princess treatment accepted immediately."],
+      ["Get one surprise road trip", "Get one surprise staycation", "New places and random snacks, full scene.", "No travel stress, only soft luxury."],
+      ["Spend one day doing nothing together", "Spend one day doing ten random fun things together", "Comfort silence is also peak romance.", "Busy, silly, and super memorable."],
+      ["Get complimented for your smile every day", "Get complimented for your brain every day", "Blush coming automatically.", "This one hits deeper, no?"],
+      ["Have inside jokes nobody else gets", "Have secret hand signals only both of you know", "Private comedy club vibes.", "That silent communication scene is too cute."],
+      ["Have one person who steals your fries", "Have one person who saves last bite for you", "Possessive love, little toxic, still funny.", "Saving last bite is actual devotion."],
+      ["Get one long hug after bad day", "Get one long pep talk after bad day", "Sometimes hug only is needed boss.", "Correct words at correct time also powerful."],
+      ["Go dancing where nobody knows you", "Go singing where nobody knows you", "Embarrassing for five minutes, memory for life.", "Off-key but full confidence, lovely scene."],
+      ["Have one relationship full of banter", "Have one relationship full of mushy softness", "Roasting with love is beautiful art.", "Soft-soft affection all day is also dangerous."]
+    ];
+
+    const chaosQuestions = [
+      ["Lose network in the middle of important call", "Lose charger when phone is at 2 percent", "This is office trauma type choice.", "Battery anxiety full activated, ayyo."],
+      ["Get stuck in rain without umbrella", "Get stuck in sun without sunglasses", "At least filmy moment chance is there.", "You will look angry and stylish both."],
+      ["Have laptop update during urgency", "Have Wi-Fi die during urgency", "That spinning wheel will test your soul.", "Whole family suddenly becomes internet engineer only."],
+      ["Accidentally like one old photo", "Accidentally send one message then delete too late", "Social anxiety max pro version.", "Now you must change name and city."],
+      ["Spill chai on white shirt before leaving", "Step in puddle with fresh shoes before leaving", "Day not started, already one issue.", "Shoe pain is very personal, boss."],
+      ["Miss your stop on Metro", "Get into wrong auto and realize late", "Small detour, big irritation.", "Then whole route explanation scene starts."],
+      ["Forget password for every app", "Forget names of everyone at one party", "Digital identity gone, what a life.", "Social buffering in real life, too much."],
+      ["Have alarm not ring on Monday", "Have meeting moved earlier without warning", "Week opening itself like horror trailer.", "Calendar betrayal is worst betrayal."],
+      ["Get one haircut you hate", "Get one outfit photo you hate", "Hair grows back but confidence takes time.", "Photo exists forever, little painful."],
+      ["Drop your last fry", "Drop your last momo", "Tiny tragedy, big emotional damage.", "That last momo was future and hope."],
+      ["Have one dramatic power cut during movie", "Have one dramatic buffering during climax", "Darkness at least gives suspense, no?", "Buffering at climax should be illegal actually."],
+      ["Get trapped in a boring call for one hour", "Get trapped in a boring wedding speech for one hour", "Mute face and fake interest full scene.", "Smile-hold stamina test only."],
+      ["Have one child call you uncle or aunty suddenly", "Have one shopkeeper call you old enough for discount suddenly", "Age crisis unlocked without warning.", "Discount good, but pain also there."],
+      ["Get no chutney with dosa", "Get no raita with biryani", "Meal is still possible but heart is hurt.", "Now full balance is gone, sad scene."],
+      ["Be too early for every plan", "Be too late for every plan", "You will become wall inspection expert.", "Running everywhere like movie montage."],
+      ["Have one friend who sends 27 reels at once", "Have one friend who sends one 8-minute voice note", "Scrolling marathon only.", "Podcast friendship unlocked."],
+      ["Forget your wallet on date", "Forget your phone on date", "Embarrassing but maybe romance saves you.", "No phone means memory or panic, depends."],
+      ["Get one auto uncle who talks nonstop", "Get one auto uncle who is full silent and judging", "At least entertainment is there.", "That silence will make you question your life."],
+      ["Have one sock always disappear", "Have one earbud always disappear", "Laundry mystery level 100.", "This is modern pain, truly."],
+      ["Drop ice cream on first bite", "Drop burger filling on first bite", "Summer heartbreak scene.", "Whole dignity gone in one second."]
+    ];
+
+    const cuteQuestions = [
+      ["Get one random cheek kiss during argument", "Get one random hug during argument", "Argument immediately becoming soft-soft.", "Hug wins many fights, not joking."],
+      ["Spend one whole day laughing", "Spend one whole day cuddling", "Stomach pain from laughter is good problem.", "World can wait, blanket scene ongoing."],
+      ["Have one partner who says 'I reached' every time", "Have one partner who says 'did you eat' every time", "Safety and softness together, nice only.", "That simple question also feels like love."],
+      ["Get one surprise playlist made for you", "Get one surprise photo dump made for you", "Every song becomes memory marker.", "Looking back and blushing guaranteed."],
+      ["Be called cute when angry", "Be called smart when overthinking", "Very annoying but also impossible to stay mad.", "Exactly the reassurance needed, boss."],
+      ["Have one date where you both get lost", "Have one date where everything goes perfectly", "Lost together becomes best story later.", "Smooth date is rare luxury, enjoy fully."],
+      ["Rewatch same comfort movie together", "Start one totally random new series together", "Predictable and soothing, like home only.", "New obsession and fresh inside jokes loading."],
+      ["Get tiny gifts without reason", "Get tiny notes without reason", "Little objects, big feelings.", "Words stay longer, soft choice."],
+      ["Have one balcony chai ritual", "Have one late-night snack ritual", "Evenings become full romantic routine.", "Midnight hunger plus togetherness, elite."],
+      ["Laugh till you cry together", "Cry once and get understood completely", "Pure joy scene, top tier.", "That depth is scary and beautiful both."],
+      ["Get picked up after a long day", "Get waited for after a long day", "Rescue energy, full movie vibe.", "Someone waiting for you always hits different."],
+      ["Have one person who knows your coffee order", "Have one person who knows your comfort meal", "Morning love language sorted.", "Bad day cure already handled."],
+      ["Take silly mirror selfies together", "Take one unexpectedly perfect candid together", "Goofy memories are always gold.", "That one natural photo becomes favorite forever."],
+      ["Get called first during good news", "Get called first during bad news", "Happiness sharing is full trust scene.", "Being safe place during hard time is real love."],
+      ["Have one person who hypes every outfit", "Have one person who hypes every random thought", "Fashion confidence unlocked properly.", "Brain support is also super attractive, no?"],
+      ["Have one rainy day nap together", "Have one sunny lazy brunch together", "Sleepy cozy romance, too good.", "Bright easy happiness, full wholesome."],
+      ["Get one flower tucked behind ear", "Get one hoodie placed on shoulders", "Small filmy gesture, big effect.", "Immediate protection mode, very cute."],
+      ["Share one earphone and walk", "Share one plate and eat", "Music syncing hearts, wow okay.", "One plate means closeness level confirmed."],
+      ["Be loved loudly", "Be loved quietly but consistently", "Public hype and dramatic affection, fun scene.", "Steady everyday love is deadly powerful."],
+      ["End every date with ice cream", "End every date with one extra-long hug", "Sweet finish and sticky fingers, nice.", "No sugar needed, heart already full."]
+    ];
+
+    const questions = [...cityQuestions, ...foodQuestions, ...dateQuestions, ...chaosQuestions, ...cuteQuestions]
+      .map(([a, b, ra, rb]) => ({ a, b, ra, rb }));
+
     function shuffle(arr) {
-      const a = [...arr];
-      for (let i=a.length-1; i>0; i--) {
-        const j = Math.floor(Math.random()*(i+1));
-        [a[i],a[j]]=[a[j],a[i]];
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
       }
-      return a;
+      return copy;
     }
 
     let deck = shuffle(questions);
-    let idx  = 0;
+    let idx = 0;
     let answered = false;
 
     function load() {
@@ -257,12 +438,12 @@
       const q = deck[idx];
       document.getElementById("optA").textContent = q.a;
       document.getElementById("optB").textContent = q.b;
-      document.getElementById("optA").classList.remove("chosen","dimmed");
-      document.getElementById("optB").classList.remove("chosen","dimmed");
+      document.getElementById("optA").classList.remove("chosen", "dimmed");
+      document.getElementById("optB").classList.remove("chosen", "dimmed");
       document.getElementById("reaction").classList.remove("show");
       document.getElementById("reaction").textContent = "";
       document.getElementById("nextBtn").classList.remove("show");
-      document.getElementById("counter").textContent = `Question ${idx+1} of ${deck.length}`;
+      document.getElementById("counter").textContent = "Question " + (idx + 1) + " of " + deck.length;
     }
 
     function choose(side) {
@@ -270,38 +451,28 @@
       answered = true;
       const q = deck[idx];
       const reaction = side === "a" ? q.ra : q.rb;
-
       document.getElementById("opt" + side.toUpperCase()).classList.add("chosen");
-      document.getElementById("opt" + (side==="a"?"B":"A")).classList.add("dimmed");
+      document.getElementById("opt" + (side === "a" ? "B" : "A")).classList.add("dimmed");
       document.getElementById("reaction").textContent = reaction;
-
-      setTimeout(()=>{
+      setTimeout(() => {
         document.getElementById("reaction").classList.add("show");
-        if (idx < deck.length - 1) {
-          document.getElementById("nextBtn").classList.add("show");
+        document.getElementById("nextBtn").classList.add("show");
+        if (idx >= deck.length - 1) {
+          document.getElementById("nextBtn").textContent = "Start over";
         } else {
-          document.getElementById("nextBtn").textContent = "Start over 🔄";
-          document.getElementById("nextBtn").classList.add("show");
+          document.getElementById("nextBtn").textContent = "Next one";
         }
-      }, 300);
+      }, 220);
     }
 
     function nextQuestion() {
-      const wrap = document.getElementById("cardWrap");
-      wrap.classList.add("flip-out");
-      setTimeout(()=>{
-        if (idx >= deck.length - 1) {
-          deck = shuffle(questions);
-          idx = 0;
-        } else {
-          idx++;
-        }
-        load();
-        wrap.classList.remove("flip-out");
-        wrap.classList.add("flip-in");
-        setTimeout(()=> wrap.classList.remove("flip-in"), 320);
-        document.getElementById("nextBtn").textContent = "Next one 💭";
-      }, 300);
+      if (idx >= deck.length - 1) {
+        deck = shuffle(questions);
+        idx = 0;
+      } else {
+        idx += 1;
+      }
+      load();
     }
 
     load();

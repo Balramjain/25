@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Visitor Log</title>
+  <style>
+    @font-face {
+      font-family: "CutiePatootie";
+      src: url("../fonts/CutiePatootie-Rgjv.ttf") format("truetype");
+      font-display: swap;
+    }
+
+    :root {
+      --bg: #fff5ef;
+      --bg-2: #fffef8;
+      --panel: rgba(255, 255, 255, 0.9);
+      --ink: #2f2430;
+      --soft: #7e6675;
+      --accent: #ffb8c6;
+      --accent-2: #ffe7a8;
+      --line: rgba(47, 36, 48, 0.1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100svh;
+      padding: 24px 16px 96px;
+      font-family: "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(255, 184, 198, 0.38), transparent 30%),
+        radial-gradient(circle at top right, rgba(255, 231, 168, 0.42), transparent 28%),
+        linear-gradient(180deg, var(--bg), var(--bg-2));
+    }
+
+    .shell {
+      width: min(980px, 100%);
+      margin: 0 auto;
+    }
+
+    .title {
+      margin-bottom: 18px;
+      text-align: center;
+    }
+
+    .title h1 {
+      font-family: "CutiePatootie", cursive;
+      font-size: clamp(2.4rem, 6vw, 4rem);
+    }
+
+    .title p {
+      margin-top: 8px;
+      color: var(--soft);
+      font-size: 1rem;
+      line-height: 1.5;
+    }
+
+    .card,
+    .log-item {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      box-shadow: 0 16px 34px rgba(58, 34, 45, 0.08);
+      backdrop-filter: blur(10px);
+    }
+
+    .card {
+      padding: 20px;
+      margin-bottom: 18px;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 14px;
+      margin-bottom: 18px;
+    }
+
+    .stat {
+      padding: 18px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid var(--line);
+    }
+
+    .stat strong {
+      display: block;
+      font-size: 1.8rem;
+      font-family: "CutiePatootie", cursive;
+      margin-bottom: 4px;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .controls input {
+      flex: 1 1 220px;
+      min-height: 46px;
+      padding: 0 14px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    .btn {
+      min-height: 46px;
+      padding: 0 18px;
+      border: none;
+      border-radius: 999px;
+      cursor: pointer;
+      font-size: 1rem;
+      color: var(--ink);
+      background: var(--accent);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      box-shadow: 0 12px 24px rgba(255, 184, 198, 0.28);
+    }
+
+    .btn.secondary {
+      background: var(--accent-2);
+      box-shadow: 0 12px 24px rgba(255, 231, 168, 0.26);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+    }
+
+    .log-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .log-item {
+      padding: 16px 18px;
+    }
+
+    .log-item strong {
+      display: block;
+      font-size: 1.05rem;
+      margin-bottom: 6px;
+    }
+
+    .meta {
+      color: var(--soft);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .empty {
+      text-align: center;
+      color: var(--soft);
+      padding: 28px 16px;
+    }
+
+    .back-link {
+      position: fixed;
+      left: 20px;
+      bottom: 20px;
+      padding: 12px 18px;
+      border-radius: 999px;
+      text-decoration: none;
+      color: var(--ink);
+      background: rgba(255, 255, 255, 0.94);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+    }
+
+    @media (max-width: 640px) {
+      body {
+        padding-bottom: 110px;
+      }
+
+      .controls {
+        flex-direction: column;
+      }
+
+      .controls input,
+      .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body data-visitor-prompt="false">
+  <div class="shell">
+    <header class="title">
+      <h1>Visitor Log</h1>
+      <p>
+        This page auto-refreshes from browser storage and is useful for a lightweight demo.
+        GitHub Pages by itself cannot truly tell you every real visitor without a backend.
+      </p>
+    </header>
+
+    <section class="card">
+      <div class="stats">
+        <div class="stat">
+          <strong id="totalVisits">0</strong>
+          <span>Total visits saved</span>
+        </div>
+        <div class="stat">
+          <strong id="uniqueVisitors">0</strong>
+          <span>Unique names saved</span>
+        </div>
+        <div class="stat">
+          <strong id="lastUpdated">Never</strong>
+          <span>Last updated</span>
+        </div>
+      </div>
+
+      <div class="controls">
+        <input id="visitorName" type="text" placeholder="Set this browser's visitor name" />
+        <button class="btn" id="saveNameBtn" type="button">Save My Name</button>
+        <button class="btn secondary" id="clearLogBtn" type="button">Clear Log</button>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="log-list" id="logList"></div>
+    </section>
+  </div>
+
+  <a class="back-link" href="index.html">Back To Home</a>
+
+  <script src="../js/visitor-tracker.js"></script>
+  <script>
+    const totalVisitsEl = document.getElementById("totalVisits");
+    const uniqueVisitorsEl = document.getElementById("uniqueVisitors");
+    const lastUpdatedEl = document.getElementById("lastUpdated");
+    const visitorNameEl = document.getElementById("visitorName");
+    const logListEl = document.getElementById("logList");
+    const saveNameBtn = document.getElementById("saveNameBtn");
+    const clearLogBtn = document.getElementById("clearLogBtn");
+
+    function formatStamp(isoString) {
+      const value = new Date(isoString);
+      if (Number.isNaN(value.getTime())) return "Unknown time";
+
+      return value.toLocaleString("en-IN", {
+        day: "numeric",
+        month: "short",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit"
+      });
+    }
+
+    function renderLog() {
+      const profile = window.PenguVisitorTracker.getProfile() || {};
+      const log = window.PenguVisitorTracker.getLog();
+      const names = new Set(log.map((entry) => entry.name).filter(Boolean));
+      const lastUpdatedAt = window.PenguVisitorTracker.getLastUpdatedAt();
+
+      visitorNameEl.value = profile.name || "";
+      totalVisitsEl.textContent = String(log.length);
+      uniqueVisitorsEl.textContent = String(names.size);
+      lastUpdatedEl.textContent = lastUpdatedAt ? formatStamp(lastUpdatedAt) : "Never";
+
+      if (!log.length) {
+        logListEl.innerHTML = '<div class="empty">No visits saved yet. Open the site pages and they will start appearing here.</div>';
+        return;
+      }
+
+      logListEl.innerHTML = log.map((entry) => {
+        return `
+          <article class="log-item">
+            <strong>${entry.name || "Anonymous Guest"}</strong>
+            <div class="meta">Opened ${entry.title || entry.page || "a page"}</div>
+            <div class="meta">File: ${entry.page || "unknown"}</div>
+            <div class="meta">Time: ${formatStamp(entry.timestamp)}</div>
+          </article>
+        `;
+      }).join("");
+    }
+
+    saveNameBtn.addEventListener("click", () => {
+      const finalName = window.PenguVisitorTracker.setName(visitorNameEl.value);
+      visitorNameEl.value = finalName;
+      renderLog();
+    });
+
+    clearLogBtn.addEventListener("click", () => {
+      const confirmed = window.confirm("Clear the saved visitor log for this browser?");
+      if (!confirmed) return;
+      window.PenguVisitorTracker.clearLog();
+      renderLog();
+    });
+
+    window.addEventListener("storage", renderLog);
+    renderLog();
+    setInterval(renderLog, 2000);
+  </script>
+</body>
+</html>
