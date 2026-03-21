@@ -81,6 +81,8 @@
     background: #ffd6f0;
     color: #57374d;
     cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
   ">⤵</button>
 
   <script>
@@ -88,17 +90,40 @@
     const btn = document.getElementById("musicBtn");
     const quickNavBtn = document.getElementById("quickNavBtn");
     const scrollTargetKey = "scrollTarget";
-    const isTouchViewport = window.matchMedia("(pointer: coarse)").matches;
+
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+
     if ("scrollRestoration" in history) {
       history.scrollRestoration = "manual";
     }
 
+    // --- Read and clear all session flags synchronously at startup ---
     const hasVisited = localStorage.getItem("hasVisited");
     const musicMuted = localStorage.getItem("musicMuted");
     const cameFromPage = sessionStorage.getItem("cameFromPage") === "true";
     const scrollTarget = sessionStorage.getItem(scrollTargetKey);
-    sessionStorage.removeItem("cameFromPage"); // one-time flag for current tab only
+    sessionStorage.removeItem("cameFromPage");
+    sessionStorage.removeItem(scrollTargetKey);
+
+    // Guard: ensures scroll init only fires once across load + pageshow
+    let _scrollInitDone = false;
+
+    function getScrollBehavior() {
+      return prefersReducedMotion.matches ? "auto" : "smooth";
+    }
+
+    function scrollToY(y) {
+      window.scrollTo({ top: y, behavior: getScrollBehavior() });
+    }
+
+    function scrollToEl(el, block = "start") {
+      if (!el) return;
+      // Use offsetTop for reliable cross-device positioning (avoids mobile chrome resize jump)
+      const offset = block === "center"
+        ? el.offsetTop - window.innerHeight / 2 + el.offsetHeight / 2
+        : el.offsetTop;
+      scrollToY(Math.max(0, offset));
+    }
 
     function setReturnTarget(id) {
       sessionStorage.setItem("cameFromPage", "true");
@@ -106,40 +131,36 @@
     }
 
     function scrollToReturnTarget() {
-      if (cameFromPage && scrollTarget) {
-        const el = document.getElementById(scrollTarget);
-        if (el) {
-          el.scrollIntoView({ behavior: getScrollBehavior(), block: "center" });
-        }
-        sessionStorage.removeItem(scrollTargetKey);
+      if (!cameFromPage || !scrollTarget) return false;
+      const el = document.getElementById(scrollTarget);
+      if (el) {
+        scrollToEl(el, "center");
         return true;
       }
       return false;
     }
 
-    function forceTopNow() {
-      window.scrollTo(0, 0);
-      document.documentElement.scrollTop = 0;
-      document.body.scrollTop = 0;
-    }
+    function initScrollPosition() {
+      if (_scrollInitDone) return;
+      _scrollInitDone = true;
 
-    function forceTopOnFreshOpen() {
-      if (!cameFromPage) {
-        forceTopNow();
-        requestAnimationFrame(forceTopNow);
-        setTimeout(forceTopNow, 40);
+      if (cameFromPage) {
+        setTimeout(() => {
+          if (!scrollToReturnTarget()) {
+            const actionsEl = document.getElementById("actions");
+            if (actionsEl) scrollToEl(actionsEl, "start");
+          }
+        }, 120);
+      } else {
+        // Fresh open: snap to top immediately, no rAF loop
+        window.scrollTo(0, 0);
       }
     }
 
-    function getScrollBehavior() {
-      return prefersReducedMotion.matches ? "auto" : "smooth";
-    }
-
+    // --- Init on load ---
     if (hasVisited) {
-      // Skip splash
       document.getElementById("splash").style.display = "none";
 
-      // Restore music state
       if (musicMuted === "true") {
         btn.innerText = "🔇";
       } else {
@@ -147,35 +168,19 @@
         music.play().catch(() => {});
       }
 
-      // Auto scroll to correct button only when coming back from a button click
-      if (cameFromPage) {
-        setTimeout(() => {
-          if (!scrollToReturnTarget()) {
-            document.getElementById("actions").scrollIntoView({ behavior: getScrollBehavior(), block: "start" });
-          }
-        }, 500);
-      } else {
-        forceTopOnFreshOpen();
-      }
+      initScrollPosition();
     }
 
-    // Handle browser back/forward cache and restore behavior.
-    window.addEventListener("pageshow", () => {
-      if (cameFromPage) {
-        setTimeout(() => {
-          if (!scrollToReturnTarget()) {
-            document.getElementById("actions").scrollIntoView({ behavior: getScrollBehavior(), block: "start" });
-          }
-        }, 100);
-      } else {
-        forceTopOnFreshOpen();
+    // --- pageshow handles bfcache restores (back/forward navigation on mobile) ---
+    window.addEventListener("pageshow", (e) => {
+      if (e.persisted) {
+        // Browser restored from bfcache — scroll position is already correct, don't touch it
+        return;
       }
+      initScrollPosition();
     });
 
-    window.addEventListener("load", () => {
-      if (!cameFromPage) forceTopOnFreshOpen();
-    });
-
+    // --- Site entry from splash ---
     function startSite() {
       if (document.getElementById("splash").style.display === "none") return;
       localStorage.setItem("hasVisited", "true");
@@ -200,9 +205,10 @@
       setTimeout(() => btn.style.transform = "scale(1) rotate(0deg)", 300);
     }
 
-    let navDirection = "down";
+    // --- Quick nav state ---
     let lastScrollY = window.scrollY;
     let lastScrollDirection = "down";
+    let navDirection = "down";
 
     function getSnapSections() {
       return [
@@ -214,94 +220,77 @@
     }
 
     function getCurrentSectionIndex(sections) {
-      if (!sections.length) return -1;
-
+      if (!sections.length) return 0;
       const probeY = window.scrollY + Math.min(window.innerHeight * 0.28, 220);
-
-      for (let i = sections.length - 1; i >= 0; i -= 1) {
-        if (probeY >= sections[i].offsetTop) {
-          return i;
-        }
+      for (let i = sections.length - 1; i >= 0; i--) {
+        if (probeY >= sections[i].offsetTop) return i;
       }
-
       return 0;
-    }
-
-    function getSectionAnchorPositions(sections) {
-      return sections.map((section) => section.offsetTop);
     }
 
     function getQuickNavState() {
       const sections = getSnapSections();
       const currentIndex = getCurrentSectionIndex(sections);
-      const anchorPositions = getSectionAnchorPositions(sections);
       const scrollY = window.scrollY;
       const tolerance = Math.max(window.innerHeight * 0.08, 36);
 
-      if (!sections.length || currentIndex === -1) {
-        return { direction: navDirection, type: "section", section: sections[0] || null };
-      }
+      if (!sections.length) return { direction: "down", section: null };
 
-      for (let i = 0; i < anchorPositions.length - 1; i += 1) {
-        const currentTop = anchorPositions[i];
-        const nextTop = anchorPositions[i + 1];
+      for (let i = 0; i < sections.length - 1; i++) {
+        const currentTop = sections[i].offsetTop;
+        const nextTop = sections[i + 1].offsetTop;
         const inGap = scrollY > currentTop + tolerance && scrollY < nextTop - tolerance;
-
         if (inGap) {
           const direction = lastScrollDirection === "up" ? "up" : "down";
-          const section = direction === "up" ? sections[i] : sections[i + 1];
-          navDirection = direction;
-          return { direction, type: "section", section };
+          return { direction, section: direction === "up" ? sections[i] : sections[i + 1] };
         }
       }
 
-      if (currentIndex === 0) {
-        navDirection = "down";
-      } else if (currentIndex === sections.length - 1) {
-        navDirection = "up";
-      } else {
-        navDirection = lastScrollDirection === "up" ? "up" : "down";
-      }
+      if (currentIndex === 0) navDirection = "down";
+      else if (currentIndex === sections.length - 1) navDirection = "up";
+      else navDirection = lastScrollDirection === "up" ? "up" : "down";
 
-      if (navDirection === "down") {
-        return { direction: "down", type: "section", section: sections[Math.min(currentIndex + 1, sections.length - 1)] };
-      }
+      const nextIndex = navDirection === "down"
+        ? Math.min(currentIndex + 1, sections.length - 1)
+        : Math.max(currentIndex - 1, 0);
 
-      return { direction: "up", type: "section", section: sections[Math.max(currentIndex - 1, 0)] };
+      return { direction: navDirection, section: sections[nextIndex] };
     }
 
     function updateQuickNavBtn() {
       const state = getQuickNavState();
-
-      quickNavBtn.dataset.targetType = state.type;
-      quickNavBtn.dataset.targetId = state.section ? state.section.id || "" : "";
+      quickNavBtn.dataset.targetId = state.section ? (state.section.id || "") : "";
       quickNavBtn.innerText = state.direction === "down" ? "⤵" : "⤴";
       quickNavBtn.setAttribute("aria-label", state.direction === "down" ? "Scroll down" : "Scroll up");
     }
 
-    function handleQuickNavScrollState() {
-      const currentY = window.scrollY;
+    // Button click: use scrollToEl for consistent mobile behavior
+    quickNavBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      const state = getQuickNavState();
+      if (state.section) scrollToEl(state.section, "start");
+    });
 
+    // Throttled scroll listener via rAF
+    let scrollTicking = false;
+    window.addEventListener("scroll", () => {
+      const currentY = window.scrollY;
       if (Math.abs(currentY - lastScrollY) > 2) {
         lastScrollDirection = currentY > lastScrollY ? "down" : "up";
         lastScrollY = currentY;
       }
-
-      updateQuickNavBtn();
-    }
-
-    quickNavBtn.addEventListener("click", () => {
-      const state = getQuickNavState();
-
-      if (state.type === "section" && state.section) {
-        state.section.scrollIntoView({ behavior: getScrollBehavior(), block: "start" });
+      if (!scrollTicking) {
+        requestAnimationFrame(() => {
+          updateQuickNavBtn();
+          scrollTicking = false;
+        });
+        scrollTicking = true;
       }
-    });
+    }, { passive: true });
 
-    window.addEventListener("scroll", handleQuickNavScrollState, { passive: true });
     window.addEventListener("resize", updateQuickNavBtn);
-    updateQuickNavBtn();
     window.addEventListener("load", updateQuickNavBtn);
+    updateQuickNavBtn();
   </script>
 
   <!-- ✨ BACKGROUND ANIMATIONS -->
