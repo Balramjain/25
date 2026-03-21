@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
+  <title>Purrcade Player</title>
+  <style>
+    @font-face { font-family: "GamePaused"; src: url("../fonts/GamepauseddemoRegular-RpmY6.otf") format("opentype"); font-display: swap; }
+    @font-face { font-family: "CutiePatootie"; src: url("../fonts/CutiePatootie-Rgjv.ttf") format("truetype"); font-display: swap; }
+
+    :root {
+      color-scheme: light;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background:
+        radial-gradient(circle at 10% 12%, rgba(255, 189, 226, 0.38), transparent 26%),
+        radial-gradient(circle at 88% 14%, rgba(169, 210, 255, 0.34), transparent 26%),
+        linear-gradient(145deg, #f7f4ff 0%, #edf5ff 52%, #e9fff5 100%);
+      font-family: "GamePaused", system-ui, sans-serif;
+      color: #1f2f4f;
+    }
+
+    body {
+      padding: 12px;
+    }
+
+    .app {
+      width: min(100%, 1600px);
+      min-height: calc(100dvh - 24px);
+      margin: 0 auto;
+      display: grid;
+      grid-template-rows: auto 1fr;
+      gap: 12px;
+    }
+
+    .toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 16px 36px rgba(30, 42, 67, 0.14);
+    }
+
+    .title-wrap {
+      display: grid;
+      gap: 4px;
+      min-width: 180px;
+    }
+
+    .eyebrow {
+      font-family: "CutiePatootie", cursive;
+      font-size: 1.35rem;
+      color: #5a4567;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(1.3rem, 3.1vw, 2.1rem);
+      letter-spacing: 0.04em;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .control-btn {
+      border: none;
+      border-radius: 14px;
+      padding: 12px 16px;
+      min-height: 48px;
+      font-family: inherit;
+      font-size: 0.95rem;
+      cursor: pointer;
+      color: #172a4a;
+      background: linear-gradient(135deg, #ffd0ea, #a5d1ff 56%, #9af0d7);
+      box-shadow: 0 10px 22px rgba(52, 88, 156, 0.18);
+    }
+
+    .control-btn.secondary {
+      background: linear-gradient(135deg, #355b93, #24446e);
+      color: #fff;
+    }
+
+    .player-shell {
+      position: relative;
+      min-height: 0;
+      border-radius: 26px;
+      overflow: hidden;
+      background: rgba(15, 24, 41, 0.92);
+      box-shadow: 0 24px 58px rgba(30, 42, 67, 0.22);
+    }
+
+    iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      min-height: calc(100dvh - 128px);
+      border: 0;
+      background: #101827;
+    }
+
+    .status {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      text-align: center;
+      background: linear-gradient(145deg, rgba(26, 38, 66, 0.94), rgba(18, 27, 47, 0.9));
+      color: #fff;
+      transition: opacity 0.22s ease, visibility 0.22s ease;
+    }
+
+    .status.hidden {
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+    }
+
+    .status-card {
+      max-width: 32rem;
+      display: grid;
+      gap: 10px;
+    }
+
+    .status-card strong {
+      font-size: clamp(1.15rem, 3vw, 1.7rem);
+    }
+
+    .status-card p {
+      margin: 0;
+      font-size: 0.98rem;
+      opacity: 0.82;
+      line-height: 1.45;
+    }
+
+    @media (max-width: 768px) {
+      body {
+        padding: 8px;
+      }
+
+      .app {
+        min-height: calc(100dvh - 16px);
+        gap: 8px;
+      }
+
+      .toolbar {
+        padding: 12px;
+        border-radius: 18px;
+      }
+
+      .controls {
+        width: 100%;
+      }
+
+      .control-btn {
+        flex: 1 1 calc(50% - 10px);
+      }
+
+      iframe {
+        min-height: calc(100dvh - 168px);
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="app">
+    <section class="toolbar">
+      <div class="title-wrap">
+        <h1 id="gameTitle">Loading game</h1>
+      </div>
+
+      <div class="controls">
+        <button class="control-btn secondary" id="backBtn" type="button">Go Back</button>
+        <button class="control-btn" id="reloadBtn" type="button">Reload Fast</button>
+        <button class="control-btn" id="clearCacheBtn" type="button">Clear Cache</button>
+        <button class="control-btn" id="fullscreenBtn" type="button">Fullscreen</button>
+      </div>
+    </section>
+
+    <section class="player-shell" id="playerShell">
+      <iframe id="gameFrame" title="Embedded game" loading="eager" allow="fullscreen; autoplay; gamepad"></iframe>
+      <div class="status" id="status">
+        <div class="status-card">
+          <strong id="statusTitle">Getting the game ready</strong>
+          <p id="statusText">Opening the game in a clean player so it loads faster and stays full-screen friendly on desktop and mobile.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const games = {
+      "flappy-bird": {
+        title: "Flappy Bird",
+        path: "../external-src/html-css-javascript-games/09-Flappy-Bird-Game/index.html"
+      },
+      "2048": {
+        title: "2048",
+        path: "../external-src/html-css-javascript-games/10-2048-Game/index.html"
+      },
+      "hangman": {
+        title: "Hangman",
+        path: "../external-src/html-css-javascript-games/12-Hangman-Game/index.html"
+      },
+      "tic-tac-toe": {
+        title: "Tic-Tac-Toe",
+        path: "../external-src/html-css-javascript-games/15-Tic-Tac-Toe/index.html"
+      },
+      "breakout": {
+        title: "Breakout",
+        path: "../external-src/html-css-javascript-games/18-Breakout-Game/index.html"
+      },
+      "tetris": {
+        title: "Tetris",
+        path: "../external-src/html-css-javascript-games/20-Tetris-Game/index.html"
+      },
+      "memory-cards": {
+        title: "Memory Cards",
+        path: "../external-src/html-css-javascript-games/22-Memory-Card-Game/index.html"
+      },
+      "snake": {
+        title: "Snake",
+        path: "../external-src/html-css-javascript-games/24-Snake-Game/index.html"
+      },
+      "quiz-game": {
+        title: "Quiz Game",
+        path: "../external-src/html-css-javascript-games/33-Quiz-Game/index.html"
+      },
+      "emoji-catcher": {
+        title: "Emoji Catcher",
+        path: "../external-src/html-css-javascript-games/34-Emoji-Catcher-Game/index.html"
+      },
+      "whack-a-mole": {
+        title: "Whack-A-Mole",
+        path: "../external-src/html-css-javascript-games/35-Whack-A-Mole-Game/index.html"
+      },
+      "sliding-puzzle": {
+        title: "Sliding Puzzle",
+        path: "../external-src/html-css-javascript-games/37-Sliding-Puzzle-Game/index.html"
+      }
+    };
+
+    const params = new URLSearchParams(window.location.search);
+    const gameKey = params.get("game");
+    const game = games[gameKey];
+
+    const playerShell = document.getElementById("playerShell");
+    const gameFrame = document.getElementById("gameFrame");
+    const gameTitle = document.getElementById("gameTitle");
+    const status = document.getElementById("status");
+    const statusTitle = document.getElementById("statusTitle");
+    const statusText = document.getElementById("statusText");
+    const backBtn = document.getElementById("backBtn");
+    const reloadBtn = document.getElementById("reloadBtn");
+    const clearCacheBtn = document.getElementById("clearCacheBtn");
+    const fullscreenBtn = document.getElementById("fullscreenBtn");
+
+    function showStatus(title, text) {
+      statusTitle.textContent = title;
+      statusText.textContent = text;
+      status.classList.remove("hidden");
+    }
+
+    function hideStatus() {
+      status.classList.add("hidden");
+    }
+
+    function buildGameUrl() {
+      if (!game) return "";
+      const separator = game.path.includes("?") ? "&" : "?";
+      return game.path + separator + "v=" + Date.now();
+    }
+
+    function loadGame() {
+      if (!game) {
+        showStatus("Game not found", "This game link looks broken. Go back to the game list and pick another one.");
+        gameTitle.textContent = "Game not found";
+        return;
+      }
+
+      gameTitle.textContent = game.title;
+      document.title = game.title + " | Purrcade Player";
+      showStatus("Loading " + game.title, "Opening a fresh copy of the game.");
+      gameFrame.src = buildGameUrl();
+    }
+
+    async function clearGameCache() {
+      showStatus("Clearing cache", "Removing saved game data and refreshing a clean copy.");
+
+      try {
+        const frameWindow = gameFrame.contentWindow;
+        if (frameWindow) {
+          try { frameWindow.localStorage.clear(); } catch (error) {}
+          try { frameWindow.sessionStorage.clear(); } catch (error) {}
+        }
+
+        if ("caches" in window) {
+          const keys = await caches.keys();
+          await Promise.all(keys.map((key) => caches.delete(key)));
+        }
+
+        if ("serviceWorker" in navigator) {
+          const registrations = await navigator.serviceWorker.getRegistrations();
+          await Promise.all(registrations.map((registration) => registration.unregister()));
+        }
+      } catch (error) {
+      }
+
+      loadGame();
+    }
+
+    backBtn.addEventListener("click", () => {
+      sessionStorage.setItem("cameFromPage", "true");
+      location.href = "game-repo-collection.html?v=20260321";
+    });
+
+    reloadBtn.addEventListener("click", () => {
+      loadGame();
+    });
+
+    clearCacheBtn.addEventListener("click", () => {
+      clearGameCache();
+    });
+
+    fullscreenBtn.addEventListener("click", async () => {
+      try {
+        if (document.fullscreenElement) {
+          await document.exitFullscreen();
+          return;
+        }
+
+        await playerShell.requestFullscreen();
+      } catch (error) {
+        showStatus("Fullscreen not available", "This browser or device did not allow fullscreen here, but the game still stays nearly full-screen.");
+        setTimeout(hideStatus, 1800);
+      }
+    });
+
+    gameFrame.addEventListener("load", () => {
+      hideStatus();
+    });
+
+    loadGame();
+  </script>
+</body>
+</html>
