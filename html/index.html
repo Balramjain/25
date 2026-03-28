@@ -87,14 +87,15 @@
 
   <script>
     // ═══════════════════════════════════════════════════════════════════
-    //  SCROLL SYSTEM — v4
-    //  Key design decision: save the RAW PIXEL POSITION at click time.
-    //  No DOM-walking, no element resolving — just restore the exact Y.
-    //  This works for every section: cat pics, 4-btn grid, More Magic
-    //  subsections, time-since — everything lands exactly right.
+    //  SCROLL SYSTEM — v5
+    //  Goals:
+    //    1. Keep hard manual snap stops on the quote cards and sections
+    //    2. Make quick-nav direction follow actual user scroll intent
+    //    3. Restore back-navigation to the clicked button without landing
+    //       in the middle of the captions stream
     //
     //  Handles:
-    //    1. Return from sub-page  → exact pixel restore (smooth)
+    //    1. Return from sub-page  → restore clicked button (smooth)
     //    2. Hard refresh          → exact pixel restore (instant, no flash)
     //    3. Fresh open / new tab  → snap to top
     //    4. bfcache back/forward  → do nothing, browser handles it
@@ -111,6 +112,7 @@
     const LS_MUTED        = "musicMuted";
     const LS_SCROLL_LIVE  = "scrollPosLive";   // updated on every scroll — for refresh restore
     const LS_SCROLL_CLICK = "scrollPosClick";  // frozen at click time — for return-from-subpage
+    const LS_RETURN_ID    = "scrollReturnId";  // clicked button id — primary return target
 
     // sessionStorage key — tab-scoped only, dies on tab close / new tab
     const SS_CAME_BACK = "cameBack";
@@ -120,6 +122,7 @@
     const musicMuted      = localStorage.getItem(LS_MUTED);
     const rawLive         = localStorage.getItem(LS_SCROLL_LIVE);
     const rawClick        = localStorage.getItem(LS_SCROLL_CLICK);
+    const returnTargetId  = localStorage.getItem(LS_RETURN_ID) || "";
     const savedScrollY    = rawLive  !== null ? parseInt(rawLive,  10) : -1;
     const clickScrollY    = rawClick !== null ? parseInt(rawClick, 10) : -1;
     const cameBack        = sessionStorage.getItem(SS_CAME_BACK) === "true";
@@ -139,9 +142,49 @@
       window.scrollTo({ top: Math.max(0, Math.round(y)), behavior: behavior ?? getBehavior() });
     }
 
-    function scrollToEl(el, nudge) {
+    function scrollToEl(el, nudge, behavior) {
       if (!el) return;
-      scrollToY(el.offsetTop - (nudge ?? 0));
+      scrollToY(el.offsetTop - (nudge ?? 0), behavior);
+    }
+
+    function getCenteredTargetY(el) {
+      const rect = el.getBoundingClientRect();
+      const absoluteTop = window.scrollY + rect.top;
+      const centered = absoluteTop - ((window.innerHeight - rect.height) / 2);
+      return Math.max(0, centered);
+    }
+
+    function getBottomLockY() {
+      return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    }
+
+    function withSnapLockDisabled(fn) {
+      document.documentElement.classList.add("snap-lock-off");
+      requestAnimationFrame(() => {
+        fn();
+        setTimeout(() => {
+          document.documentElement.classList.remove("snap-lock-off");
+        }, prefersReducedMotion.matches ? 80 : 750);
+      });
+    }
+
+    function restoreClickedTarget() {
+      const el = returnTargetId ? document.getElementById(returnTargetId) : null;
+      if (el) {
+        withSnapLockDisabled(() => {
+          scrollToY(getCenteredTargetY(el), "smooth");
+        });
+        return true;
+      }
+
+      if (clickScrollY > 0) {
+        withSnapLockDisabled(() => {
+          scrollToY(clickScrollY, "smooth");
+        });
+        return true;
+      }
+
+      return false;
     }
 
     // ── setReturnTarget — called inline onclick on every button/link ──────
@@ -150,6 +193,7 @@
     function setReturnTarget(id) {
       sessionStorage.setItem(SS_CAME_BACK, "true");
       localStorage.setItem(LS_SCROLL_CLICK, String(Math.round(window.scrollY)));
+      localStorage.setItem(LS_RETURN_ID, id);
     }
 
     // ── Init — runs exactly once ───────────────────────────────────────
@@ -157,12 +201,9 @@
       if (_initDone) return;
       _initDone = true;
 
-      if (cameBack && clickScrollY > 0) {
-        // Came back from a sub-page — restore to exactly where the button was.
-        // Use the frozen click-time position, NOT the live scroll position.
-        // 350ms: lets fonts + images settle on mobile before measuring.
+      if (cameBack && (returnTargetId || clickScrollY > 0)) {
         setTimeout(() => {
-          scrollToY(clickScrollY, "smooth");
+          restoreClickedTarget();
         }, 350);
 
       } else if (savedScrollY > 0 && hasVisited) {
@@ -211,6 +252,7 @@
       localStorage.setItem(LS_MUTED, "false");
       localStorage.setItem(LS_SCROLL_LIVE, "0");
       localStorage.removeItem(LS_SCROLL_CLICK);
+      localStorage.removeItem(LS_RETURN_ID);
       sessionStorage.removeItem(SS_CAME_BACK);
       document.getElementById("splash").style.display = "none";
       btn.innerText = "🔊";
@@ -237,6 +279,20 @@
     let lastScrollY   = window.scrollY;
     let lastScrollDir = "down";
     let navDir        = "down";
+    let lastIntentDir = "down";
+    let lastIntentTs  = 0;
+    let touchY        = null;
+
+    function setIntentDir(dir) {
+      if (dir !== "up" && dir !== "down") return;
+      lastIntentDir = dir;
+      lastIntentTs = Date.now();
+      refreshNavBtn();
+    }
+
+    function getPreferredDir() {
+      return Date.now() - lastIntentTs < 900 ? lastIntentDir : lastScrollDir;
+    }
 
     function getSnapSections() {
       return SNAP_IDS.map(id => document.getElementById(id)).filter(Boolean);
@@ -256,19 +312,26 @@
       const idx     = getCurrentIdx(sections);
       const scrollY = window.scrollY;
       const zone    = 60;
+      const preferredDir = getPreferredDir();
+      const lastSection = sections[sections.length - 1];
+      const maxScrollY = document.documentElement.scrollHeight - window.innerHeight;
+
+      if (lastSection && (scrollY >= lastSection.offsetTop - zone || scrollY >= maxScrollY - 4)) {
+        return { dir: "up", target: sections[Math.max(sections.length - 2, 0)] };
+      }
 
       for (let i = 0; i < sections.length - 1; i++) {
         const inZone = scrollY > sections[i].offsetTop + zone
                     && scrollY < sections[i + 1].offsetTop - zone;
         if (inZone) {
-          const d = lastScrollDir === "up" ? "up" : "down";
+          const d = preferredDir === "up" ? "up" : "down";
           return { dir: d, target: d === "up" ? sections[i] : sections[i + 1] };
         }
       }
 
       if (idx === 0)                        navDir = "down";
       else if (idx === sections.length - 1) navDir = "up";
-      else                                  navDir = lastScrollDir === "up" ? "up" : "down";
+      else                                  navDir = preferredDir === "up" ? "up" : "down";
 
       const nextIdx = navDir === "down"
         ? Math.min(idx + 1, sections.length - 1)
@@ -281,12 +344,56 @@
       const { dir } = getNavState();
       quickNavBtn.innerText = dir === "down" ? "⤵" : "⤴";
       quickNavBtn.setAttribute("aria-label", dir === "down" ? "Scroll down" : "Scroll up");
+      quickNavBtn.classList.toggle("to-bottom", dir === "down");
+      quickNavBtn.classList.toggle("to-top", dir === "up");
     }
 
     quickNavBtn.addEventListener("click", (e) => {
       e.preventDefault();
       const { target } = getNavState();
-      if (target) scrollToEl(target, 0);
+      if (!target) return;
+
+      if (target.id === "time-since") {
+        quickNavBtn.innerText = "⤴";
+        quickNavBtn.setAttribute("aria-label", "Scroll up");
+        quickNavBtn.classList.remove("to-bottom");
+        quickNavBtn.classList.add("to-top");
+        scrollToY(getBottomLockY(), getBehavior());
+        setTimeout(refreshNavBtn, prefersReducedMotion.matches ? 40 : 420);
+        return;
+      }
+
+      scrollToEl(target, 0);
+      setTimeout(refreshNavBtn, prefersReducedMotion.matches ? 40 : 420);
+    });
+
+    window.addEventListener("wheel", (event) => {
+      if (Math.abs(event.deltaY) > 2) {
+        setIntentDir(event.deltaY > 0 ? "down" : "up");
+      }
+    }, { passive: true });
+
+    window.addEventListener("touchstart", (event) => {
+      touchY = event.touches[0] ? event.touches[0].clientY : null;
+    }, { passive: true });
+
+    window.addEventListener("touchmove", (event) => {
+      const nextY = event.touches[0] ? event.touches[0].clientY : null;
+      if (touchY === null || nextY === null) return;
+      const delta = nextY - touchY;
+      if (Math.abs(delta) > 4) {
+        setIntentDir(delta > 0 ? "up" : "down");
+        touchY = nextY;
+      }
+    }, { passive: true });
+
+    window.addEventListener("touchend", () => {
+      touchY = null;
+    }, { passive: true });
+
+    window.addEventListener("keydown", (event) => {
+      if (["ArrowUp", "PageUp", "Home"].includes(event.key)) setIntentDir("up");
+      if (["ArrowDown", "PageDown", "End", " "].includes(event.key)) setIntentDir("down");
     });
 
     // ── Unified rAF scroll loop ────────────────────────────────────────
@@ -768,11 +875,11 @@
       ".quote-block, .actions h2, .button-grid, .feature-title, .feature-grid"
     );
     quoteBlocks.forEach((el, i) => {
-      el.style.setProperty("--stagger", `${i * 70}ms`);
+      el.style.setProperty("--stagger", `${Math.min(i * 18, 110)}ms`);
     });
 
-    const revealThreshold = window.matchMedia("(max-width: 768px)").matches ? 0.35 : 0.45;
-    const passThreshold = window.matchMedia("(max-width: 768px)").matches ? 0.15 : 0.2;
+    const revealThreshold = window.matchMedia("(max-width: 768px)").matches ? 0.2 : 0.28;
+    const passThreshold = window.matchMedia("(max-width: 768px)").matches ? 0.08 : 0.12;
 
     // Reveal on enter
     const revealObserver = new IntersectionObserver((entries) => {
