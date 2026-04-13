@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -61,7 +61,7 @@
     }
     header p { margin-top: 8px; font-size: clamp(1rem, 2.5vw, 1.2rem); opacity: 0.75; }
 
-    /* ── CARD DECK ── */
+    /* â”€â”€ CARD DECK â”€â”€ */
     .deck-area {
       width: 100%;
       display: flex;
@@ -137,7 +137,7 @@
       line-height: 1.2;
     }
 
-    /* ── RESULT BOX ── */
+    /* â”€â”€ RESULT BOX â”€â”€ */
     .result-box {
       width: min(600px, 92vw);
       background: linear-gradient(155deg, rgba(45,10,94,0.9), rgba(10,26,62,0.9));
@@ -209,7 +209,7 @@
     }
     .back-btn:hover { transform: translateY(-2px); }
   </style>
-  <script defer src="../js/site-runtime.js?v=20260321-runtime1"></script>
+  <script defer src="../js/site-runtime.js?v=20260331-runtime13"></script>
 </head>
 <body>
 
@@ -225,7 +225,7 @@
       <p>The universe has a message for you today.</p>
     </header>
 
-    <p class="hint" id="hint">Pick one card — trust your gut 🌙</p>
+    <p class="hint" id="hint">Pick one card - trust your gut 🌙</p>
 
     <div class="deck-area">
       <div class="card-row" id="cardRow">
@@ -261,17 +261,17 @@
 
   <script>
     const cards = [
-      { emoji:"☀️", name:"The Sun", msg:"Warmth and joy are all around you right now. Something wonderful is coming — maybe it's already here.", love:"You radiate happiness that makes everyone around you brighter. 💛" },
-      { emoji:"🌙", name:"The Moon", msg:"Trust your intuition today. The things you feel deeply are real — don't second guess your heart.", love:"Your emotions are your superpower. Feel them fully. 🌙" },
+      { emoji:"☀️", name:"The Sun", msg:"Warmth and joy are all around you right now. Something wonderful is coming - maybe it's already here.", love:"You radiate happiness that makes everyone around you brighter. 💛" },
+      { emoji:"🌙", name:"The Moon", msg:"Trust your intuition today. The things you feel deeply are real - don't second guess your heart.", love:"Your emotions are your superpower. Feel them fully. 🌙" },
       { emoji:"⭐", name:"The Star", msg:"Hope is not lost. In fact, it's shining brighter than ever. This is a time of healing and beautiful new beginnings.", love:"You are someone worth wishing upon a star for. ✨" },
       { emoji:"💕", name:"The Lovers", msg:"Connection, harmony, and deep love are highlighted for you. A bond in your life is growing stronger by the day.", love:"You are loved more than you know. 💕" },
-      { emoji:"🌸", name:"The Empress", msg:"You are full of creative energy and natural beauty. Nurture yourself and the things you love — they will bloom.", love:"Everything you touch grows beautiful. 🌸" },
-      { emoji:"🔮", name:"The High Priestess", msg:"Something hidden is about to reveal itself. Pay attention to dreams and small signs — the universe is whispering.", love:"Your wisdom and mystery make you unforgettable. 🔮" },
-      { emoji:"⚡", name:"The Tower", msg:"A sudden change might shake things up — but it clears the way for something far better. Trust the process.", love:"Through every storm, you come out even more radiant. ⚡" },
-      { emoji:"🌈", name:"The World", msg:"You are exactly where you're supposed to be. A cycle is completing beautifully — celebrate how far you've come.", love:"You are whole, complete, and deeply wonderful. 🌈" },
-      { emoji:"🦋", name:"The Fool", msg:"A fresh start is calling your name. Say yes to something new — leap with joy and trust that you'll land softly.", love:"Your sense of wonder makes life magical for everyone near you. 🦋" },
-      { emoji:"🌺", name:"Strength", msg:"You have more courage than you realise. The gentle way you handle hard things is your greatest power.", love:"Your kindness is not weakness — it is extraordinary strength. 🌺" },
-      { emoji:"💫", name:"The Magician", msg:"You have everything you need to make your dreams happen. The magic is already inside you — use it.", love:"You make impossible things feel possible just by being you. 💫" },
+      { emoji:"🌸", name:"The Empress", msg:"You are full of creative energy and natural beauty. Nurture yourself and the things you love - they will bloom.", love:"Everything you touch grows beautiful. 🌸" },
+      { emoji:"🔮", name:"The High Priestess", msg:"Something hidden is about to reveal itself. Pay attention to dreams and small signs - the universe is whispering.", love:"Your wisdom and mystery make you unforgettable. 🔮" },
+      { emoji:"⚡", name:"The Tower", msg:"A sudden change might shake things up - but it clears the way for something far better. Trust the process.", love:"Through every storm, you come out even more radiant. ⚡" },
+      { emoji:"🌈", name:"The World", msg:"You are exactly where you're supposed to be. A cycle is completing beautifully - celebrate how far you've come.", love:"You are whole, complete, and deeply wonderful. 🌈" },
+      { emoji:"🦋", name:"The Fool", msg:"A fresh start is calling your name. Say yes to something new - leap with joy and trust that you'll land softly.", love:"Your sense of wonder makes life magical for everyone near you. 🦋" },
+      { emoji:"🌺", name:"Strength", msg:"You have more courage than you realise. The gentle way you handle hard things is your greatest power.", love:"Your kindness is not weakness - it is extraordinary strength. 🌺" },
+      { emoji:"💫", name:"The Magician", msg:"You have everything you need to make your dreams happen. The magic is already inside you - use it.", love:"You make impossible things feel possible just by being you. 💫" },
       { emoji:"🕊️", name:"Justice", msg:"Balance is coming. What is right will prevail. Trust that fair outcomes are on their way to you.", love:"You deserve every good and honest thing the world has to offer. 🕊️" },
     ];
 
@@ -325,7 +325,7 @@
       picked = false;
       document.getElementById("resultBox").classList.remove("show");
       document.getElementById("pullAgainBtn").classList.remove("show");
-      document.getElementById("hint").textContent = "Pick one card — trust your gut 🌙";
+      document.getElementById("hint").textContent = "Pick one card - trust your gut 🌙";
 
       for (let i = 0; i < 3; i++) {
         document.getElementById(`card-${i}`).classList.remove("flipped");
@@ -340,3 +340,13 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+

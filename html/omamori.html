@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -59,7 +59,7 @@
     }
     header p { margin-top: 8px; font-size: clamp(1rem, 2.5vw, 1.2rem); opacity: 0.75; }
 
-    /* ── SHRINE AREA ── */
+    /* â”€â”€ SHRINE AREA â”€â”€ */
     .shrine {
       width: min(500px, 92vw);
       background: linear-gradient(160deg, rgba(253,245,230,0.95), rgba(255,255,255,0.9));
@@ -80,7 +80,7 @@
       opacity: 0.7;
     }
 
-    /* ── OMAMORI CHARM ── */
+    /* â”€â”€ OMAMORI CHARM â”€â”€ */
     .omamori-wrap {
       position: relative;
       cursor: pointer;
@@ -178,7 +178,7 @@
       opacity: 0.6;
     }
 
-    /* ── FORTUNE RESULT ── */
+    /* â”€â”€ FORTUNE RESULT â”€â”€ */
     .fortune-result {
       width: 100%;
       background: rgba(253,245,230,0.95);
@@ -236,7 +236,7 @@
     }
     .back-btn:hover { transform: translateY(-2px); }
   </style>
-  <script defer src="../js/site-runtime.js?v=20260321-runtime1"></script>
+  <script defer src="../js/site-runtime.js?v=20260331-runtime13"></script>
 </head>
 <body>
 
@@ -268,7 +268,7 @@
         <div class="omamori">
           <div class="omamori-tassel"></div>
           <div class="omamori-body">
-            <div class="omamori-kanji" id="omamoriKanji">御守</div>
+            <div class="omamori-kanji" id="omamoriKanji">å¾¡å®ˆ</div>
             <div class="omamori-label">OMAMORI</div>
           </div>
           <div class="omamori-fringe">
@@ -293,14 +293,14 @@
   <script>
     const fortunes = [
       { kanji:"愛", name:"Love & Warmth 💕", msg:"The universe has wrapped a blanket of love around you today. Someone near you holds you dearer than you know.", note:"Carry this warmth wherever you go today. 🌸" },
-      { kanji:"福", name:"Great Fortune 🌟", msg:"Abundance is flowing toward you. Small joys and unexpected gifts are hiding in the corners of your day — look for them.", note:"Fortune favors those who smile first. ✨" },
-      { kanji:"健", name:"Radiant Health 🌿", msg:"Your energy is strong. Take care of your beautiful self today — rest, nourish, breathe. You deserve to feel amazing.", note:"One deep breath. You've got this. 💚" },
-      { kanji:"縁", name:"Destined Connection 🔗", msg:"A bond in your life is fated and strong. The person who holds your heart is not there by chance — it was always meant to be.", note:"Some connections are written in the stars. 💫" },
-      { kanji:"幸", name:"Pure Happiness 🌈", msg:"Joy is not coming — it is already here, hiding in the ordinary. Today, let yourself be happy for no reason at all.", note:"You deserve happiness just for being you. 🌺" },
-      { kanji:"運", name:"Lucky Winds 🍃", msg:"Something you've been hoping for is quietly turning in your favour. Keep going — luck is on your side this season.", note:"Good things take time, but they do come. 🍀" },
+      { kanji:"福", name:"Great Fortune 🌟", msg:"Abundance is flowing toward you. Small joys and unexpected gifts are hiding in the corners of your day - look for them.", note:"Fortune favors those who smile first. ✨" },
+      { kanji:"健", name:"Radiant Health 🌿", msg:"Your energy is strong. Take care of your beautiful self today - rest, nourish, breathe. You deserve to feel amazing.", note:"One deep breath. You've got this. 💚" },
+      { kanji:"縁", name:"Destined Connection 🔗", msg:"A bond in your life is fated and strong. The person who holds your heart is not there by chance - it was always meant to be.", note:"Some connections are written in the stars. 💫" },
+      { kanji:"幸", name:"Pure Happiness 🌈", msg:"Joy is not coming - it is already here, hiding in the ordinary. Today, let yourself be happy for no reason at all.", note:"You deserve happiness just for being you. 🌺" },
+      { kanji:"運", name:"Lucky Winds 🍃", msg:"Something you've been hoping for is quietly turning in your favour. Keep going - luck is on your side this season.", note:"Good things take time, but they do come. 🍀" },
       { kanji:"夢", name:"Beautiful Dreams 🌙", msg:"Your dreams are not silly. They are signals. The things you want deeply are the things you are meant to have.", note:"Dream big, darling. The universe is listening. 🌙" },
       { kanji:"平", name:"Inner Peace ☁️", msg:"You are allowed to let go of what is heavy. Peace is your birthright. Rest in the knowledge that you are safe and loved.", note:"Let go of what isn't yours to carry. 🕊️" },
-      { kanji:"勝", name:"Victory is Yours ⚡", msg:"You are stronger than you think. Whatever challenge stands before you — you have already survived harder. You will win.", note:"Believe in yourself like I believe in you. 💪" },
+      { kanji:"勝", name:"Victory is Yours ⚡", msg:"You are stronger than you think. Whatever challenge stands before you - you have already survived harder. You will win.", note:"Believe in yourself like I believe in you. 💪" },
       { kanji:"心", name:"Pure Heart 💖", msg:"Your heart is good and pure and rare. The way you love and care for people is one of the most beautiful things about you.", note:"A pure heart always finds its way home. 💖" },
     ];
 
@@ -329,7 +329,7 @@
 
     function resetCharm() {
       used = false;
-      document.getElementById("omamoriKanji").textContent = "御守";
+      document.getElementById("omamoriKanji").textContent = "å¾¡å®ˆ";
       document.getElementById("fortuneResult").classList.remove("show");
       document.getElementById("newCharmBtn").classList.remove("show");
       document.getElementById("shakeHint").textContent = "Tap the charm to receive your blessing 🙏";
@@ -337,3 +337,13 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -63,7 +63,7 @@
     }
     header p { margin-top: 8px; font-size: clamp(1rem, 2.5vw, 1.2rem); opacity: 0.7; }
 
-    /* ── INPUT PANEL ── */
+    /* â”€â”€ INPUT PANEL â”€â”€ */
     .input-panel {
       width: min(680px, 92vw);
       background: linear-gradient(155deg, rgba(30,10,60,0.9), rgba(10,20,50,0.9));
@@ -124,7 +124,7 @@
     }
     .match-btn:hover { transform: translateY(-3px) scale(1.05); }
 
-    /* ── RESULT ── */
+    /* â”€â”€ RESULT â”€â”€ */
     .result-panel {
       width: min(680px, 92vw);
       background: linear-gradient(155deg, rgba(30,10,60,0.92), rgba(10,20,50,0.9));
@@ -239,7 +239,7 @@
     }
     .back-btn:hover { transform: translateY(-2px); }
   </style>
-  <script defer src="../js/site-runtime.js?v=20260321-runtime1"></script>
+  <script defer src="../js/site-runtime.js?v=20260331-runtime13"></script>
 </head>
 <body>
 
@@ -302,18 +302,18 @@
 
   <script>
     const signs = [
-      { name:"Aries",       emoji:"♈", el:"Fire",  dates:"Mar 21–Apr 19" },
-      { name:"Taurus",      emoji:"♉", el:"Earth", dates:"Apr 20–May 20" },
-      { name:"Gemini",      emoji:"♊", el:"Air",   dates:"May 21–Jun 20" },
-      { name:"Cancer",      emoji:"♋", el:"Water", dates:"Jun 21–Jul 22" },
-      { name:"Leo",         emoji:"♌", el:"Fire",  dates:"Jul 23–Aug 22" },
-      { name:"Virgo",       emoji:"♍", el:"Earth", dates:"Aug 23–Sep 22" },
-      { name:"Libra",       emoji:"♎", el:"Air",   dates:"Sep 23–Oct 22" },
-      { name:"Scorpio",     emoji:"♏", el:"Water", dates:"Oct 23–Nov 21" },
-      { name:"Sagittarius", emoji:"♐", el:"Fire",  dates:"Nov 22–Dec 21" },
-      { name:"Capricorn",   emoji:"♑", el:"Earth", dates:"Dec 22–Jan 19" },
-      { name:"Aquarius",    emoji:"♒", el:"Air",   dates:"Jan 20–Feb 18" },
-      { name:"Pisces",      emoji:"♓", el:"Water", dates:"Feb 19–Mar 20" },
+      { name:"Aries",       emoji:"♈", el:"Fire",  dates:"Mar 21-Apr 19" },
+      { name:"Taurus",      emoji:"♉", el:"Earth", dates:"Apr 20-May 20" },
+      { name:"Gemini",      emoji:"♊", el:"Air",   dates:"May 21-Jun 20" },
+      { name:"Cancer",      emoji:"♋", el:"Water", dates:"Jun 21-Jul 22" },
+      { name:"Leo",         emoji:"♌", el:"Fire",  dates:"Jul 23-Aug 22" },
+      { name:"Virgo",       emoji:"♍", el:"Earth", dates:"Aug 23-Sep 22" },
+      { name:"Libra",       emoji:"♎", el:"Air",   dates:"Sep 23-Oct 22" },
+      { name:"Scorpio",     emoji:"♏", el:"Water", dates:"Oct 23-Nov 21" },
+      { name:"Sagittarius", emoji:"♐", el:"Fire",  dates:"Nov 22-Dec 21" },
+      { name:"Capricorn",   emoji:"♑", el:"Earth", dates:"Dec 22-Jan 19" },
+      { name:"Aquarius",    emoji:"♒", el:"Air",   dates:"Jan 20-Feb 18" },
+      { name:"Pisces",      emoji:"♓", el:"Water", dates:"Feb 19-Mar 20" },
     ];
 
     // compatibility matrix [0-100]
@@ -353,11 +353,11 @@
     }
 
     function getRating(pct) {
-      if (pct >= 90) return { title:"Twin Flames 🔥💫", msg:"The stars didn't just align for you two — they threw a whole party. This connection is rare, electric, and deeply fated. You balance each other in the most beautiful way.", tip:"The universe waited a long time to bring you two together. 💫" };
+      if (pct >= 90) return { title:"Twin Flames 🔥💫", msg:"The stars didn't just align for you two - they threw a whole party. This connection is rare, electric, and deeply fated. You balance each other in the most beautiful way.", tip:"The universe waited a long time to bring you two together. 💫" };
       if (pct >= 80) return { title:"Cosmic Match ✨💖", msg:"Your energies complement each other naturally. There's a warmth and understanding between you that most people spend their whole lives searching for.", tip:"What you two have is not ordinary. Cherish it always. 🌙" };
-      if (pct >= 70) return { title:"Star-Crossed Sweethearts 🌟", msg:"You two bring out something interesting in each other. Your differences are your strengths — together you create a balance that's genuinely beautiful.", tip:"Opposites don't just attract — they complete. 💕" };
+      if (pct >= 70) return { title:"Star-Crossed Sweethearts 🌟", msg:"You two bring out something interesting in each other. Your differences are your strengths - together you create a balance that's genuinely beautiful.", tip:"Opposites don't just attract - they complete. 💕" };
       if (pct >= 60) return { title:"A Beautiful Mystery 🌸", msg:"There's a complexity to your connection that makes it fascinating. With understanding and patience, something truly special can grow here.", tip:"The best love stories have a little tension in them. 🌺" };
-      return { title:"A Unique Bond 🌈", msg:"You two are different souls on different paths — but that doesn't mean there isn't something real between you. Love transcends the stars.", tip:"Astrology is a guide, not a rule. Follow your heart. 💖" };
+      return { title:"A Unique Bond 🌈", msg:"You two are different souls on different paths - but that doesn't mean there isn't something real between you. Love transcends the stars.", tip:"Astrology is a guide, not a rule. Follow your heart. 💖" };
     }
 
     // populate selects
@@ -409,3 +409,13 @@
   </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+

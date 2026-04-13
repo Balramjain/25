@@ -44,9 +44,13 @@
       width:100%; height:180px;
       border-radius:12px;
       background:linear-gradient(135deg,#fff1d6,#e9ffe8);
-      display:grid; place-items:center;
-      font-family:"Cookiemonster",sans-serif;
-      color:#6a3a2e;
+      overflow:hidden;
+    }
+    .doggo-photo{
+      width:100%;
+      height:100%;
+      display:block;
+      object-fit:cover;
     }
     .caption{
       font-family:"Cookiemonster",sans-serif;
@@ -67,7 +71,7 @@
       font-family: "LoveDays", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
     }
   </style>
-  <script defer src="../js/site-runtime.js?v=20260321-runtime1"></script>
+  <script defer src="../js/site-runtime.js?v=20260331-runtime13"></script>
 </head>
 <body>
   <header>
@@ -75,18 +79,67 @@
     <p>A happy wall for your best doggo moments.</p>
   </header>
 
-  <section class="gallery">
-    <div class="card"><div class="frame">Dog Photo 1</div><div class="caption">Walkies day</div></div>
-    <div class="card"><div class="frame">Dog Photo 2</div><div class="caption">Fetch champion</div></div>
-    <div class="card"><div class="frame">Dog Photo 3</div><div class="caption">Cozy nap</div></div>
-    <div class="card"><div class="frame">Dog Photo 4</div><div class="caption">Puppy eyes</div></div>
-    <div class="card"><div class="frame">Dog Photo 5</div><div class="caption">Treat time</div></div>
-    <div class="card"><div class="frame">Dog Photo 6</div><div class="caption">Tail wags</div></div>
-  </section>
+  <section class="gallery" id="doggoGallery"></section>
 
-  <button class="back-btn" onclick="sessionStorage.setItem('cameFromPage','true'); location.href='index.html?v=20260315';">Go Back</button>
+  <button class="back-btn" onclick="sessionStorage.setItem('cameBack','true'); location.href='index.html?v=20260331-runtime13';">Go Back</button>
+
+  <script>
+    const doggoCaptions = [
+      "gimme money",
+      "robbin in the hood",
+      "i did not fart",
+      "Puppy eyes attack",
+      "Treat inspector",
+      "Zoomies mode",
+      "Park explorer",
+      "Sunbeam snoozer",
+      "cuteness alert",
+      "Goodest smile",
+      "Biscuit break",
+      "Cozy loaf",
+      "Sniff squad leader",
+      "Tiny guardian",
+      "Belly-rub CEO",
+      "Side-eye artist",
+      "Rainy paw patrol",
+      "Blanket monster",
+      "Nose boop expert",
+      "Sofa conqueror",
+      "Adventure paws",
+      "Happy bark hour",
+      "Love bug mode",
+      "Ball detective",
+      "Forever goodest"
+    ];
+
+    const doggoGallery = document.getElementById("doggoGallery");
+    doggoGallery.innerHTML = doggoCaptions.map((caption, index) => `
+      <article class="card">
+        <div class="frame">
+          <img
+            class="doggo-photo"
+            src="../image/doggo_gallery/D${index + 1}.jpg"
+            alt="Doggo photo ${index + 1}"
+            loading="lazy"
+            decoding="async"
+          />
+        </div>
+        <div class="caption">${caption}</div>
+      </article>
+    `).join("");
+  </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
 
 
 

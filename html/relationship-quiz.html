@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -32,7 +32,7 @@
       padding-bottom: 100px;
     }
 
-    /* ── floating blobs bg ── */
+    /* â”€â”€ floating blobs bg â”€â”€ */
     .blobs {
       position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
     }
@@ -49,7 +49,7 @@
       100% { transform: translate(30px,20px) scale(1.08); }
     }
 
-    /* ── header ── */
+    /* â”€â”€ header â”€â”€ */
     header {
       text-align: center;
       padding: 52px 24px 24px;
@@ -77,7 +77,7 @@
       opacity: 0.55;
     }
 
-    /* ── progress ── */
+    /* â”€â”€ progress â”€â”€ */
     .progress-wrap {
       position: relative; z-index: 2;
       max-width: 560px; margin: 0 auto 10px;
@@ -98,7 +98,7 @@
       transition: width 0.45s cubic-bezier(.4,0,.2,1);
     }
 
-    /* ── card ── */
+    /* â”€â”€ card â”€â”€ */
     .quiz-card {
       position: relative; z-index: 2;
       max-width: 560px;
@@ -134,7 +134,7 @@
       min-height: 58px;
     }
 
-    /* ── options ── */
+    /* â”€â”€ options â”€â”€ */
     .options {
       display: grid;
       gap: 10px;
@@ -179,7 +179,7 @@
     .opt-btn.wrong::before { opacity: 0; }
     .opt-btn:disabled { cursor: not-allowed; pointer-events: none; }
 
-    /* ── feedback ── */
+    /* â”€â”€ feedback â”€â”€ */
     .feedback {
       margin-top: 16px;
       padding: 12px 16px;
@@ -196,7 +196,7 @@
       to   { opacity:1; transform: translateY(0); }
     }
 
-    /* ── next btn ── */
+    /* â”€â”€ next btn â”€â”€ */
     .next-btn {
       display: none;
       margin-top: 20px;
@@ -217,7 +217,7 @@
     .next-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 28px rgba(194,102,122,0.4); }
     .next-btn.show { display: block; animation: fadeUp 0.3s ease; }
 
-    /* ── score screen ── */
+    /* â”€â”€ score screen â”€â”€ */
     #score-screen {
       display: none;
       position: relative; z-index: 2;
@@ -276,7 +276,7 @@
     }
     .retry-btn:hover { background: var(--pink2); transform: translateY(-2px); }
 
-    /* ── back btn ── */
+    /* â”€â”€ back btn â”€â”€ */
     .back-btn {
       position: fixed; left: 20px; bottom: 22px; z-index: 30;
       border: 1.5px solid var(--border);
@@ -294,7 +294,7 @@
     }
     .back-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(0,0,0,0.16); }
 
-    /* ── sparkles ── */
+    /* â”€â”€ sparkles â”€â”€ */
     .sparkle-wrap { position: fixed; inset: 0; pointer-events: none; z-index: 99; }
     .sparkle {
       position: absolute;
@@ -363,69 +363,124 @@
 
 <script>
 const questions = [
-  // ── Personal / relationship ──
-  { q: "Seri, when did we first start talking to each other?", opts: ["12th Feb 2019","14th Feb 2019","1st Jan 2019","20th March 2019"], ans: 0, fact: "Yep! 12th February 2019 — that's when it all started da! 🥺" },
-  { q: "Okay now tell — where exactly did he propose to you?", opts: ["Coffee shop","Sherwood walking track","Beach side","Some random park"], ans: 1, fact: "Sherwood walking track! He was so nervous ugh 🥹" },
-  { q: "When did the big proposal happen?", opts: ["13th June 2019","14th Feb 2019","1st July 2019","13th July 2019"], ans: 0, fact: "June 13th, 2019. A date to remember forever 💍" },
-  { q: "What did he give her during the proposal?", opts: ["Big red roses","Small colourful flowers","Chocolates","A teddy bear"], ans: 1, fact: "Small colourful flowers — simple but so so sweet la! 🌸" },
-  { q: "From first talking to proposing, how long did he wait?", opts: ["1 week","4 months","Over a year","6 months"], ans: 1, fact: "About 4 months! Patient guy da 😂" },
+  // â”€â”€ Personal / relationship â”€â”€
+  { q: "Seri, when did we first start talking to each other?", opts: ["12th Feb 2019","14th Feb 2019","1st Jan 2019","20th March 2019"], ans: 0, fact: "Yep! 12th February 2019 â€” that's when it all started da! ðŸ¥º" },
+  { q: "Okay now tell â€” where exactly did he propose to you?", opts: ["Coffee shop","Sherwood walking track","Beach side","Some random park"], ans: 1, fact: "Sherwood walking track! He was so nervous ugh ðŸ¥¹" },
+  { q: "When did the big proposal happen?", opts: ["13th June 2019","14th Feb 2019","1st July 2019","13th July 2019"], ans: 0, fact: "June 13th, 2019. A date to remember forever ðŸ’" },
+  { q: "What did he give her during the proposal?", opts: ["Big red roses","Small colourful flowers","Chocolates","A teddy bear"], ans: 1, fact: "Small colourful flowers â€” simple but so so sweet la! ðŸŒ¸" },
+  { q: "From first talking to proposing, how long did he wait?", opts: ["1 week","4 months","Over a year","6 months"], ans: 1, fact: "About 4 months! Patient guy da ðŸ˜‚" },
 
-  // ── His interests — cars ──
-  { q: "He is obsessed with cars. Which brand is his top love?", opts: ["Mercedes","Audi","BMW","Toyota"], ans: 2, fact: "BMW all day every day! The kidney grille hit different 😤" },
-  { q: "Which BMW series does he mostly fanboy about?", opts: ["1 Series & 2 Series","3 Series & 5 Series","7 Series & X5","M8 only"], ans: 1, fact: "3 Series and 5 Series — clean, sporty, perfect da! 🚘" },
-  { q: "What trim/variant does he love most in BMW?", opts: ["Luxury Line","M Sport","xDrive","Base model lol"], ans: 1, fact: "M Sport! That body kit and sporty bits? Chef's kiss 🔥" },
-  { q: "If he had to pick one Porsche, what would it be?", opts: ["Cayenne","Macan","911 GT3 RS","Panamera"], ans: 2, fact: "Porsche 911 GT3 RS — naturally aspirated engine music is unmatched 🏎️" },
-  { q: "What makes the 911 GT3 RS so special to him?", opts: ["It's cheap","It's a family car","Track-focused NA engine beast","Good fuel economy"], ans: 2, fact: "Track beast with a naturally aspirated flat-six that sings at redline. Pure da! 🎶" },
-  { q: "If he got a BMW 3 Series today, which colour would he most likely pick?", opts: ["White","Beige","Black or Alpine White","Yellow"], ans: 2, fact: "Black or Alpine White — classic, clean, no nonsense 🖤🤍" },
-  { q: "He sees a BMW M3 Competition and a 911 GT3 RS parked side by side. He takes a photo of:", opts: ["Neither","Both obviously","Only the M3","Only the GT3 RS"], ans: 1, fact: "BOTH and then spends 10 mins explaining the differences 😂" },
+  // â”€â”€ His interests â€” cars â”€â”€
+  { q: "He is obsessed with cars. Which brand is his top love?", opts: ["Mercedes","Audi","BMW","Toyota"], ans: 2, fact: "BMW all day every day! The kidney grille hit different ðŸ˜¤" },
+  { q: "Which BMW series does he mostly fanboy about?", opts: ["1 Series & 2 Series","3 Series & 5 Series","7 Series & X5","M8 only"], ans: 1, fact: "3 Series and 5 Series â€” clean, sporty, perfect da! ðŸš˜" },
+  { q: "What trim/variant does he love most in BMW?", opts: ["Luxury Line","M Sport","xDrive","Base model lol"], ans: 1, fact: "M Sport! That body kit and sporty bits? Chef's kiss ðŸ”¥" },
+  { q: "If he had to pick one Porsche, what would it be?", opts: ["Cayenne","Macan","911 GT3 RS","Panamera"], ans: 2, fact: "Porsche 911 GT3 RS â€” naturally aspirated engine music is unmatched ðŸŽï¸" },
+  { q: "What makes the 911 GT3 RS so special to him?", opts: ["It's cheap","It's a family car","Track-focused NA engine beast","Good fuel economy"], ans: 2, fact: "Track beast with a naturally aspirated flat-six that sings at redline. Pure da! ðŸŽ¶" },
+  { q: "If he got a BMW 3 Series today, which colour would he most likely pick?", opts: ["White","Beige","Black or Alpine White","Yellow"], ans: 2, fact: "Black or Alpine White â€” classic, clean, no nonsense ðŸ–¤ðŸ¤" },
+  { q: "He sees a BMW M3 Competition and a 911 GT3 RS parked side by side. He takes a photo of:", opts: ["Neither","Both obviously","Only the M3","Only the GT3 RS"], ans: 1, fact: "BOTH and then spends 10 mins explaining the differences ðŸ˜‚" },
 
-  // ── Bikes & adventure ──
-  { q: "Apart from cars, what else does he love riding?", opts: ["Scooters","Cycles only","Bikes (motorcycles)","Skateboards"], ans: 2, fact: "Bikes! Two wheels, full freedom 🏍️" },
-  { q: "His ideal weekend would include:", opts: ["Staying home and Netflix","Long bike ride and exploring","Shopping mall hangout","Sleeping all day"], ans: 1, fact: "Bike ride + exploring random places = perfect Saturday da! 🛣️" },
-  { q: "What kind of trips does he prefer?", opts: ["Luxury resort stays","Adventure and travel","City shopping trips","Staycations only"], ans: 1, fact: "Adventure and travel — the more crazy, the more fun for him! 🌍" },
-  { q: "If there's a trip planned, he would most likely:", opts: ["Research every single detail","Just show up and figure out","Cancel last minute","Only go if 5-star hotel"], ans: 0, fact: "He'll research the route, the bikes, the stops — full planner mode 😅" },
-  { q: "His travel style is best described as:", opts: ["Luxury only","Slow and relaxing","Fast, crazy and fun","I don't like travelling"], ans: 2, fact: "Fast, crazy and fun — that's literally his personality da! 🤪" },
-  { q: "What would he say if someone suggested a boring safe trip with zero adventure?", opts: ["Sounds amazing!","Okay la","No fun da, let's do something crazy","I'll come but only if there's AC"], ans: 2, fact: "He'd immediately start planning something wilder 😂" },
+  // â”€â”€ Bikes & adventure â”€â”€
+  { q: "Apart from cars, what else does he love riding?", opts: ["Scooters","Cycles only","Bikes (motorcycles)","Skateboards"], ans: 2, fact: "Bikes! Two wheels, full freedom ðŸï¸" },
+  { q: "His ideal weekend would include:", opts: ["Staying home and Netflix","Long bike ride and exploring","Shopping mall hangout","Sleeping all day"], ans: 1, fact: "Bike ride + exploring random places = perfect Saturday da! ðŸ›£ï¸" },
+  { q: "What kind of trips does he prefer?", opts: ["Luxury resort stays","Adventure and travel","City shopping trips","Staycations only"], ans: 1, fact: "Adventure and travel â€” the more crazy, the more fun for him! ðŸŒ" },
+  { q: "If there's a trip planned, he would most likely:", opts: ["Research every single detail","Just show up and figure out","Cancel last minute","Only go if 5-star hotel"], ans: 0, fact: "He'll research the route, the bikes, the stops â€” full planner mode ðŸ˜…" },
+  { q: "His travel style is best described as:", opts: ["Luxury only","Slow and relaxing","Fast, crazy and fun","I don't like travelling"], ans: 2, fact: "Fast, crazy and fun â€” that's literally his personality da! ðŸ¤ª" },
+  { q: "What would he say if someone suggested a boring safe trip with zero adventure?", opts: ["Sounds amazing!","Okay la","No fun da, let's do something crazy","I'll come but only if there's AC"], ans: 2, fact: "He'd immediately start planning something wilder ðŸ˜‚" },
 
-  // ── Personality / general ──
-  { q: "Which one describes him best?", opts: ["Quiet and reserved","Loud and fun","Chill but secretly wild","Serious all the time"], ans: 2, fact: "Chill on the outside but absolute chaos on the inside 😂" },
-  { q: "He's the type of person who:", opts: ["Plans everything months ahead","Decides to go on a trip same day","Never leaves the house","Only does safe activities"], ans: 1, fact: "Same-day plan? Let's GO! That's his energy 🚀" },
-  { q: "What does he do when he's bored?", opts: ["Stare at walls","Car videos, bike rides or plan a trip","Cook elaborate meals","Nothing, stays bored"], ans: 1, fact: "YouTube car videos or just takes the bike out for a spin 🎥🏍️" },
-  { q: "Pick the sentence he'd most likely say:", opts: ["Let's be safe and stay home","Dei let's go yaar, don't overthink","I'm too tired","Maybe next time"], ans: 1, fact: "'Dei let's go yaar' is his whole personality 😂" },
-  { q: "If he could have one superpower it would be:", opts: ["Invisibility","Fly anywhere instantly like a GPS drone","Mind reading","Super strength"], ans: 1, fact: "Fly instantly so he can explore every road trip destination 😄" },
-  { q: "His love language is mostly:", opts: ["Words only","Quality time and doing things together","Just gifts","Silent treatment"], ans: 1, fact: "Spending quality time, going on rides, making memories — that's his love language 💛" },
-  { q: "If she needs help with something, he:", opts: ["Ignores it","Figures it out no matter what","Says ask someone else","Panics and leaves"], ans: 1, fact: "He'll figure it out — stubbornly helpful like that 🤓" },
+  // â”€â”€ Personality / general â”€â”€
+  { q: "Which one describes him best?", opts: ["Quiet and reserved","Loud and fun","Chill but secretly wild","Serious all the time"], ans: 2, fact: "Chill on the outside but absolute chaos on the inside ðŸ˜‚" },
+  { q: "He's the type of person who:", opts: ["Plans everything months ahead","Decides to go on a trip same day","Never leaves the house","Only does safe activities"], ans: 1, fact: "Same-day plan? Let's GO! That's his energy ðŸš€" },
+  { q: "What does he do when he's bored?", opts: ["Stare at walls","Car videos, bike rides or plan a trip","Cook elaborate meals","Nothing, stays bored"], ans: 1, fact: "YouTube car videos or just takes the bike out for a spin ðŸŽ¥ðŸï¸" },
+  { q: "Pick the sentence he'd most likely say:", opts: ["Let's be safe and stay home","Dei let's go yaar, don't overthink","I'm too tired","Maybe next time"], ans: 1, fact: "'Dei let's go yaar' is his whole personality ðŸ˜‚" },
+  { q: "If he could have one superpower it would be:", opts: ["Invisibility","Fly anywhere instantly like a GPS drone","Mind reading","Super strength"], ans: 1, fact: "Fly instantly so he can explore every road trip destination ðŸ˜„" },
+  { q: "His love language is mostly:", opts: ["Words only","Quality time and doing things together","Just gifts","Silent treatment"], ans: 1, fact: "Spending quality time, going on rides, making memories â€” that's his love language ðŸ’›" },
+  { q: "If she needs help with something, he:", opts: ["Ignores it","Figures it out no matter what","Says ask someone else","Panics and leaves"], ans: 1, fact: "He'll figure it out â€” stubbornly helpful like that ðŸ¤“" },
 
-  // ── Relationship trivia ──
-  { q: "What year did everything start?", opts: ["2017","2018","2019","2020"], ans: 2, fact: "2019 was the year! From strangers to everything 🥹" },
-  { q: "The first conversation happened in which month?", opts: ["January","February","March","June"], ans: 1, fact: "February 2019 — peak romance month la! 💌" },
-  { q: "The proposal was in which month?", opts: ["February","April","June","August"], ans: 2, fact: "June 13th, 2019. Right in the middle of the year 🌸" },
-  { q: "How many months between first talking and the proposal?", opts: ["2 months","4 months","8 months","12 months"], ans: 1, fact: "Roughly 4 months! Fast mover but the right kind 😌" },
-  { q: "The proposal spot — Sherwood. What kind of place is it?", opts: ["A fancy restaurant","A walking track / park area","A beach","A rooftop"], ans: 1, fact: "A walking track — peaceful, no crowd, just them and small colourful flowers 🌼" },
-  { q: "What was special about the flowers he gave?", opts: ["They were expensive","They were small and colourful","They were fake","They were a single rose"], ans: 1, fact: "Small and colourful — not show-off, but full of love da! 🌈🌸" },
+  // â”€â”€ Relationship trivia â”€â”€
+  { q: "What year did everything start?", opts: ["2017","2018","2019","2020"], ans: 2, fact: "2019 was the year! From strangers to everything ðŸ¥¹" },
+  { q: "The first conversation happened in which month?", opts: ["January","February","March","June"], ans: 1, fact: "February 2019 â€” peak romance month la! ðŸ’Œ" },
+  { q: "The proposal was in which month?", opts: ["February","April","June","August"], ans: 2, fact: "June 13th, 2019. Right in the middle of the year ðŸŒ¸" },
+  { q: "How many months between first talking and the proposal?", opts: ["2 months","4 months","8 months","12 months"], ans: 1, fact: "Roughly 4 months! Fast mover but the right kind ðŸ˜Œ" },
+  { q: "The proposal spot â€” Sherwood. What kind of place is it?", opts: ["A fancy restaurant","A walking track / park area","A beach","A rooftop"], ans: 1, fact: "A walking track â€” peaceful, no crowd, just them and small colourful flowers ðŸŒ¼" },
+  { q: "What was special about the flowers he gave?", opts: ["They were expensive","They were small and colourful","They were fake","They were a single rose"], ans: 1, fact: "Small and colourful â€” not show-off, but full of love da! ðŸŒˆðŸŒ¸" },
 
-  // ── Food & daily life (generalised fun) ──
-  { q: "What kind of food vibe does he most likely enjoy?", opts: ["Only fine dining","Street food and good biryani","Diet food only","Doesn't care about food"], ans: 1, fact: "Street food and biryani hits different after a long bike ride 😋" },
-  { q: "His ideal Friday night is:", opts: ["Alone at home","Long drive or ride with her","Watching sad movies","Sleeping at 9 PM"], ans: 1, fact: "Long drive, good music, her company — perfect Friday da! 🌙" },
-  { q: "If she's sad, he most likely:", opts: ["Ignores it","Overthinks but still shows up","Sends a meme","Panics and runs"], ans: 1, fact: "Overthinks a little but always shows up — he cares too much 💙" },
-  { q: "They're planning a road trip. Who's driving?", opts: ["She is","He is — obviously","They take a cab","Nobody, they cancel"], ans: 1, fact: "Him. 100%. And he already has the playlist ready 😂" },
-  { q: "Pick his most used phrase:", opts: ["Whatever da","Dei come let's go!","I don't know la","Let me think about it"], ans: 1, fact: "'Dei come let's go!' — Bangalore maximum energy 😂" },
-  { q: "On a rainy day, what's he most likely doing?", opts: ["Sleeping all day","Going for a bike ride in the rain","Crying about the weather","Cancelling all plans"], ans: 1, fact: "Bike ride in the rain — he calls it 'vibes' 🌧️🏍️" },
-  { q: "His phone gallery is mostly full of:", opts: ["Selfies","Car and bike photos + trip pics","Food photos","Nothing, deleted everything"], ans: 1, fact: "Cars, bikes, roads, and some very chaotic trip photos 📸" },
-  { q: "He sees a BMW 5 Series M Sport on the road. He:", opts: ["Doesn't notice","Immediately points it out to her","Pretends he doesn't care","Takes 37 photos"], ans: 3, fact: "37 photos minimum and a full monologue about the specs 😂" },
-  { q: "What's his take on speed?", opts: ["Slow and steady","Speed is fun but safety matters","Doesn't care","Only slow roads"], ans: 1, fact: "Loves speed but knows when to be responsible — balance da! ⚡" },
-  { q: "If she buys him a gift, he prefers:", opts: ["Expensive jewellery","Something related to cars or bikes or travel","Clothes","He doesn't like gifts"], ans: 1, fact: "Anything car, bike or adventure related and he's over the moon 🎁" },
+  // â”€â”€ Food & daily life (generalised fun) â”€â”€
+  { q: "What kind of food vibe does he most likely enjoy?", opts: ["Only fine dining","Street food and good biryani","Diet food only","Doesn't care about food"], ans: 1, fact: "Street food and biryani hits different after a long bike ride ðŸ˜‹" },
+  { q: "His ideal Friday night is:", opts: ["Alone at home","Long drive or ride with her","Watching sad movies","Sleeping at 9 PM"], ans: 1, fact: "Long drive, good music, her company â€” perfect Friday da! ðŸŒ™" },
+  { q: "If she's sad, he most likely:", opts: ["Ignores it","Overthinks but still shows up","Sends a meme","Panics and runs"], ans: 1, fact: "Overthinks a little but always shows up â€” he cares too much ðŸ’™" },
+  { q: "They're planning a road trip. Who's driving?", opts: ["She is","He is â€” obviously","They take a cab","Nobody, they cancel"], ans: 1, fact: "Him. 100%. And he already has the playlist ready ðŸ˜‚" },
+  { q: "Pick his most used phrase:", opts: ["Whatever da","Dei come let's go!","I don't know la","Let me think about it"], ans: 1, fact: "'Dei come let's go!' â€” Bangalore maximum energy ðŸ˜‚" },
+  { q: "On a rainy day, what's he most likely doing?", opts: ["Sleeping all day","Going for a bike ride in the rain","Crying about the weather","Cancelling all plans"], ans: 1, fact: "Bike ride in the rain â€” he calls it 'vibes' ðŸŒ§ï¸ðŸï¸" },
+  { q: "His phone gallery is mostly full of:", opts: ["Selfies","Car and bike photos + trip pics","Food photos","Nothing, deleted everything"], ans: 1, fact: "Cars, bikes, roads, and some very chaotic trip photos ðŸ“¸" },
+  { q: "He sees a BMW 5 Series M Sport on the road. He:", opts: ["Doesn't notice","Immediately points it out to her","Pretends he doesn't care","Takes 37 photos"], ans: 3, fact: "37 photos minimum and a full monologue about the specs ðŸ˜‚" },
+  { q: "What's his take on speed?", opts: ["Slow and steady","Speed is fun but safety matters","Doesn't care","Only slow roads"], ans: 1, fact: "Loves speed but knows when to be responsible â€” balance da! âš¡" },
+  { q: "If she buys him a gift, he prefers:", opts: ["Expensive jewellery","Something related to cars or bikes or travel","Clothes","He doesn't like gifts"], ans: 1, fact: "Anything car, bike or adventure related and he's over the moon ðŸŽ" },
 
-  // ── Fun last batch ──
-  { q: "BMW 3 Series M Sport vs 5 Series M Sport — if he had to choose one?", opts: ["3 Series — sporty and nimble","5 Series — comfortable but still M Sport","Can't choose, both","Neither, give me the GT3 RS"], ans: 0, fact: "3 Series M Sport — lighter, more fun to drive, pure driving machine da! 🚗" },
-  { q: "He finds out there's a new GT3 RS variant with more downforce. His reaction?", opts: ["Meh, whatever","Full youtube deep dive that night","Doesn't care","Asks her to buy it"], ans: 1, fact: "Deep dive starting at 11 PM, eyes wide open at 2 AM 😂" },
-  { q: "She surprises him with a bike trip to Coorg. His face?", opts: ["Confused","Disappointed","Absolute pure joy — best reaction ever","Worried about packing"], ans: 2, fact: "Biggest smile, bag packed in 10 minutes flat 😍" },
-  { q: "What does he value most in a relationship?", opts: ["Money and status","Loyalty, fun and real connection","Looks only","Silence"], ans: 1, fact: "Loyalty + having fun together + being real — that's everything to him 💛" },
-  { q: "If he had to describe her in one word?", opts: ["Annoying (jk)","His person","Okay la","Fine I guess"], ans: 1, fact: "His person. Simple as that. Always. 🥹" },
-  { q: "What does February 12th mean to them?", opts: ["Nothing special","The day it all began 💫","Just another day","Her birthday"], ans: 1, fact: "The day two people started talking and changed each other's lives forever 💌" },
-  { q: "What does June 13th mean to them?", opts: ["Random Tuesday","The proposal date — he asked, she said yes 💍","Her cat's birthday","Nothing"], ans: 1, fact: "June 13th, 2019 — the day he asked and everything became official 🌸" },
-  { q: "At the end of the day, this relationship is best described as:", opts: ["Complicated","A beautiful adventure with the right person","Boring and routine","Still figuring it out"], ans: 1, fact: "A beautiful adventure — with bikes, BMWs, small colourful flowers, and a lot of love 💕" },
+  // â”€â”€ Fun last batch â”€â”€
+  { q: "BMW 3 Series M Sport vs 5 Series M Sport â€” if he had to choose one?", opts: ["3 Series â€” sporty and nimble","5 Series â€” comfortable but still M Sport","Can't choose, both","Neither, give me the GT3 RS"], ans: 0, fact: "3 Series M Sport â€” lighter, more fun to drive, pure driving machine da! ðŸš—" },
+  { q: "He finds out there's a new GT3 RS variant with more downforce. His reaction?", opts: ["Meh, whatever","Full youtube deep dive that night","Doesn't care","Asks her to buy it"], ans: 1, fact: "Deep dive starting at 11 PM, eyes wide open at 2 AM ðŸ˜‚" },
+  { q: "She surprises him with a bike trip to Coorg. His face?", opts: ["Confused","Disappointed","Absolute pure joy â€” best reaction ever","Worried about packing"], ans: 2, fact: "Biggest smile, bag packed in 10 minutes flat ðŸ˜" },
+  { q: "What does he value most in a relationship?", opts: ["Money and status","Loyalty, fun and real connection","Looks only","Silence"], ans: 1, fact: "Loyalty + having fun together + being real â€” that's everything to him ðŸ’›" },
+  { q: "If he had to describe her in one word?", opts: ["Annoying (jk)","His person","Okay la","Fine I guess"], ans: 1, fact: "His person. Simple as that. Always. ðŸ¥¹" },
+  { q: "What does February 12th mean to them?", opts: ["Nothing special","The day it all began ðŸ’«","Just another day","Her birthday"], ans: 1, fact: "The day two people started talking and changed each other's lives forever ðŸ’Œ" },
+  { q: "What does June 13th mean to them?", opts: ["Random Tuesday","The proposal date â€” he asked, she said yes ðŸ’","Her cat's birthday","Nothing"], ans: 1, fact: "June 13th, 2019 â€” the day he asked and everything became official ðŸŒ¸" },
+  { q: "At the end of the day, this relationship is best described as:", opts: ["Complicated","A beautiful adventure with the right person","Boring and routine","Still figuring it out"], ans: 1, fact: "A beautiful adventure â€” with bikes, BMWs, small colourful flowers, and a lot of love ðŸ’•" },
 ];
+
+function repairCopy(value) {
+  if (typeof value !== "string") return value;
+
+  return value
+    .replaceAll("â€”", "-")
+    .replaceAll("â€“", "-")
+    .replaceAll("â†’", "→")
+    .replaceAll("âœ“", "✓")
+    .replaceAll("âœ—", "✗")
+    .replaceAll("â™¡", "♡")
+    .replaceAll("ðŸ’•", "💕")
+    .replaceAll("ðŸŒ¸", "🌸")
+    .replaceAll("ðŸ¥º", "🥺")
+    .replaceAll("ðŸ¥¹", "🥹")
+    .replaceAll("ðŸ’", "💍")
+    .replaceAll("ðŸ˜‚", "😂")
+    .replaceAll("ðŸ˜¤", "😤")
+    .replaceAll("ðŸš˜", "🚘")
+    .replaceAll("ðŸ”¥", "🔥")
+    .replaceAll("ðŸŽï¸", "🏎️")
+    .replaceAll("ðŸŽ¶", "🎶")
+    .replaceAll("ðŸ–¤ðŸ¤", "🖤🤍")
+    .replaceAll("ðŸï¸", "🏍️")
+    .replaceAll("ðŸ›£ï¸", "🛣️")
+    .replaceAll("ðŸŒ", "🌍")
+    .replaceAll("ðŸ˜…", "😅")
+    .replaceAll("ðŸ¤ª", "🤪")
+    .replaceAll("ðŸš€", "🚀")
+    .replaceAll("ðŸ˜„", "😄")
+    .replaceAll("ðŸ’›", "💛")
+    .replaceAll("ðŸ¤“", "🤓")
+    .replaceAll("ðŸ’Œ", "💌")
+    .replaceAll("ðŸŒ¼", "🌼")
+    .replaceAll("ðŸŒˆ", "🌈")
+    .replaceAll("ðŸ˜‹", "😋")
+    .replaceAll("ðŸŒ™", "🌙")
+    .replaceAll("ðŸ’™", "💙")
+    .replaceAll("ðŸŒ§ï¸", "🌧️")
+    .replaceAll("ðŸ“¸", "📸")
+    .replaceAll("âš¡", "⚡")
+    .replaceAll("ðŸŽ", "🎁")
+    .replaceAll("ðŸš—", "🚗")
+    .replaceAll("ðŸ˜", "😍")
+    .replaceAll("ðŸ’«", "💫")
+    .replaceAll("ðŸŽ‰", "🎉")
+    .replaceAll("ðŸ†", "🏆")
+    .replaceAll("ðŸ’€", "💀");
+}
+
+questions.forEach((q) => {
+  q.q = repairCopy(q.q);
+  q.fact = repairCopy(q.fact);
+  q.opts = q.opts.map(repairCopy);
+});
 
 let current = 0;
 let score = 0;
@@ -530,26 +585,26 @@ function showScore() {
   let emoji, title, msg;
 
   if (pct >= 0.9) {
-    emoji = '🏆'; title = 'Soulmates confirmed da!';
-    msg = `${score}/50 — You know each other better than anyone else on this planet. From February 12th to June 13th to Sherwood walking track — you remember it all. BMWs, bike rides, crazy trips — you were there for every single bit of it. This is the real thing da! 💕`;
+    emoji = 'ðŸ†'; title = 'Soulmates confirmed da!';
+    msg = `${score}/50 â€” You know each other better than anyone else on this planet. From February 12th to June 13th to Sherwood walking track â€” you remember it all. BMWs, bike rides, crazy trips â€” you were there for every single bit of it. This is the real thing da! ðŸ’•`;
   } else if (pct >= 0.75) {
-    emoji = '💕'; title = "Pretty close, not bad la!";
-    msg = `${score}/50 — You know the big stuff! The proposal at Sherwood, the small colourful flowers, the BMW obsession — all there. A few details slipped but honestly, you two just get each other 🌸`;
+    emoji = 'ðŸ’•'; title = "Pretty close, not bad la!";
+    msg = `${score}/50 â€” You know the big stuff! The proposal at Sherwood, the small colourful flowers, the BMW obsession â€” all there. A few details slipped but honestly, you two just get each other ðŸŒ¸`;
   } else if (pct >= 0.55) {
-    emoji = '😊'; title = "Decent effort da!";
-    msg = `${score}/50 — You've got the vibes right even if some facts went fuzzy. Go re-read the love story from Feb 12th 2019 again and come back stronger! 🌼`;
+    emoji = 'ðŸ˜Š'; title = "Decent effort da!";
+    msg = `${score}/50 â€” You've got the vibes right even if some facts went fuzzy. Go re-read the love story from Feb 12th 2019 again and come back stronger! ðŸŒ¼`;
   } else if (pct >= 0.35) {
-    emoji = '😅'; title = "Aye, need to pay more attention!";
-    msg = `${score}/50 — Bro/gurl, the man proposed at Sherwood with small colourful flowers and drives BMWs. These are not secret facts 😂 Try again!`;
+    emoji = 'ðŸ˜…'; title = "Aye, need to pay more attention!";
+    msg = `${score}/50 â€” Bro/gurl, the man proposed at Sherwood with small colourful flowers and drives BMWs. These are not secret facts ðŸ˜‚ Try again!`;
   } else {
-    emoji = '😂'; title = "Were you even there??";
-    msg = `${score}/50 — Okay this is rough da. Start from February 12th 2019, read slowly, and come back. We believe in you! 💀`;
+    emoji = 'ðŸ˜‚'; title = "Were you even there??";
+    msg = `${score}/50 â€” Okay this is rough da. Start from February 12th 2019, read slowly, and come back. We believe in you! ðŸ’€`;
   }
 
-  document.getElementById('scoreEmoji').textContent = emoji;
-  document.getElementById('scoreTitle').textContent = title;
+  document.getElementById('scoreEmoji').textContent = repairCopy(emoji);
+  document.getElementById('scoreTitle').textContent = repairCopy(title);
   document.getElementById('scoreBig').textContent = score;
-  document.getElementById('scoreMsg').textContent = msg;
+  document.getElementById('scoreMsg').textContent = repairCopy(msg);
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 

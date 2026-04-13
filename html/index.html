@@ -21,7 +21,7 @@
   </style>
 
   <link rel="stylesheet" href="../css/index.css" />
-  <script defer src="../js/site-runtime.js?v=20260321-runtime1"></script>
+  <script defer src="../js/site-runtime.js?v=20260331-runtime13"></script>
 </head>
 
 <body>
@@ -132,6 +132,13 @@
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     if ("scrollRestoration" in history) history.scrollRestoration = "manual";
     let _initDone = false;
+    let latestScrollY = Math.max(0, Math.round(window.scrollY));
+    let lastStoredScrollY = savedScrollY >= 0 ? savedScrollY : latestScrollY;
+    let persistTimer = 0;
+    let snapMeasureRaf = 0;
+    let snapLockTimer = 0;
+    let snapPositions = [];
+    let snapViewportHeight = window.innerHeight;
 
     function getBehavior() {
       return prefersReducedMotion.matches ? "auto" : "smooth";
@@ -139,7 +146,12 @@
 
     // All scrolls go through here — always pixel-based
     function scrollToY(y, behavior) {
-      window.scrollTo({ top: Math.max(0, Math.round(y)), behavior: behavior ?? getBehavior() });
+      const nextY = Math.max(0, Math.round(y));
+      const nextBehavior = behavior ?? getBehavior();
+      if (nextBehavior === "auto") {
+        latestScrollY = nextY;
+      }
+      window.scrollTo({ top: nextY, behavior: nextBehavior });
     }
 
     function scrollToEl(el, nudge, behavior) {
@@ -160,11 +172,15 @@
 
     function withSnapLockDisabled(fn) {
       document.documentElement.classList.add("snap-lock-off");
+      if (snapLockTimer) {
+        clearTimeout(snapLockTimer);
+      }
       requestAnimationFrame(() => {
         fn();
-        setTimeout(() => {
+        snapLockTimer = setTimeout(() => {
           document.documentElement.classList.remove("snap-lock-off");
-        }, prefersReducedMotion.matches ? 80 : 750);
+          snapLockTimer = 0;
+        }, prefersReducedMotion.matches ? 120 : 1100);
       });
     }
 
@@ -192,6 +208,8 @@
     // LS_SCROLL_LIVE keeps updating independently for refresh restore.
     function setReturnTarget(id) {
       sessionStorage.setItem(SS_CAME_BACK, "true");
+      latestScrollY = Math.max(0, Math.round(window.scrollY));
+      persistScrollPos(true);
       localStorage.setItem(LS_SCROLL_CLICK, String(Math.round(window.scrollY)));
       localStorage.setItem(LS_RETURN_ID, id);
     }
@@ -222,8 +240,32 @@
     // Writes to LS_SCROLL_LIVE only — never touches LS_SCROLL_CLICK.
     // LS_SCROLL_CLICK is frozen at button-click time and only overwritten
     // when a new button is clicked.
-    function persistScrollPos() {
-      localStorage.setItem(LS_SCROLL_LIVE, String(Math.round(window.scrollY)));
+    function persistScrollPos(force) {
+      const flush = () => {
+        persistTimer = 0;
+        const nextY = Math.max(0, Math.round(latestScrollY));
+        if (nextY === lastStoredScrollY) return;
+        lastStoredScrollY = nextY;
+        try {
+          localStorage.setItem(LS_SCROLL_LIVE, String(nextY));
+        } catch (error) {
+          // Ignore storage failures so scrolling never stalls.
+        }
+      };
+
+      if (force) {
+        if (persistTimer) {
+          clearTimeout(persistTimer);
+          persistTimer = 0;
+        }
+        flush();
+        return;
+      }
+
+      if (persistTimer) {
+        clearTimeout(persistTimer);
+      }
+      persistTimer = window.setTimeout(flush, 140);
     }
 
     // ── Startup ────────────────────────────────────────────────────────
@@ -251,6 +293,8 @@
       localStorage.setItem(LS_VISITED, "true");
       localStorage.setItem(LS_MUTED, "false");
       localStorage.setItem(LS_SCROLL_LIVE, "0");
+      latestScrollY = 0;
+      lastStoredScrollY = 0;
       localStorage.removeItem(LS_SCROLL_CLICK);
       localStorage.removeItem(LS_RETURN_ID);
       sessionStorage.removeItem(SS_CAME_BACK);
@@ -261,7 +305,7 @@
 
     function toggleMusic() {
       if (music.paused) {
-        music.play();
+        music.play().catch(() => {});
         btn.innerText = "🔊";
         btn.style.transform = "scale(1.2) rotate(0deg)";
         localStorage.setItem(LS_MUTED, "false");
@@ -282,6 +326,7 @@
     let lastIntentDir = "down";
     let lastIntentTs  = 0;
     let touchY        = null;
+    let cachedSnapSections = [];
 
     function setIntentDir(dir) {
       if (dir !== "up" && dir !== "down") return;
@@ -294,14 +339,42 @@
       return Date.now() - lastIntentTs < 900 ? lastIntentDir : lastScrollDir;
     }
 
-    function getSnapSections() {
-      return SNAP_IDS.map(id => document.getElementById(id)).filter(Boolean);
+    function refreshSnapSections() {
+      cachedSnapSections = SNAP_IDS.map(id => document.getElementById(id)).filter(Boolean);
+      snapPositions = [];
+      return cachedSnapSections;
     }
 
-    function getCurrentIdx(sections) {
-      const probe = window.scrollY + window.innerHeight * 0.3;
+    function getSnapSections() {
+      return cachedSnapSections.length ? cachedSnapSections : refreshSnapSections();
+    }
+
+    function getSnapPositions() {
+      const sections = getSnapSections();
+      if (!sections.length) return [];
+      if (snapPositions.length === sections.length && snapViewportHeight === window.innerHeight) {
+        return snapPositions;
+      }
+
+      snapViewportHeight = window.innerHeight;
+      snapPositions = sections.map(section => section.offsetTop);
+      return snapPositions;
+    }
+
+    function queueSnapRefresh() {
+      if (snapMeasureRaf) return;
+      snapMeasureRaf = requestAnimationFrame(() => {
+        snapMeasureRaf = 0;
+        refreshSnapSections();
+        getSnapPositions();
+        refreshNavBtn();
+      });
+    }
+
+    function getCurrentIdx(sections, positions) {
+      const probe = latestScrollY + window.innerHeight * 0.3;
       for (let i = sections.length - 1; i >= 0; i--) {
-        if (probe >= sections[i].offsetTop) return i;
+        if (probe >= positions[i]) return i;
       }
       return 0;
     }
@@ -309,20 +382,21 @@
     function getNavState() {
       const sections = getSnapSections();
       if (!sections.length) return { dir: "down", target: null };
-      const idx     = getCurrentIdx(sections);
-      const scrollY = window.scrollY;
+      const positions = getSnapPositions();
+      const idx     = getCurrentIdx(sections, positions);
+      const scrollY = latestScrollY;
       const zone    = 60;
       const preferredDir = getPreferredDir();
-      const lastSection = sections[sections.length - 1];
+      const lastSectionTop = positions[positions.length - 1];
       const maxScrollY = document.documentElement.scrollHeight - window.innerHeight;
 
-      if (lastSection && (scrollY >= lastSection.offsetTop - zone || scrollY >= maxScrollY - 4)) {
+      if (typeof lastSectionTop === "number" && (scrollY >= lastSectionTop - zone || scrollY >= maxScrollY - 4)) {
         return { dir: "up", target: sections[Math.max(sections.length - 2, 0)] };
       }
 
       for (let i = 0; i < sections.length - 1; i++) {
-        const inZone = scrollY > sections[i].offsetTop + zone
-                    && scrollY < sections[i + 1].offsetTop - zone;
+        const inZone = scrollY > positions[i] + zone
+                    && scrollY < positions[i + 1] - zone;
         if (inZone) {
           const d = preferredDir === "up" ? "up" : "down";
           return { dir: d, target: d === "up" ? sections[i] : sections[i + 1] };
@@ -353,17 +427,18 @@
       const { target } = getNavState();
       if (!target) return;
 
-      if (target.id === "time-since") {
-        quickNavBtn.innerText = "⤴";
-        quickNavBtn.setAttribute("aria-label", "Scroll up");
-        quickNavBtn.classList.remove("to-bottom");
-        quickNavBtn.classList.add("to-top");
-        scrollToY(getBottomLockY(), getBehavior());
-        setTimeout(refreshNavBtn, prefersReducedMotion.matches ? 40 : 420);
-        return;
-      }
+      withSnapLockDisabled(() => {
+        if (target.id === "time-since") {
+          quickNavBtn.innerText = "⤴";
+          quickNavBtn.setAttribute("aria-label", "Scroll up");
+          quickNavBtn.classList.remove("to-bottom");
+          quickNavBtn.classList.add("to-top");
+          scrollToY(getBottomLockY(), getBehavior());
+          return;
+        }
 
-      scrollToEl(target, 0);
+        scrollToEl(target, 0);
+      });
       setTimeout(refreshNavBtn, prefersReducedMotion.matches ? 40 : 420);
     });
 
@@ -402,6 +477,7 @@
     let rafPending = false;
     window.addEventListener("scroll", () => {
       const y = window.scrollY;
+      latestScrollY = Math.max(0, Math.round(y));
       if (Math.abs(y - lastScrollY) > 1) {
         lastScrollDir = y > lastScrollY ? "down" : "up";
         lastScrollY   = y;
@@ -410,15 +486,38 @@
         rafPending = true;
         requestAnimationFrame(() => {
           refreshNavBtn();
-          updateBgBlend();
+          if (typeof window.updateBgBlend === "function") {
+            window.updateBgBlend();
+          }
+          if (typeof window.maybeSpawnBubbleOnScroll === "function") {
+            window.maybeSpawnBubbleOnScroll(Date.now());
+          }
           persistScrollPos();
           rafPending = false;
         });
       }
     }, { passive: true });
 
-    window.addEventListener("resize", refreshNavBtn);
-    window.addEventListener("load", refreshNavBtn);
+    window.addEventListener("resize", () => {
+      queueSnapRefresh();
+    });
+    window.addEventListener("orientationchange", queueSnapRefresh);
+    window.addEventListener("pagehide", () => {
+      persistScrollPos(true);
+    }, { passive: true });
+    document.addEventListener("visibilitychange", () => {
+      if (document.hidden) {
+        persistScrollPos(true);
+      }
+    }, { passive: true });
+    if (window.visualViewport) {
+      window.visualViewport.addEventListener("resize", queueSnapRefresh, { passive: true });
+    }
+    window.addEventListener("load", () => {
+      queueSnapRefresh();
+    });
+    refreshSnapSections();
+    getSnapPositions();
     refreshNavBtn();
   </script>
 
@@ -441,127 +540,127 @@
     <section class="section quotes-stream">
 
     <div class="quote-block theme-rose anim-pop">
-      <img src="../stickers/index_cat_stickers/cat1.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C1.jpg" class="sticker" alt="cat photo 1">
       <p class="quote">I meow you more than moonbeams, tuna dreams, and all nine lives.</p>
     </div>
 
     <div class="quote-block theme-mint anim-sway">
-      <img src="../stickers/index_cat_stickers/cat2.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C2.jpg" class="sticker" alt="cat photo 2">
       <p class="quote">You are my favorite hooman, my soft paw-hold, my forever purr-son.</p>
     </div>
 
     <div class="quote-block theme-lilac anim-bloom">
-      <img src="../stickers/index_cat_stickers/cat3.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C3.jpg" class="sticker" alt="cat photo 3">
       <p class="quote">If love had whiskers and paws, it would still curl up right beside you.</p>
     </div>
 
     <div class="quote-block theme-peach anim-wobble">
-      <img src="../stickers/index_cat_stickers/cat4.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C4.jpg" class="sticker" alt="cat photo 4">
       <p class="quote">I would knock every cup off every table just to hear your laugh once more.</p>
     </div>
 
     <div class="quote-block theme-sky anim-pop">
-      <img src="../stickers/1.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C5.jpg" class="sticker" alt="cat photo 5">
       <p class="quote">You are my warm sun spot, my sleepy cuddle corner, my happiest cat nap.</p>
     </div>
 
     <div class="quote-block theme-rose anim-sway">
-      <img src="../stickers/2.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C6.jpg" class="sticker" alt="cat photo 6">
       <p class="quote">In every lifetime, this cat heart will still purr only for you.</p>
     </div>
 
     <div class="quote-block theme-mint anim-bloom">
-      <img src="../stickers/3.png" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C7.jpg" class="sticker" alt="cat photo 7">
       <p class="quote">Even on grumpy cat days, your smile makes my tiny whiskers dance.</p>
     </div>
 
     <div class="quote-block theme-lilac anim-wobble">
-      <img src="../stickers/4.png" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C8.jpg" class="sticker" alt="cat photo 8">
       <p class="quote">I choose your lap, your heart, and your chaos over every fancy cat tower.</p>
     </div>
 
     <div class="quote-block theme-peach anim-pop">
-      <img src="../stickers/5.png" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C9.jpg" class="sticker" alt="cat photo 9">
       <p class="quote">You are my meow-gic, my comfort blanket, and my fur-ever favorite person.</p>
     </div>
 
     <div class="quote-block theme-sky anim-sway">
-      <img src="../stickers/6.png" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C10.jpg" class="sticker" alt="cat photo 10">
       <p class="quote">My heart does tiny zoomies every time you say my name.</p>
     </div>
 
     <div class="quote-block theme-rose anim-bloom">
-      <img src="../stickers/index_cat_stickers/cat3.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C11.jpg" class="sticker" alt="cat photo 11">
       <p class="quote">You pet my soul the way I pet tiny kittens, gentle and full of love.</p>
     </div>
 
     <div class="quote-block theme-mint anim-wobble">
-      <img src="../stickers/index_cat_stickers/cat4.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C12.jpg" class="sticker" alt="cat photo 12">
       <p class="quote">If kisses were yarn balls, I would roll a mountain to your doorstep.</p>
     </div>
 
     <div class="quote-block theme-lilac anim-pop">
-      <img src="../stickers/index_cat_stickers/cat1.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C13.jpg" class="sticker" alt="cat photo 13">
       <p class="quote">You are my favorite bedtime purr-story and my sweetest morning meow.</p>
     </div>
 
     <div class="quote-block theme-peach anim-sway">
-      <img src="../stickers/index_cat_stickers/cat2.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C14.jpg" class="sticker" alt="cat photo 14">
       <p class="quote">My cat brain has one thought: love you, cuddle you, repeat forever.</p>
     </div>
 
     <div class="quote-block theme-sky anim-bloom">
-      <img src="../stickers/index_cat_stickers/cat3.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C15.jpg" class="sticker" alt="cat photo 15">
       <p class="quote">You are the reason my heart purrs louder than a sleepy kitten.</p>
     </div>
 
     <div class="quote-block theme-rose anim-wobble">
-      <img src="../stickers/index_cat_stickers/cat4.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C16.jpg" class="sticker" alt="cat photo 16">
       <p class="quote">I would share my last fish snack with you, and that is true cat love.</p>
     </div>
 
     <div class="quote-block theme-mint anim-pop">
-      <img src="../stickers/index_cat_stickers/cat1.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C17.jpg" class="sticker" alt="cat photo 17">
       <p class="quote">You are my little paw-tner in mischief and my forever cuddle mission.</p>
     </div>
 
     <div class="quote-block theme-lilac anim-sway">
-      <img src="../stickers/index_cat_stickers/cat2.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C18.jpg" class="sticker" alt="cat photo 18">
       <p class="quote">No map needed, this cat heart always finds its way back to you.</p>
     </div>
 
     <div class="quote-block theme-peach anim-bloom">
-      <img src="../stickers/index_cat_stickers/cat3.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C19.jpg" class="sticker" alt="cat photo 19">
       <p class="quote">You are the only hooman I would pause my zoomies for.</p>
     </div>
 
     <div class="quote-block theme-sky anim-wobble">
-      <img src="../stickers/index_cat_stickers/cat4.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C20.jpg" class="sticker" alt="cat photo 20">
       <p class="quote">Forever yours, with whiskers, paws, and a million purrs of love.</p>
     </div>
 
     <div class="quote-block theme-rose anim-pop">
-      <img src="../stickers/index_cat_stickers/cat1.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C21.jpg" class="sticker" alt="cat photo 21">
       <p class="quote">Ayyo, one smile from you and my full system becomes soft-soft only.</p>
     </div>
 
     <div class="quote-block theme-mint anim-sway">
-      <img src="../stickers/index_cat_stickers/cat2.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C22.jpg" class="sticker" alt="cat photo 22">
       <p class="quote">With you next to me, even total chaos feels full chill macha.</p>
     </div>
 
     <div class="quote-block theme-lilac anim-bloom">
-      <img src="../stickers/index_cat_stickers/cat3.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C23.jpg" class="sticker" alt="cat photo 23">
       <p class="quote">Nodu, if love had one permanent address, it would simply come and sit near you.</p>
     </div>
 
     <div class="quote-block theme-peach anim-wobble">
-      <img src="../stickers/index_cat_stickers/cat4.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C24.jpg" class="sticker" alt="cat photo 24">
       <p class="quote">You are that one person who can make my overthinking go sari bidi in two seconds.</p>
     </div>
 
     <div class="quote-block theme-sky anim-pop">
-      <img src="../stickers/index_cat_stickers/cat1.jpg" class="sticker" alt="cat sticker">
+      <img src="../image/cat_pics/C25.jpg" class="sticker" alt="cat photo 25">
       <p class="quote">Honestly, life with you feels like extra chutney, extra joy, extra everything.</p>
     </div>
 
@@ -749,15 +848,8 @@
       document.body.style.backgroundColor = `rgb(${r},${g},${b})`;
     };
 
-    let bgTicking = false;
-    window.addEventListener("scroll", () => {
-      if (bgTicking) return;
-      bgTicking = true;
-      requestAnimationFrame(() => {
-        updateBackgroundBlend();
-        bgTicking = false;
-      });
-    }, { passive: true });
+    window.updateBgBlend = updateBackgroundBlend;
+    updateBackgroundBlend();
   </script>
 
   <script>
@@ -817,17 +909,20 @@
     const isMobileViewport = window.matchMedia("(max-width: 768px)").matches;
 
     function spawnStar() {
+      if (!starContainer || document.hidden) return;
       const star = document.createElement("div");
       star.className = "emoji-star";
       star.innerText = starEmojis[Math.floor(Math.random() * starEmojis.length)];
 
-      const size = Math.random() * 1.5 + 0.8;
+      const isDarkTheme = document.documentElement.classList.contains("site-dark-mode");
+      const size = Math.random() * (isDarkTheme ? 1.9 : 1.5) + (isDarkTheme ? 1.05 : 0.8);
       const startX = Math.random() * window.innerWidth;
       const startY = Math.random() * window.innerHeight;
 
-      const dx = (Math.random() - 0.5) * 600;
-      const dy = (Math.random() - 0.5) * 600;
-      const duration = isMobileViewport ? (Math.random() * 3 + 4.5) : (Math.random() * 4 + 4);
+      const driftRange = isDarkTheme ? 760 : 600;
+      const dx = (Math.random() - 0.5) * driftRange;
+      const dy = (Math.random() - 0.5) * driftRange;
+      const duration = isMobileViewport ? (Math.random() * 3 + 4.2) : (Math.random() * 3.2 + 3.8);
 
       star.style.left = `${startX}px`;
       star.style.top = `${startY}px`;
@@ -840,21 +935,43 @@
       setTimeout(() => star.remove(), duration * 1000);
     }
 
-    setInterval(spawnStar, isMobileViewport ? 3000 : 2000);
+    function spawnStarBurst(count) {
+      for (let i = 0; i < count; i += 1) {
+        setTimeout(spawnStar, i * 120);
+      }
+    }
+
+    spawnStarBurst(isMobileViewport ? 6 : 10);
+    setInterval(() => {
+      if (document.hidden) return;
+      spawnStar();
+      if (document.documentElement.classList.contains("site-dark-mode")) {
+        setTimeout(spawnStar, 120);
+        setTimeout(spawnStar, 260);
+      }
+    }, isMobileViewport ? 2200 : 1400);
+
+    const themeToggle = document.getElementById("site-theme-toggle");
+    if (themeToggle) {
+      themeToggle.addEventListener("click", () => {
+        setTimeout(() => {
+          spawnStarBurst(isMobileViewport ? 7 : 12);
+        }, 260);
+      });
+    }
 
     const bubbleContainer = document.getElementById("emoji-bubbles");
     let lastBubbleTime = 0;
 
-    window.addEventListener("scroll", () => {
-      const now = Date.now();
+    window.maybeSpawnBubbleOnScroll = (now = Date.now()) => {
       if (now - lastBubbleTime > 1200) {
         spawnBubble();
         lastBubbleTime = now;
       }
-    }, { passive: true });
+    };
 
     function spawnBubble() {
-      if (Math.random() < 0.5) return;
+      if (!bubbleContainer || document.hidden || Math.random() < 0.5) return;
 
       const bubble = document.createElement("div");
       bubble.className = "emoji-bubble";
@@ -871,11 +988,24 @@
   <!-- 🎬 SCROLL REVEAL (kept inside body for valid structure) -->
   <script>
     const quoteBlocks = document.querySelectorAll(".quote-block");
+    const quoteImages = document.querySelectorAll(".quote-block .sticker");
     const revealEls = document.querySelectorAll(
       ".quote-block, .actions h2, .button-grid, .feature-title, .feature-grid"
     );
     quoteBlocks.forEach((el, i) => {
       el.style.setProperty("--stagger", `${Math.min(i * 18, 110)}ms`);
+    });
+    quoteImages.forEach((img, i) => {
+      img.decoding = "async";
+      if (i === 0) {
+        img.fetchPriority = "high";
+      } else if (i > 1) {
+        img.loading = "lazy";
+      }
+
+      if (!img.complete) {
+        img.addEventListener("load", queueSnapRefresh, { once: true });
+      }
     });
 
     const revealThreshold = window.matchMedia("(max-width: 768px)").matches ? 0.2 : 0.28;
@@ -912,3 +1042,4 @@
 
 </body>
 </html>
+<!--  -->
