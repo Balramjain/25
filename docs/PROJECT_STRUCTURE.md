@@ -20,7 +20,6 @@ This project is a static multi-page website.
 ## Assets
 - `audio/`: Background audio files.
 - `video/`: Video files (`proposal.mp4` placeholder location).
-- `assets/`: Game assets.
 - `stickers/`: Quote images/sticker images.
 - `fonts/`: Local custom fonts.
 
@@ -28,6 +27,9 @@ This project is a static multi-page website.
 - Removed unused legacy files:
   - `script.js`
   - `index_old.html`
+- Removed unused folders:
+  - `assets/`
+  - `text/`
 
 ## Recommended Update Flow
 1. Make changes locally.
