@@ -246,8 +246,8 @@
 
     var toggle = document.getElementById("site-theme-toggle");
     if (toggle) {
-      toggle.textContent = "Twinverse";
-      toggle.setAttribute("aria-label", "Open the dark twinverse");
+      toggle.textContent = "Twinverse Treat";
+      toggle.setAttribute("aria-label", "Open the Twinverse portal");
     }
   }
 
@@ -472,16 +472,16 @@
       "  border: 0;",
       "  border-radius: 999px;",
       "  padding: 11px 16px;",
-      "  min-width: 116px;",
+      "  min-width: 138px;",
       "  font-family: \"SiteLoaderWildcrazy\", \"Segoe UI Emoji\", \"Apple Color Emoji\", \"Noto Color Emoji\", sans-serif;",
       "  font-size: 14px;",
       "  font-weight: 600;",
       "  line-height: 1.1;",
       "  letter-spacing: 0.02em;",
       "  cursor: pointer;",
-      "  color: #1f2230;",
-      "  background: linear-gradient(135deg, rgba(255,255,255,0.92), rgba(229,235,255,0.94));",
-      "  box-shadow: 0 14px 32px rgba(18, 24, 39, 0.16);",
+      "  color: #000000;",
+      "  background: linear-gradient(135deg, rgba(255, 239, 246, 0.97), rgba(235, 245, 255, 0.97), rgba(255, 247, 218, 0.97));",
+      "  box-shadow: 0 16px 34px rgba(18, 24, 39, 0.16), inset 0 1px 0 rgba(255,255,255,0.88);",
       "  backdrop-filter: blur(12px);",
       "  transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;",
       "}",
@@ -519,7 +519,7 @@
       "    top: max(10px, env(safe-area-inset-top, 0px) + 8px);",
       "    right: max(12px, env(safe-area-inset-right, 0px) + 10px);",
       "    padding: 10px 14px;",
-      "    min-width: 104px;",
+      "    min-width: 122px;",
       "    font-size: 13px;",
       "  }",
       "}"

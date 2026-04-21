@@ -4,6 +4,18 @@
   font-display: swap;
 }
 
+@font-face {
+  font-family: "CutiePatootie";
+  src: url("../fonts/CutiePatootie-Rgjv.ttf") format("truetype");
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cookiemonster";
+  src: url("../fonts/Cookiemonster-gv11.ttf") format("truetype");
+  font-display: swap;
+}
+
 :root {
   --accent: #8dd5ff;
   --accent-2: #ff8fd3;
@@ -143,11 +155,13 @@ a {
 
 .nv-topnote {
   max-width: 520px;
-  padding: 12px 18px;
-  border-radius: 999px;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  color: var(--muted);
+  padding: 14px 18px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0.05));
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: #f8effa;
+  font-family: "Cookiemonster", "Trebuchet MS", sans-serif;
+  font-size: 0.98rem;
   line-height: 1.5;
   text-align: right;
 }
@@ -167,6 +181,21 @@ a {
   padding: 34px 28px;
   border-radius: 34px;
   margin-bottom: 28px;
+  background:
+    radial-gradient(circle at 18% 20%, rgba(255, 143, 211, 0.1), transparent 26%),
+    radial-gradient(circle at 82% 18%, rgba(141, 213, 255, 0.12), transparent 28%),
+    linear-gradient(160deg, var(--surface), var(--surface-2));
+}
+
+.nv-hero::before {
+  content: "";
+  position: absolute;
+  inset: 18px auto auto 18px;
+  width: 110px;
+  height: 110px;
+  border-radius: 28px;
+  background: rgba(255, 255, 255, 0.04);
+  transform: rotate(16deg);
 }
 
 .nv-hero::after {
@@ -190,9 +219,10 @@ a {
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.08);
   color: color-mix(in srgb, var(--accent-2) 80%, white);
-  text-transform: uppercase;
-  letter-spacing: 0.07em;
-  font-size: 0.78rem;
+  font-family: "CutiePatootie", "Trebuchet MS", cursive;
+  text-transform: none;
+  letter-spacing: 0.03em;
+  font-size: 1rem;
 }
 
 .nv-hero__title {
@@ -202,6 +232,7 @@ a {
   font-size: clamp(3rem, 7vw, 5.4rem);
   line-height: 0.94;
   color: #fff8fd;
+  text-shadow: 0 18px 32px rgba(0, 0, 0, 0.22);
 }
 
 .nv-hero__copy {
@@ -220,10 +251,9 @@ a {
 }
 
 .nv-pill {
-  background: rgba(255, 255, 255, 0.05);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05));
   color: #eff5ff;
-  text-transform: none;
-  letter-spacing: 0.01em;
+  letter-spacing: 0.02em;
 }
 
 .nv-hero__stats {
@@ -242,10 +272,10 @@ a {
 .nv-stat span {
   display: block;
   margin-bottom: 10px;
-  color: var(--muted);
-  font-size: 0.82rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
+  color: #ffdff1;
+  font-family: "Cookiemonster", "Trebuchet MS", sans-serif;
+  font-size: 0.88rem;
+  letter-spacing: 0.04em;
 }
 
 .nv-stat strong {
@@ -288,6 +318,10 @@ a {
   line-height: 1.6;
 }
 
+.nv-section__head p {
+  max-width: 40ch;
+}
+
 .nv-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -298,12 +332,12 @@ a {
   position: relative;
   overflow: hidden;
   border-radius: 28px;
-  padding: 20px;
+  padding: 22px;
   text-decoration: none;
   color: inherit;
   min-height: 250px;
   display: grid;
-  gap: 14px;
+  gap: 12px;
   align-content: start;
   transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
 }
@@ -336,7 +370,7 @@ a {
 }
 
 .nv-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-6px) scale(1.01);
 }
 
 .nv-card__no {
@@ -350,12 +384,31 @@ a {
   font-size: 0.95rem;
 }
 
+.nv-card__kicker {
+  display: inline-flex;
+  justify-self: start;
+  padding: 7px 12px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff1fb;
+  font-family: "CutiePatootie", "Trebuchet MS", cursive;
+  font-size: 1rem;
+  letter-spacing: 0.02em;
+}
+
 .nv-card__title {
   margin: 0;
   font-size: 1.55rem;
   line-height: 1;
   color: #fff8fd;
   font-family: "Wildcrazy", "Trebuchet MS", cursive;
+}
+
+.nv-card__copy {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .nv-card__meta {
@@ -366,8 +419,23 @@ a {
 
 .nv-card__cta {
   justify-self: start;
-  padding: 11px 16px;
+  display: grid;
+  gap: 2px;
+  padding: 11px 16px 12px;
   color: #fff;
+}
+
+.nv-card__cta strong {
+  font-family: "Cookiemonster", "Trebuchet MS", sans-serif;
+  font-size: 0.98rem;
+  font-weight: 400;
+}
+
+.nv-card__cta span {
+  font-size: 0.76rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  opacity: 0.8;
 }
 
 .nv-layout {

@@ -128,10 +128,11 @@
     return [
       '<a class="nv-card" href="' + featureFile(feature.slug) + '" style="--card-accent:' + feature.colors[0] + ";--card-accent-2:" + feature.colors[1] + ';">',
       '  <span class="nv-card__no">' + escapeHtml(feature.id) + "</span>",
+      '  <span class="nv-card__kicker">' + escapeHtml(feature.kicker) + "</span>",
       '  <h3 class="nv-card__title">' + escapeHtml(feature.title) + "</h3>",
       '  <p class="nv-card__copy">' + escapeHtml(feature.description) + "</p>",
-      '  <div class="nv-card__meta">' + badgesMarkup(feature.tags.slice(0, 3)) + "</div>",
-      '  <span class="nv-card__cta">' + escapeHtml(feature.cta) + "</span>",
+      '  <div class="nv-card__meta">' + badgesMarkup(feature.tags.slice(0, 2)) + "</div>",
+      '  <span class="nv-card__cta"><strong>' + escapeHtml(feature.cta) + '</strong><span>tap to open portal</span></span>',
       "</a>"
     ].join("");
   }
@@ -161,7 +162,7 @@
       '      <a class="nv-back" href="nightverse.html">&larr; Back to Twinverse</a>',
       '      <a class="nv-back nv-back--ghost" href="index.html" onclick="sessionStorage.setItem(\'cameBack\',\'true\');">&larr; Back to Blues</a>',
       "    </div>",
-      '    <div class="nv-topnote">Separate portal. Separate mood. Same devotion. This one is replayable, interactive, and built to feel like its own little dark-world game.</div>',
+      '    <div class="nv-topnote">Separate portal. Same devotion. This one is meant to feel like its own little midnight toybox, so poke around and let it be ridiculous.</div>',
       "  </div>",
       '  <section class="nv-hero">',
       '    <span class="nv-hero__eyebrow">' + escapeHtml(feature.kicker) + "</span>",
@@ -279,18 +280,18 @@
       '<div class="nv-shell">',
       '  <div class="nv-topbar">',
       '    <a class="nv-back" href="index.html" onclick="sessionStorage.setItem(\'cameBack\',\'true\');">&larr; Back to Blues</a>',
-      '    <div class="nv-topnote">Fresh dark-side drop: three new true mini-games just landed, so the Twinverse now feels even more like a secret arcade instead of a portal museum.</div>',
+      '    <div class="nv-topnote">The Twinverse is supposed to feel like a secret toybox now: softer, cuter, and way less like a catalog.</div>',
       "  </div>",
       '  <section class="nv-hero">',
-      '    <span class="nv-hero__eyebrow">Twinverse portal hub</span>',
-      '    <h1 class="nv-hero__title">Bangari, the secret second world just got its own galaxy.</h1>',
-      '    <p class="nv-hero__copy">' + portalCount + ' fresh experiences. Separate files. Separate portals. More visuals, more little games, more interactive weirdness, and a much stronger sense that you are stepping into distinct tiny universes instead of one big page.</p>',
-      '    <div class="nv-badges">' + badgesMarkup([portalCount + " portals", labCount + " themed labs", "all interactive", "dark twin world"]) + "</div>",
+      '    <span class="nv-hero__eyebrow">Twinverse cuddle arcade</span>',
+      '    <h1 class="nv-hero__title">Bangari, your secret second world is now a glittery little portal carnival.</h1>',
+      '    <p class="nv-hero__copy">' + portalCount + ' tiny portals, each with its own mood. Pick one when you want soft chaos, fake drama, late-night sweetness, or a mini-game that feels like it only exists for you.</p>',
+      '    <div class="nv-badges">' + badgesMarkup([portalCount + " portal treats", labCount + " spark zones", "cute chaos ready", "pick a portal"]) + "</div>",
       '    <div class="nv-hero__stats">',
-      '      <div class="nv-stat"><span>Portal count</span><strong>' + portalCount + ' mini-worlds</strong></div>',
-      '      <div class="nv-stat"><span>Lab spread</span><strong>' + labCount + ' active labs</strong></div>',
+      '      <div class="nv-stat"><span>Portal candy</span><strong>' + portalCount + ' tiny worlds</strong></div>',
+      '      <div class="nv-stat"><span>Playrooms</span><strong>' + labCount + ' sparkle labs</strong></div>',
       '      <div class="nv-stat"><span>Night signal</span><strong id="nvNightSignal">soft riot mode</strong></div>',
-      '      <div class="nv-stat"><span>Vibe clock</span><strong id="nvVibeClock">2:07 AM side quest</strong></div>',
+      '      <div class="nv-stat"><span>Mood clock</span><strong id="nvVibeClock">2:07 AM pillow fort quest</strong></div>',
       "    </div>",
       "  </section>",
       SECTION_ORDER.map(function (sectionKey) {
@@ -311,7 +312,7 @@
           "</section>"
         ].join("");
       }).join(""),
-      '  <div class="nv-footer-note">This dark twin world is still for the same girl. It just works more like a secret arcade now: pick a portal, fall into it, and come back for the next one whenever you want.</div>',
+      '  <div class="nv-footer-note">Still the same girl. Just a cuter midnight dimension now: pick a portal, fall into it, come back giggling, repeat.</div>',
       "</div>"
     ].join("");
 
@@ -326,8 +327,8 @@
       return;
     }
 
-    var signals = ["soft riot mode", "dangerously cuddly", "moonlit menace", "protective gremlin", "romantic glitch active"];
-    var vibes = ["2:07 AM side quest", "1:43 AM emotional cinema", "3:12 AM velvet chaos", "12:58 AM future planning", "2:26 AM cling mode"];
+    var signals = ["soft riot mode", "dangerously cuddly", "sparkle gremlin", "pocket chaos angel", "romantic glitch active"];
+    var vibes = ["2:07 AM pillow fort quest", "1:43 AM glittery menace", "3:12 AM cuddle arcade", "12:58 AM secret portal hour", "2:26 AM zero chill mode"];
 
     function sync() {
       signal.textContent = sample(signals);
@@ -341,32 +342,32 @@
   var SECTION_META = {
     arcade: {
       title: "Night Arcade",
-      copy: "Pressure, timing, score streaks, near-miss roasts, and the more game-like side of the dark twin world.",
+      copy: "Tap things, chase streaks, and let the Twinverse act like a candy-lit mini arcade for a while.",
       features: ["whack-the-overthought", "dark-fate-slot-machine", "heartbeat-sync"]
     },
     orbit: {
-      title: "Orbit Lab",
-      copy: "Secret quests, alternate timelines, name forges, and future home visuals that feel made at 2 AM.",
+      title: "Orbit Playground",
+      copy: "Portals, missions, silly alternate timelines, and future-home nonsense with extra midnight glow.",
       features: ["midnight-mission", "parallel-universe", "soft-roast-engine", "future-apartment-builder", "cosmic-nickname-forge"]
     },
     heart: {
-      title: "Heart Lab",
-      copy: "Comfort tools, repair rituals, reassurance experiments, and tender systems for the softer nights.",
+      title: "Heart Glow Lab",
+      copy: "Comfort tools, repair rituals, and soft little systems for nights that need reassurance without losing the charm.",
       features: ["rescue-kit", "apology-architect", "protective-spellbook", "jealousy-antidote", "sleep-call-script"]
     },
     chaos: {
-      title: "Chaos Lab",
-      copy: "Night drives, heists, fake trailers, future texts, and cuddle science with absolutely no normal energy.",
+      title: "Chaos Cutie Club",
+      copy: "Fake trailers, dramatic drives, future texts, and affection-powered nonsense with absolutely no normal energy.",
       features: ["night-drive-plotter", "tiny-heist-planner", "movie-trailer", "future-text-thread", "cuddle-protocol"]
     },
     future: {
-      title: "Future Lab",
-      copy: "Dates, contracts, vaults, outfit drops, and wild someday ideas that already feel weirdly real.",
+      title: "Someday Spark Lab",
+      copy: "Dates, wishes, outfit drops, and ridiculous future plans that already feel halfway real.",
       features: ["dream-date-blueprint", "promise-contract", "wish-vault", "future-closet-drop", "joint-bucket-shock"]
     },
     signal: {
-      title: "Signal Lab",
-      copy: "Scanners, maps, memory remixers, constellations, and aura art for when the feelings deserve machinery.",
+      title: "Soft Signal Studio",
+      copy: "Scanners, maps, constellations, and pretty feeling-machines for when emotions deserve extra sparkle.",
       features: ["soul-signal-meter", "comfort-map", "memory-remix-machine", "constellation-for-her", "aura-portrait"]
     }
   };

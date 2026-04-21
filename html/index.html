@@ -69,7 +69,7 @@
   ">🔊</button>
 
   <!-- QUICK NAV BUTTON -->
-  <button id="quickNavBtn" class="quick-nav-btn to-bottom" aria-label="Scroll to bottom" style="
+  <button id="quickNavBtn" class="quick-nav-btn to-bottom" aria-label="Scroll down" style="
     position: fixed;
     right: 80px;
     bottom: 20px;
@@ -79,11 +79,11 @@
     border: none;
     border-radius: 50%;
     background: #ffd6f0;
-    color: #57374d;
+    color: #000;
     cursor: pointer;
     touch-action: manipulation;
     -webkit-tap-highlight-color: transparent;
-  ">⤵</button>
+  ">↓</button>
 
   <script>
     // ═══════════════════════════════════════════════════════════════════
@@ -166,8 +166,34 @@
       return Math.max(0, centered);
     }
 
-    function getBottomLockY() {
-      return Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    function isWithinStartSection(y) {
+      const hero = document.getElementById("top-section");
+      if (!hero) return y <= 0;
+      return y < hero.offsetTop + Math.max(hero.offsetHeight - 12, window.innerHeight * 0.92);
+    }
+
+    function getSectionFocusEl(section) {
+      if (!section) return null;
+      const selector = section.dataset.navFocus;
+      if (!selector) return section;
+      return section.querySelector(selector) || section;
+    }
+
+    function getSectionTargetY(section) {
+      if (!section) return 0;
+      const focusEl = getSectionFocusEl(section);
+      if (!focusEl || focusEl === section) {
+        return Math.max(0, Math.round(section.offsetTop));
+      }
+
+      const rect = focusEl.getBoundingClientRect();
+      const absoluteTop = window.scrollY + rect.top;
+      const shouldCenter = rect.height > 0 && rect.height <= window.innerHeight * 0.82;
+      const targetY = shouldCenter
+        ? absoluteTop - ((window.innerHeight - rect.height) / 2)
+        : absoluteTop - Math.max(18, window.innerHeight * 0.12);
+
+      return Math.max(0, Math.round(targetY));
     }
 
     function withSnapLockDisabled(fn) {
@@ -224,10 +250,10 @@
           restoreClickedTarget();
         }, 350);
 
-      } else if (savedScrollY > 0 && hasVisited) {
+      } else if (savedScrollY >= 0 && hasVisited) {
         // Hard refresh — restore to live scroll position instantly (no animation flash).
         setTimeout(() => {
-          scrollToY(savedScrollY, "auto");
+          scrollToY(isWithinStartSection(savedScrollY) ? 0 : savedScrollY, "auto");
         }, 80);
 
       } else {
@@ -357,7 +383,7 @@
       }
 
       snapViewportHeight = window.innerHeight;
-      snapPositions = sections.map(section => section.offsetTop);
+      snapPositions = sections.map(section => getSectionTargetY(section));
       return snapPositions;
     }
 
@@ -416,7 +442,7 @@
 
     function refreshNavBtn() {
       const { dir } = getNavState();
-      quickNavBtn.innerText = dir === "down" ? "⤵" : "⤴";
+      quickNavBtn.innerText = dir === "down" ? "↓" : "↑";
       quickNavBtn.setAttribute("aria-label", dir === "down" ? "Scroll down" : "Scroll up");
       quickNavBtn.classList.toggle("to-bottom", dir === "down");
       quickNavBtn.classList.toggle("to-top", dir === "up");
@@ -428,16 +454,15 @@
       if (!target) return;
 
       withSnapLockDisabled(() => {
+        const targetY = getSectionTargetY(target);
         if (target.id === "time-since") {
-          quickNavBtn.innerText = "⤴";
+          quickNavBtn.innerText = "↑";
           quickNavBtn.setAttribute("aria-label", "Scroll up");
           quickNavBtn.classList.remove("to-bottom");
           quickNavBtn.classList.add("to-top");
-          scrollToY(getBottomLockY(), getBehavior());
-          return;
         }
 
-        scrollToEl(target, 0);
+        scrollToY(targetY, getBehavior());
       });
       setTimeout(refreshNavBtn, prefersReducedMotion.matches ? 40 : 420);
     });
@@ -537,7 +562,12 @@
   </section>
 
   <!-- 💕 QUOTES -->
-    <section class="section quotes-stream">
+  <section class="section quotes-stream" id="cat-captions">
+    <div class="quotes-stage" aria-label="Cat and captions">
+      <span class="quotes-stage__eyebrow">Cat and Captions</span>
+      <h2>tiny meow museum</h2>
+      <p>Scroll a little slower here, cutie. The cats made a full caption parade just for your birthday.</p>
+    </div>
 
     <div class="quote-block theme-rose anim-pop">
       <img src="../image/cat_pics/C1.jpg" class="sticker" alt="cat photo 1">
@@ -667,8 +697,8 @@
   </section>
 
   <!-- 🧊 ACTION BUTTONS -->
-  <section class="section actions" id="actions" data-nav-stop="true">
-    <h2>Choose your purr-venture 😼</h2>
+  <section class="section actions" id="actions" data-nav-stop="true" data-nav-focus=".button-grid">
+    <h2>4 Buttons of Birthday Trouble 😼</h2>
 
     <div class="button-grid">
       <a id="btn-neon-meowtrix" href="memes.html?v=20260308" class="cat-button pink" onclick="setReturnTarget('btn-neon-meowtrix')"><span>Neon Meowtrix</span></a>
@@ -679,7 +709,7 @@
   </section>
 
   <!-- 🌈 MORE FEATURES -->
-  <section class="section actions more-actions" id="more-actions" data-nav-stop="true">
+  <section class="section actions more-actions" id="more-actions" data-nav-stop="true" data-nav-focus=".feature-group.theme-cute .feature-grid">
     <h2>MORE MAGIC ✨</h2>
 
     <div class="feature-groups">
@@ -744,7 +774,7 @@
             <strong>Playlist Page</strong>
           </a>
           <a id="btn-voice-message" class="feature-btn" href="voice-message.html?v=20260315" onclick="setReturnTarget('btn-voice-message')">
-            <strong>Voice Message</strong>
+            <strong>Pocket Voice Hug</strong>
           </a>
         </div>
       </div>
@@ -753,7 +783,7 @@
         <h3 class="feature-title">Nego</h3>
         <div class="feature-grid">
           <a id="btn-cat-cursor" class="feature-btn" href="cat-cursor.html?v=20260315" onclick="setReturnTarget('btn-cat-cursor')">
-            <strong>Cat Cursor</strong>
+            <strong>Kitty Sparkle Cursor</strong>
           </a>
           <a id="btn-cat-facts" class="feature-btn" href="cat-facts.html?v=20260315" onclick="setReturnTarget('btn-cat-facts')">
             <strong>Cat Facts</strong>
@@ -771,7 +801,7 @@
             <strong>Dog Facts</strong>
           </a>
           <a id="btn-fetch-game" class="feature-btn" href="fetch-game.html?v=20260315" onclick="setReturnTarget('btn-fetch-game')">
-            <strong>Fetch Game</strong>
+            <strong>Treat Toss Zoomies</strong>
           </a>
           <a id="btn-doggo-gallery" class="feature-btn" href="doggo-gallery.html?v=20260315" onclick="setReturnTarget('btn-doggo-gallery')">
             <strong>Doggo Gallery</strong>
@@ -811,8 +841,8 @@
     </div>
   </section>
 
-  <section class="section time-since" id="time-since" data-nav-stop="true">
-    <h2>Time Since We First Started Talking 💖</h2>
+  <section class="section time-since" id="time-since" data-nav-stop="true" data-nav-focus=".time-counter">
+    <h2>Time Since We Met 💖</h2>
     <div class="time-counter">
       <div class="time-box">
         <span class="time-value" id="homeTimeYears">--</span>

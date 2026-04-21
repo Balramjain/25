@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -6,17 +6,11 @@
   <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
   <meta http-equiv="Pragma" content="no-cache" />
   <meta http-equiv="Expires" content="0" />
-  <title>My Voice to You</title>
+  <title>Pocket Voice Hug</title>
   <style>
     @font-face {
       font-family: "CutiePatootie";
       src: url("../fonts/CutiePatootie-Rgjv.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    @font-face {
-      font-family: "Wildcrazy";
-      src: url("../fonts/Wildcrazy-WKYO.ttf") format("truetype");
       font-display: swap;
     }
 
@@ -32,236 +26,467 @@
       font-display: swap;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
     :root {
-      --bg: #f5f0ff;
-      --bg-2: #f0fff6;
-      --card: #ffffffcc;
-      --ink: #2a2a3b;
-      --accent: #ccb7ff;
-      --accent-2: #b7f0d2;
+      --ink: #261b2c;
+      --muted: #5b4c64;
+      --card: rgba(255, 255, 255, 0.8);
+      --line: rgba(83, 56, 78, 0.12);
     }
 
     body {
-      font-family: "LoveAndTrustHearted", sans-serif;
-      color: var(--ink);
-      background: linear-gradient(140deg, var(--bg), var(--bg-2));
       min-height: 100vh;
-      padding: 24px 16px 80px;
       overflow-x: hidden;
+      color: var(--ink);
+      font-family: "LoveAndTrustHearted", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255, 216, 232, 0.9), transparent 26%),
+        radial-gradient(circle at 84% 16%, rgba(206, 235, 255, 0.86), transparent 24%),
+        radial-gradient(circle at 20% 82%, rgba(255, 238, 186, 0.72), transparent 22%),
+        linear-gradient(155deg, #fff7fb 0%, #f8fbff 42%, #fff8eb 100%);
+      padding: 28px 16px 86px;
     }
 
-    body > @font-face {
-      font-family: "LoveAndTrustHearted";
-      src: url("../fonts/LoveAndTrustHearted-naLP.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    * {
-      position: relative;
-      z-index: 2;
-    }
-
+    .bg-orbs,
     .bg-sparkles {
       position: fixed;
       inset: 0;
       pointer-events: none;
-      z-index: 1;
+      z-index: 0;
+    }
+
+    .bg-orbs span,
+    .bg-sparkles span {
+      position: absolute;
+      border-radius: 999px;
+      animation: drift 9s ease-in-out infinite;
+    }
+
+    .bg-orbs span {
+      width: var(--size);
+      height: var(--size);
+      background: rgba(255, 255, 255, 0.34);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(4px);
     }
 
     .bg-sparkles span {
-      position: absolute;
-      width: var(--size);
-      height: var(--size);
-      border-radius: 999px;
-      background: var(--accent-2);
-      opacity: 0.45;
-      filter: blur(0.2px);
-      animation: float 10s ease-in-out infinite;
+      width: 10px;
+      height: 10px;
+      background: rgba(255, 193, 220, 0.7);
+      box-shadow: 0 0 18px rgba(255, 193, 220, 0.46);
+      animation-duration: 6.8s;
     }
 
-    @keyframes float {
-      0% { transform: translateY(0) translateX(0) scale(1); }
-      50% { transform: translateY(-16px) translateX(10px) scale(1.06); }
-      100% { transform: translateY(0) translateX(0) scale(1); }
+    @keyframes drift {
+      0%,
+      100% {
+        transform: translateY(0) translateX(0) scale(1);
+      }
+      50% {
+        transform: translateY(-16px) translateX(10px) scale(1.06);
+      }
     }
 
-    header {
-      text-align: center;
-      margin: 12px auto 22px;
-      max-width: 900px;
-    }
-
-    header h1 {
-      font-family: "CutiePatootie", cursive;
-      font-size: clamp(2.2rem, 6vw, 3.4rem);
-    }
-
-    header p {
-      margin-top: 8px;
-      font-size: 1.1rem;
-      opacity: 0.8;
-    }
-.back-btn {
+    .back-btn {
       position: fixed;
-      left: 20px;
-      bottom: 20px;
-      z-index: 30;
+      left: 18px;
+      bottom: 18px;
+      z-index: 4;
+      display: inline-block;
       border: none;
       border-radius: 999px;
-      padding: 10px 18px;
-      font-family: "CutiePatootie", cursive;
-      font-size: 1.1rem;
-      cursor: pointer;
-      background: rgba(255, 255, 255, 0.86);
+      padding: 12px 18px;
+      background: linear-gradient(135deg, rgba(255, 239, 246, 0.96), rgba(236, 246, 255, 0.96), rgba(255, 247, 218, 0.96));
       color: #000;
-      box-shadow: 0 8px 22px rgba(0, 0, 0, 0.2);
+      text-decoration: none;
+      font-family: "Cookiemonster", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow:
+        0 12px 28px rgba(69, 47, 82, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.9);
       transition: transform 220ms ease, box-shadow 220ms ease;
     }
 
     .back-btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 12px 26px rgba(0, 0, 0, 0.25);
-    }
-    .panel {
-      width: min(980px, 92vw);
-      margin: 0 auto;
-      padding: 28px;
-      border-radius: 26px;
-      background-image: url("https://images.unsplash.com/photo-1762227144580-431ec0015003?auto=format&fit=crop&fm=jpg&q=80&w=2000");
-      background-size: cover;
-      background-position: center;
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.12);
-      min-height: 65vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      overflow: hidden;
+      box-shadow:
+        0 16px 30px rgba(69, 47, 82, 0.22),
+        inset 0 1px 0 rgba(255, 255, 255, 0.92);
     }
 
-    .panel::before {
-      content: "";
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(150deg, rgba(255,255,255,0.92), rgba(255,255,255,0.78));
-    }
-
-    .panel > @font-face {
-      font-family: "LoveAndTrustHearted";
-      src: url("../fonts/LoveAndTrustHearted-naLP.ttf") format("truetype");
-      font-display: swap;
-    }
-
-    * {
+    .page-shell {
       position: relative;
       z-index: 1;
+      width: min(980px, 94vw);
+      margin: 0 auto;
+      display: grid;
+      gap: 26px;
     }
 
-    .mini-panel {
-      padding: 16px;
-      border-radius: 16px;
-      background: rgba(255, 255, 255, 0.88);
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
+    .hero {
+      padding-top: 14px;
+      text-align: center;
+      display: grid;
+      gap: 12px;
+      justify-items: center;
     }
 
-    @media (max-width: 700px) {
-      .panel {
-        min-height: 70vh;
-        padding: 22px;
-      }
+    .hero__eyebrow {
+      padding: 10px 16px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.72);
+      color: #000;
+      font-family: "Cookiemonster", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+      box-shadow:
+        0 12px 24px rgba(69, 47, 82, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.92);
     }
-.row {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
+
+    .hero h1 {
+      font-family: "CutiePatootie", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", cursive;
+      font-size: clamp(2.6rem, 7vw, 4.4rem);
+      line-height: 0.98;
+    }
+
+    .hero p {
+      max-width: 30ch;
+      font-size: clamp(1rem, 2.4vw, 1.18rem);
+      line-height: 1.55;
+      color: var(--muted);
+    }
+
+    .voice-card {
+      position: relative;
+      overflow: hidden;
+      border-radius: 36px;
+      padding: clamp(22px, 4vw, 34px);
+      background:
+        linear-gradient(160deg, rgba(255, 255, 255, 0.78), rgba(255, 248, 252, 0.92), rgba(244, 250, 255, 0.9));
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      box-shadow:
+        0 28px 58px rgba(69, 47, 82, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.92);
+    }
+
+    .voice-card::before,
+    .voice-card::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .voice-card::before {
+      width: 220px;
+      height: 220px;
+      top: -82px;
+      right: -58px;
+      background: radial-gradient(circle, rgba(255, 214, 235, 0.48), rgba(255, 214, 235, 0));
+    }
+
+    .voice-card::after {
+      width: 180px;
+      height: 180px;
+      bottom: -64px;
+      left: -54px;
+      background: radial-gradient(circle, rgba(206, 235, 255, 0.54), rgba(206, 235, 255, 0));
+    }
+
+    .voice-grid {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(0, 0.92fr);
+      gap: 24px;
       align-items: center;
     }
 
-    .primary-btn {
-      border: none;
+    .tape-card {
+      padding: 22px;
+      border-radius: 30px;
+      background: linear-gradient(155deg, rgba(255, 243, 249, 0.96), rgba(246, 251, 255, 0.96));
+      border: 1px solid var(--line);
+      box-shadow:
+        0 18px 34px rgba(69, 47, 82, 0.12),
+        inset 0 1px 0 rgba(255, 255, 255, 0.92);
+      display: grid;
+      gap: 18px;
+    }
+
+    .tape-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      font-family: "Cookiemonster", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif;
+      color: #000;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+    }
+
+    .tape-sticker {
+      padding: 8px 12px;
       border-radius: 999px;
-      padding: 10px 18px;
-      font-family: "Cookiemonster", sans-serif;
-      font-size: 1.05rem;
-      cursor: pointer;
-      background: var(--accent);
-      color: #2b2b3a;
-      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      background: rgba(255, 255, 255, 0.84);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.92);
     }
 
-    .primary-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 14px 26px rgba(0, 0, 0, 0.18);
+    .cassette {
+      position: relative;
+      min-height: 240px;
+      border-radius: 28px;
+      padding: 22px 20px;
+      background:
+        linear-gradient(155deg, rgba(255, 220, 236, 0.9), rgba(230, 243, 255, 0.92), rgba(255, 242, 211, 0.9));
+      border: 1px solid rgba(83, 56, 78, 0.12);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.9),
+        0 16px 32px rgba(83, 56, 78, 0.1);
+      display: grid;
+      align-content: start;
+      gap: 18px;
     }
 
-    .tiny-btn {
-      border: none;
-      border-radius: 10px;
-      padding: 6px 12px;
-      font-family: "Cookiemonster", sans-serif;
-      cursor: pointer;
-      background: var(--accent-2);
-      color: #2b2b3a;
+    .cassette::before {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border-radius: 22px;
+      border: 1px dashed rgba(83, 56, 78, 0.12);
+      pointer-events: none;
     }
- 
-    body, body * {
-      font-family: "LoveAndTrustHearted", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", sans-serif !important;
+
+    .cassette-reels {
+      display: grid;
+      grid-template-columns: repeat(2, 88px);
+      justify-content: center;
+      gap: 26px;
+      margin-top: 8px;
+    }
+
+    .cassette-reel {
+      width: 88px;
+      height: 88px;
+      border-radius: 50%;
+      background:
+        radial-gradient(circle, rgba(255, 255, 255, 0.96) 0 10px, rgba(255, 218, 235, 0.92) 11px 28px, rgba(242, 248, 255, 0.96) 29px 44px);
+      box-shadow:
+        inset 0 1px 0 rgba(255, 255, 255, 0.92),
+        0 10px 20px rgba(83, 56, 78, 0.12);
+      position: relative;
+      animation: spin 8s linear infinite;
+    }
+
+    .cassette-reel::after {
+      content: "";
+      position: absolute;
+      inset: 50%;
+      width: 12px;
+      height: 12px;
+      margin: -6px;
+      border-radius: 50%;
+      background: rgba(83, 56, 78, 0.34);
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .cassette-label {
+      padding: 14px 16px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.76);
+      border: 1px solid rgba(83, 56, 78, 0.08);
+      text-align: center;
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    }
+
+    .cassette-label strong {
+      display: block;
+      font-family: "CutiePatootie", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", cursive;
+      font-size: 1.7rem;
+      color: #201622;
+    }
+
+    .cassette-label span {
+      display: block;
+      margin-top: 4px;
+      color: var(--muted);
+      font-size: 0.98rem;
+      line-height: 1.45;
+    }
+
+    .audio-shell {
+      padding: 12px;
+      border-radius: 22px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 1px solid rgba(83, 56, 78, 0.08);
+    }
+
+    .audio-shell audio {
+      width: 100%;
+      display: block;
+    }
+
+    .note-stack {
+      display: grid;
+      gap: 14px;
+    }
+
+    .love-note {
+      padding: 18px 18px 20px;
+      border-radius: 24px;
+      background: var(--card);
+      border: 1px solid rgba(83, 56, 78, 0.08);
+      box-shadow:
+        0 16px 28px rgba(69, 47, 82, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.92);
+    }
+
+    .love-note h2 {
+      font-family: "CutiePatootie", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", cursive;
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    .love-note p,
+    .love-note li {
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    .love-note ul {
+      list-style: none;
+      display: grid;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .love-note li {
+      padding: 10px 12px;
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.56);
+      color: #34253b;
+    }
+
+    @media (max-width: 760px) {
+      body {
+        padding-top: 22px;
+      }
+
+      .voice-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .voice-card {
+        border-radius: 28px;
+        padding: 18px;
+      }
+
+      .cassette-reels {
+        grid-template-columns: repeat(2, 72px);
+        gap: 18px;
+      }
+
+      .cassette-reel {
+        width: 72px;
+        height: 72px;
+      }
+
+      .back-btn {
+        left: 14px;
+        bottom: 14px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .bg-orbs span,
+      .bg-sparkles span,
+      .cassette-reel {
+        animation: none !important;
+      }
     }
   </style>
   <script defer src="../js/site-runtime.js?v=20260331-runtime13"></script>
 </head>
 <body>
-  <div class="bg-sparkles" aria-hidden="true">
-    <span style="--size: 10px; left: 8%; top: 12%;"></span>
-    <span style="--size: 16px; left: 18%; top: 24%;"></span>
-    <span style="--size: 12px; left: 32%; top: 10%;"></span>
-    <span style="--size: 14px; left: 44%; top: 22%;"></span>
-    <span style="--size: 9px; left: 56%; top: 14%;"></span>
-    <span style="--size: 13px; left: 66%; top: 30%;"></span>
-    <span style="--size: 11px; left: 78%; top: 16%;"></span>
-    <span style="--size: 15px; left: 88%; top: 28%;"></span>
-    <span style="--size: 9px; left: 12%; top: 70%;"></span>
-    <span style="--size: 12px; left: 36%; top: 78%;"></span>
-    <span style="--size: 14px; left: 64%; top: 74%;"></span>
-    <span style="--size: 10px; left: 84%; top: 68%;"></span>
+  <div class="bg-orbs" aria-hidden="true">
+    <span style="--size: 88px; left: 8%; top: 14%; animation-delay: 0s;"></span>
+    <span style="--size: 54px; left: 26%; top: 76%; animation-delay: 1.4s;"></span>
+    <span style="--size: 110px; left: 74%; top: 12%; animation-delay: 2.1s;"></span>
+    <span style="--size: 68px; left: 82%; top: 66%; animation-delay: 0.9s;"></span>
   </div>
 
-  <button class="back-btn" onclick="sessionStorage.setItem('cameFromPage','true'); location.href='index.html?v=20260315';">
-    Go Back
-  </button>
+  <div class="bg-sparkles" aria-hidden="true">
+    <span style="left: 14%; top: 22%; animation-delay: 0.4s;"></span>
+    <span style="left: 34%; top: 12%; animation-delay: 1.2s;"></span>
+    <span style="left: 62%; top: 26%; animation-delay: 2s;"></span>
+    <span style="left: 86%; top: 38%; animation-delay: 0.8s;"></span>
+    <span style="left: 24%; top: 62%; animation-delay: 1.7s;"></span>
+    <span style="left: 72%; top: 76%; animation-delay: 2.5s;"></span>
+  </div>
 
-  <header></div>
-    <h1>My Voice to You</h1>
-    <p>Press play and hear a hug.</p>
-  </header>
+  <a class="back-btn" href="index.html">Back To Birthday Page</a>
 
-  <section class="panel">
-    <audio controls src="../audio/blue.mp3"></audio>
-  </section>
+  <main class="page-shell">
+    <header class="hero">
+      <span class="hero__eyebrow">Mujik special</span>
+      <h1>Pocket Voice Hug</h1>
+      <p>Press play whenever you want my voice to sit near you for a minute and make the page feel extra close.</p>
+    </header>
 
-  <script>
-    
-  </script>
+    <section class="voice-card">
+      <div class="voice-grid">
+        <div class="tape-card">
+          <div class="tape-top">
+            <span class="tape-sticker">for Bangari only</span>
+            <span>little replayable hug</span>
+          </div>
+
+          <div class="cassette">
+            <div class="cassette-reels" aria-hidden="true">
+              <div class="cassette-reel"></div>
+              <div class="cassette-reel"></div>
+            </div>
+
+            <div class="cassette-label">
+              <strong>play me, cutie</strong>
+              <span>This one uses the new voice_message recording from the audio folder.</span>
+            </div>
+
+            <div class="audio-shell">
+              <audio controls preload="metadata" src="../audio/voice_message.m4a"></audio>
+            </div>
+          </div>
+        </div>
+
+        <div class="note-stack">
+          <article class="love-note">
+            <h2>tiny instruction card</h2>
+            <p>This page is supposed to feel like opening a soft little cassette from me instead of landing on a default audio player screen.</p>
+          </article>
+
+          <article class="love-note">
+            <h2>best time to press play</h2>
+            <ul>
+              <li>When you miss me and want a fast little comfort refill.</li>
+              <li>When the page needs one extra cute thing hiding in it.</li>
+              <li>When you just want to hear me and smile for no reason.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
